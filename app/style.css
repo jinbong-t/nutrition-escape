@@ -1,0 +1,265 @@
+/* 테마 변수 설정 */
+:root {
+    --bg-color: #0f172a;
+    --text-color: #e2e8f0;
+    --primary-color: #10b981;
+    --secondary-color: #3b82f6;
+    --danger-color: #ef4444;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#game-container {
+    width: 100%;
+    max-width: 800px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 화면 전환 */
+.screen {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 버튼 스타일 */
+.btn {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+}
+.btn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+.btn.small {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+}
+
+/* 인트로 터미널 스타일 */
+.terminal {
+    background: #000;
+    border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+.terminal-header {
+    background: #1f2937;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+.terminal-title {
+    margin-left: 10px;
+    font-family: 'Orbit', sans-serif;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+.terminal-body {
+    padding: 20px;
+    font-family: 'Orbit', sans-serif;
+    color: #10b981;
+    min-height: 150px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- 1실험실 효과 --- */
+.transparent-text {
+    color: transparent;
+    transition: color 0.3s;
+}
+.transparent-text::selection {
+    color: #fff;
+    background: var(--primary-color);
+}
+.highlight {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* --- 2실험실 효과 --- */
+.mirror-text {
+    transform: scaleX(-1);
+    display: inline-block;
+    transition: transform 0.5s;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Orbit', monospace;
+    border: 1px dashed #475569;
+}
+.mirror-text.normal {
+    transform: scaleX(1);
+}
+
+/* --- 4실험실 효과 (UV) --- */
+.uv-container {
+    position: relative;
+    cursor: none; /* 마우스 커서 숨김 */
+}
+.uv-light {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(138,43,226,0.6) 0%, rgba(138,43,226,0) 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 10;
+}
+.room-dark {
+    background: #000;
+    height: 200px;
+    position: relative;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+.clue {
+    position: absolute;
+    color: #111; /* 배경과 비슷하게 숨김 */
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+.uv-active .room-dark .clue.uv-target {
+    color: #0ff; /* 형광 파란색 */
+    text-shadow: 0 0 10px #0ff;
+}
+.uv-active .room-dark .clue.fake {
+    color: #111; /* 가짜는 반응 없음 */
+}
+
+/* 입력 영역 및 모달 */
+.code-input-area {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.code-input-area input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100px;
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 5px;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+.modal.active {
+    display: flex;
+}
+.modal-content {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--danger-color);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+.modal-content p {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+/* 보스룸 인풋 */
+.boss-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+.boss-code {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #3b82f6;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    width: 80px;
+    text-align: center;
+}
+
+/* --- 추가 CSS --- */
+.lab-content { margin: 20px 0; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 8px; }
+.card-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; min-height: 50px; padding: 10px; border: 1px dashed var(--primary-color); }
+.food-card { background: var(--secondary-color); padding: 10px 15px; border-radius: 8px; cursor: grab; font-weight: bold; }
+.food-card:active { cursor: grabbing; }
+.drop-zones { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
+.drop-zone { flex: 1; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; min-height: 120px; border: 2px dashed #475569; }
+.drop-zone h3 { text-align: center; margin-bottom: 10px; border-bottom: 1px solid #475569; padding-bottom: 5px; }
+.slots { display: flex; gap: 5px; flex-wrap: wrap; min-height: 40px; }
+.secret-diary { background: #1e293b; padding: 15px; border-radius: 8px; border-left: 4px solid var(--danger-color); margin-top: 20px; font-family: serif; font-size: 1.1rem; }
+.quiz-container { margin-top: 20px; }
+.quiz-item { margin-bottom: 15px; }
+.quiz-item select { background: #334155; color: #fff; padding: 5px; border-radius: 4px; margin-top: 5px; width: 100%; border: 1px solid var(--primary-color); }
+.role-selector { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-bottom: 20px; }
+.role-content { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--secondary-color); }
+.diagnostic-area { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+.diagnostic-area select { background: #334155; color: #fff; padding: 10px; border-radius: 8px; border: 1px solid var(--primary-color); }
+.slider-area { margin-top: 20px; text-align: center; }
+.slider-area input { width: 80%; margin-top: 10px; }

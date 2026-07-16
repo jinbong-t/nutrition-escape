@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>백설공주의 기록 - 6대 영양소 방탈출</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbit&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <!-- 인트로 화면 -->
+        <section id="intro" class="screen active">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <div class="terminal-title">SYSTEM_ALERT_AI_영양이</div>
+                </div>
+                <div class="terminal-body" id="intro-text">
+                    <!-- JS로 타이핑 효과 적용 -->
+                </div>
+                <button id="start-btn" class="btn hidden">미션 시작</button>
+            </div>
+        </section>
+
+        <!-- 1실험실: 잠보의 기록 (탄수화물) -->
+        <section id="lab1" class="screen">
+            <h2>🧪 1실험실: 잠보의 기록</h2>
+            <p class="mission-text">잠보가 먹었던 식품들을 단당류, 이당류, 다당류로 올바르게 분류하여 코드를 찾아내라.</p>
+            <div class="lab-content">
+                <div class="card-container" id="lab1-cards">
+                    <!-- JS로 카드 생성 -->
+                </div>
+                <div class="drop-zones">
+                    <div class="drop-zone" data-type="monosaccharide"><h3>단당류</h3><div class="slots"></div></div>
+                    <div class="drop-zone" data-type="disaccharide"><h3>이당류</h3><div class="slots"></div></div>
+                    <div class="drop-zone" data-type="polysaccharide"><h3>다당류</h3><div class="slots"></div></div>
+                </div>
+                
+                <div class="secret-diary">
+                    <h3>잠보의 일기장</h3>
+                    <p>매일 <span class="highlight">설탕</span>을 제일 많이 먹었다.</p>
+                    <p class="transparent-text">두뇌는 포도당만 쓴다.</p>
+                </div>
+            </div>
+            <div class="code-input-area">
+                <input type="text" id="lab1-code" placeholder="***" maxlength="3">
+                <button class="btn" onclick="checkCode(1)">해제</button>
+            </div>
+        </section>
+
+        <!-- 2실험실: 부풍의 기록 (지방) -->
+        <section id="lab2" class="screen">
+            <h2>🧪 2실험실: 부풍의 기록</h2>
+            <div class="lab-content">
+                <div class="mirror-container">
+                    <div id="nutrition-label" class="mirror-text">
+                        <h3>영양성분표</h3>
+                        <p>포화지방: <span class="num">1</span>g</p>
+                        <p>트랜스지방: <span class="num">9</span>g</p>
+                        <p>콜레스테롤: <span class="num">7</span>mg</p>
+                    </div>
+                    <button id="mirror-toggle" class="btn small">거울 보기 🪞</button>
+                </div>
+                <div class="quiz-container" id="lab2-quiz">
+                    <!-- JS로 퀴즈 렌더링 -->
+                </div>
+            </div>
+            <div class="code-input-area">
+                <input type="text" id="lab2-code" placeholder="***" maxlength="3">
+                <button class="btn" onclick="checkCode(2)">해제</button>
+            </div>
+        </section>
+
+        <!-- 3실험실: 여림 & 저리의 기록 (단백질/무기질) -->
+        <section id="lab3" class="screen">
+            <h2>🧪 3실험실: 여림 & 저리의 기록</h2>
+            <div class="role-selector" id="role-selector">
+                <h3>당신의 역할 카드를 선택하세요 (팀원과 상의하세요)</h3>
+                <button class="btn role-btn" data-role="A">연구원 A</button>
+                <button class="btn role-btn" data-role="B">연구원 B</button>
+                <button class="btn role-btn" data-role="C">연구원 C</button>
+            </div>
+            <div class="role-content hidden" id="role-content">
+                <!-- 역할별 내용 표시 -->
+            </div>
+            <div class="diagnostic-area">
+                <select id="symptom-select">
+                    <option value="">증상 선택</option>
+                    <option value="tired">쉽게 지친다 (여림)</option>
+                    <option value="weak">쉽게 지친다 (저리)</option>
+                </select>
+                <select id="cause-select">
+                    <option value="">원인 선택</option>
+                    <option value="protein">단백질 부족</option>
+                    <option value="calcium_iron">칼슘/철분 부족</option>
+                    <option value="vit_c">비타민C 부족</option>
+                </select>
+            </div>
+            <div class="code-input-area">
+                <input type="text" id="lab3-code" placeholder="***" maxlength="3">
+                <button class="btn" onclick="checkCode(3)">해제</button>
+            </div>
+        </section>
+
+        <!-- 4실험실: 흐림 & 바싹의 기록 (비타민/물) -->
+        <section id="lab4" class="screen uv-container">
+            <div class="uv-light" id="uv-light"></div>
+            <h2>🧪 4실험실: 흐림 & 바싹의 기록</h2>
+            <button id="uv-toggle" class="btn small">UV 손전등 켜기 🔦</button>
+            <div class="lab-content room-dark">
+                <div class="hidden-clues">
+                    <div class="clue uv-target" style="top: 20%; left: 30%;">물 섭취는 하루 8잔 (코드 8)</div>
+                    <div class="clue" style="top: 50%; left: 60%;">야맹증은 비타민 A 부족 (코드 0)</div>
+                    <div class="clue fake" style="top: 80%; left: 20%;">야맹증 → 비타민 C (거짓)</div>
+                    <div class="clue uv-target" style="top: 70%; left: 70%;">물과 비타민은 6번 (코드 6)</div>
+                </div>
+            </div>
+            <div class="slider-area">
+                <label for="water-slider">물 섭취 적정량을 맞춰보세요:</label>
+                <input type="range" id="water-slider" min="0" max="100" value="0">
+            </div>
+            <div class="code-input-area">
+                <input type="text" id="lab4-code" placeholder="***" maxlength="3">
+                <button class="btn" onclick="checkCode(4)">해제</button>
+            </div>
+        </section>
+
+        <!-- 보스룸 -->
+        <section id="boss" class="screen">
+            <h2>💥 코어 시스템: 씩씩의 기록</h2>
+            <p>모든 실험실의 코드를 찾았습니다. 하지만 시스템 복구를 위해선 올바른 순서로 배열해야 합니다.</p>
+            <p class="hint-text">힌트: 씩씩이의 올바른 하루 식사 순서를 기억하라.</p>
+            <div class="boss-inputs">
+                <input type="text" class="boss-code" maxlength="3" placeholder="아침">
+                <input type="text" class="boss-code" maxlength="3" placeholder="점심">
+                <input type="text" class="boss-code" maxlength="3" placeholder="간식">
+                <input type="text" class="boss-code" maxlength="3" placeholder="저녁">
+            </div>
+            <button class="btn" onclick="checkBossCode()">시스템 복구</button>
+        </section>
+
+        <!-- 엔딩 -->
+        <section id="ending" class="screen">
+            <div class="terminal">
+                <div class="terminal-header">SYSTEM RESTORED</div>
+                <div class="terminal-body" id="ending-text">
+                    <!-- JS로 엔딩 텍스트 출력 -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- 전역 피드백 모달 -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <p id="modal-text"></p>
+                <button class="btn" onclick="closeModal()">확인</button>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
