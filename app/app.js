@@ -63,14 +63,14 @@ function typeWriter() {
 
 // --- 실험실 1: 탄수화물 드래그 앤 드롭 ---
 const lab1CardsData = [
-    { id: 'c1', text: '포도당', type: 'mono' },
-    { id: 'c2', text: '과당', type: 'mono' },
-    { id: 'c3', text: '설탕', type: 'di' },
-    { id: 'c4', text: '유당', type: 'di' },
-    { id: 'c5', text: '밥', type: 'poly' },
-    { id: 'c6', text: '식이섬유', type: 'poly' },
-    { id: 't1', text: '닭가슴살', type: 'trap_protein' },
-    { id: 't2', text: '버터', type: 'trap_fat' }
+    { id: 'c1', text: '포도당', type: 'mono', emoji: '🍇' },
+    { id: 'c2', text: '과당', type: 'mono', emoji: '🍎' },
+    { id: 'c3', text: '설탕', type: 'di', emoji: '🍬' },
+    { id: 'c4', text: '유당', type: 'di', emoji: '🥛' },
+    { id: 'c5', text: '밥', type: 'poly', emoji: '🍚' },
+    { id: 'c6', text: '식이섬유', type: 'poly', emoji: '🥦' },
+    { id: 't1', text: '닭가슴살', type: 'trap_protein', emoji: '🍗' },
+    { id: 't2', text: '버터', type: 'trap_fat', emoji: '🧈' }
 ];
 
 const lab1CardsContainer = document.getElementById('lab1-cards');
@@ -79,18 +79,29 @@ lab1CardsData.forEach(data => {
     card.className = 'food-card';
     card.draggable = true;
     card.id = data.id;
-    card.innerText = data.text;
+    card.innerHTML = `<span class="food-emoji">${data.emoji}</span><span>${data.text}</span>`;
     card.dataset.type = data.type;
     card.addEventListener('dragstart', e => {
         e.dataTransfer.setData('text/plain', card.id);
+        card.style.opacity = '0.5';
+    });
+    card.addEventListener('dragend', () => {
+        card.style.opacity = '1';
     });
     lab1CardsContainer.appendChild(card);
 });
 
 document.querySelectorAll('.drop-zone').forEach(zone => {
-    zone.addEventListener('dragover', e => e.preventDefault());
+    zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', () => {
+        zone.classList.remove('dragover');
+    });
     zone.addEventListener('drop', e => {
         e.preventDefault();
+        zone.classList.remove('dragover');
         const cardId = e.dataTransfer.getData('text/plain');
         const card = document.getElementById(cardId);
         
@@ -269,3 +280,25 @@ startBtn.addEventListener('click', () => {
 window.onload = () => {
     typeWriter();
 };
+
+// --- Intro 3D Parallax Effect ---
+document.getElementById('intro').addEventListener('mousemove', (e) => {
+    const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+    const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+    const wrapper = document.getElementById('intro-3d-wrapper');
+    if(wrapper) {
+        wrapper.style.transform = \otateY(\deg) rotateX(\deg)\;
+    }
+});
+
+document.getElementById('intro').addEventListener('mouseleave', () => {
+    const wrapper = document.getElementById('intro-3d-wrapper');
+    if(wrapper) {
+        wrapper.style.transform = \otateY(0deg) rotateX(0deg)\;
+        wrapper.style.transition = 'transform 0.5s ease';
+    }
+});
+document.getElementById('intro').addEventListener('mouseenter', () => {
+    const wrapper = document.getElementById('intro-3d-wrapper');
+    if(wrapper) wrapper.style.transition = 'none';
+});

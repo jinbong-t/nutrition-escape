@@ -11,17 +11,35 @@
     <div id="game-container">
         <!-- 인트로 화면 -->
         <section id="intro" class="screen active">
-            <div class="terminal">
-                <div class="terminal-header">
-                    <span class="dot red"></span>
-                    <span class="dot yellow"></span>
-                    <span class="dot green"></span>
-                    <div class="terminal-title">SYSTEM_ALERT_AI_영양이</div>
+            <!-- 배경 네온 반짝임 오버레이 -->
+            <div class="neon-flicker-overlay"></div>
+            <div class="scanlines"></div>
+
+            <!-- 3D 회전하는 메인 컨테이너 -->
+            <div class="intro-3d-wrapper" id="intro-3d-wrapper">
+                <div class="terminal intro-terminal">
+                    <!-- 캐릭터 홀로그램 -->
+                    <div class="ai-character-container">
+                        <div class="holo-ring"></div>
+                        <img src="assets/ai_character.png" alt="AI 영양이" class="ai-character">
+                    </div>
+                    
+                    <div class="terminal-content-box">
+                        <div class="terminal-header">
+                            <span class="dot red blink-red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green blink-green"></span>
+                            <div class="terminal-title">SYSTEM_ALERT_AI_영양이_v2.0</div>
+                        </div>
+                        <div class="terminal-body" id="intro-text">
+                            <!-- JS로 타이핑 효과 적용 -->
+                        </div>
+                        <button id="start-btn" class="btn hidden">
+                            <span class="btn-text">미션 시작</span>
+                            <span class="btn-glitch"></span>
+                        </button>
+                    </div>
                 </div>
-                <div class="terminal-body" id="intro-text">
-                    <!-- JS로 타이핑 효과 적용 -->
-                </div>
-                <button id="start-btn" class="btn hidden">미션 시작</button>
             </div>
         </section>
 
