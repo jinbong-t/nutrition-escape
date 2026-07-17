@@ -20,8 +20,7 @@
                 <div class="terminal intro-terminal">
                     <!-- 캐릭터 홀로그램 -->
                     <div class="ai-character-container">
-                        <div class="holo-ring"></div>
-                        <img src="assets/ai_character.png" alt="AI 영양이" class="ai-character">
+                        <img src="assets/main_character.png" alt="일곱 난쟁이와 백설공주" class="ai-character" style="width: 500px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
                     </div>
                     
                     <div class="terminal-content-box">
@@ -29,24 +28,23 @@
                             <span class="dot red blink-red"></span>
                             <span class="dot yellow"></span>
                             <span class="dot green blink-green"></span>
-                            <div class="terminal-title">SYSTEM_ALERT_AI_영양이_v2.0</div>
+                            <div class="terminal-title">백설공주의 메디컬 스캐너 v1.0</div>
                         </div>
                         <div class="terminal-body" id="intro-text">
                             <!-- JS로 타이핑 효과 적용 -->
                         </div>
                         <button id="start-btn" class="btn hidden">
-                            <span class="btn-text">미션 시작</span>
-                            <span class="btn-glitch"></span>
+                            <span class="btn-text">동화 속으로 들어가기</span>
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 1실험실: 잠보의 빵집 (탄수화물) -->
+        <!-- 1실험실: 잠보의 식단 (탄수화물) -->
         <section id="lab1" class="screen">
-            <h2>🥖 잠보의 빵집 (탄수화물)</h2>
-            <p class="mission-text">잠보가 먹었던 식품들을 단당류, 이당류, 다당류로 올바르게 분류하여 코드를 찾아내라.</p>
+            <h2>🧪 1번 환자: 잠보의 식단 (탄수화물)</h2>
+            <p class="mission-text">에너지가 없어 잠만 자는 잠보... 그가 먹었던 음식들을 단당류, 이당류, 다당류로 올바르게 분류하여 건강한 식단을 찾아내자.</p>
             <div class="lab-content">
                 <div class="card-container" id="lab1-cards">
                     <!-- JS로 카드 생성 -->
@@ -58,9 +56,9 @@
                 </div>
                 
                 <div class="secret-diary">
-                    <h3>잠보의 일기장</h3>
-                    <p>매일 <span class="highlight">설탕</span>을 제일 많이 먹었다.</p>
-                    <p class="transparent-text">두뇌는 포도당만 쓴다.</p>
+                    <h3>잠보의 일기</h3>
+                    <p>기운을 내려고 매일 <span class="highlight">사탕과 설탕</span>만 먹었다...</p>
+                    <p class="transparent-text">하지만 오히려 혈당이 뛰어 더 졸리기만 하다.</p>
                 </div>
             </div>
             <div class="code-input-area">
@@ -69,9 +67,10 @@
             </div>
         </section>
 
-        <!-- 2실험실: 부풍의 마법 창고 (지방) -->
+        <!-- 2실험실: 부풍이의 간식 (지방) -->
         <section id="lab2" class="screen">
-            <h2>🪞 부풍의 마법 창고 (지방)</h2>
+            <h2>🍕 2번 환자: 부풍이의 간식 (지방)</h2>
+            <p class="mission-text" style="text-align:center; margin-bottom:20px; font-size:1.2rem;">몸이 풍선처럼 부어오른 부풍이. 구겨진 불량식품의 영양성분표를 거울로 해독하여 진실을 밝혀내자.</p>
             <div class="lab-content">
                 <div class="mirror-container">
                     <div id="nutrition-label" class="mirror-text">
@@ -92,14 +91,15 @@
             </div>
         </section>
 
-        <!-- 3실험실: 여림과 저리의 쉼터 (단백질/무기질) -->
+        <!-- 3실험실: 여림과 저리의 차트 (단백질/무기질) -->
         <section id="lab3" class="screen">
-            <h2>🧚 여림과 저리의 쉼터 (단백질/무기질)</h2>
+            <h2>🧬 3, 4번 환자: 여림과 저리의 차트 (단백질/무기질)</h2>
+            <p class="mission-text" style="text-align:center; margin-bottom:20px; font-size:1.2rem;">근육이 없는 여림이와 늘 손발이 저린 저리. 의사가 되어 이들의 증상을 분석하고 부족한 영양소를 처방하자.</p>
             <div class="role-selector" id="role-selector">
-                <h3>마을 요정의 수첩을 선택하세요 (팀원과 상의하세요)</h3>
-                <button class="btn role-btn" data-role="A">요정 A</button>
-                <button class="btn role-btn" data-role="B">요정 B</button>
-                <button class="btn role-btn" data-role="C">요정 C</button>
+                <h3>의료 차트: 환자를 선택하세요</h3>
+                <button class="btn role-btn" data-role="A">여림이의 증상</button>
+                <button class="btn role-btn" data-role="B">저리의 증상</button>
+                <button class="btn role-btn" data-role="C">건강한 씩씩이</button>
             </div>
             <div class="role-content hidden" id="role-content">
                 <!-- 역할별 내용 표시 -->
@@ -107,14 +107,14 @@
             <div class="diagnostic-area">
                 <select id="symptom-select">
                     <option value="">증상 선택</option>
-                    <option value="tired">쉽게 지친다 (여림)</option>
-                    <option value="weak">쉽게 지친다 (저리)</option>
+                    <option value="tired">근육이 없고 힘이 없다 (여림)</option>
+                    <option value="weak">손발이 저리고 빈혈이 있다 (저리)</option>
                 </select>
                 <select id="cause-select">
-                    <option value="">원인 선택</option>
-                    <option value="protein">단백질 부족</option>
-                    <option value="calcium_iron">칼슘/철분 부족</option>
-                    <option value="vit_c">비타민C 부족</option>
+                    <option value="">처방(부족한 영양소) 선택</option>
+                    <option value="protein">고기/콩 (단백질) 처방</option>
+                    <option value="calcium_iron">우유/멸치 (무기질) 처방</option>
+                    <option value="vit_c">과일 (비타민C) 처방</option>
                 </select>
             </div>
             <div class="code-input-area">
@@ -123,11 +123,12 @@
             </div>
         </section>
 
-        <!-- 4실험실: 흐림과 바싹의 어두운 숲 (비타민/물) -->
+        <!-- 4실험실: 흐림과 바싹의 어두운 방 (비타민/물) -->
         <section id="lab4" class="screen uv-container">
             <div class="uv-light" id="uv-light"></div>
-            <h2>🌲 흐림과 바싹의 어두운 숲 (비타민/물)</h2>
-            <button id="uv-toggle" class="btn small">마법의 반딧불 켜기 🔦</button>
+            <h2>💧 5, 6번 환자: 흐림과 바싹 (비타민/물)</h2>
+            <p class="mission-text" style="text-align:center; margin-bottom:20px; font-size:1.2rem; position:relative; z-index:20;">밤눈이 어두워진 흐림이와 피부가 갈라진 바싹이. UV 손전등을 켜서 방 안의 숨겨진 형광 진단서를 찾아라!</p>
+            <button id="uv-toggle" class="btn small">UV 손전등 켜기 🔦</button>
             <div class="lab-content room-dark">
                 <div class="hidden-clues">
                     <div class="clue uv-target" style="top: 20%; left: 30%;">물 섭취는 하루 8잔 (코드 8)</div>
@@ -148,22 +149,22 @@
 
         <!-- 보스룸 -->
         <section id="boss" class="screen">
-            <h2>🏰 마을 중앙 시계탑 (코어 시스템)</h2>
-            <p>4개의 코드를 모두 모았습니다! 시스템 동기화를 위해 올바른 순서로 코드를 입력하세요.</p>
-            <p class="hint-text">힌트: 가장 건강했던 '씩씩이'의 올바른 하루 식사 순서를 떠올려보세요!</p>
+            <h2>🖥️ 메인 시스템: 씩씩이의 건강 식단</h2>
+            <p>모든 진단이 끝났다! 유일하게 건강했던 '씩씩이'의 식단 패턴에 맞춰, 알아낸 4개의 처방 코드들을 올바른 순서대로 메인 코어에 주입하라.</p>
+            <p class="hint-text">힌트: 씩씩이의 올바른 하루 식사 순서(아침->점심->간식->저녁)를 떠올려보세요!</p>
             <div class="boss-inputs">
                 <input type="text" class="boss-code" maxlength="3" placeholder="아침">
                 <input type="text" class="boss-code" maxlength="3" placeholder="점심">
                 <input type="text" class="boss-code" maxlength="3" placeholder="간식">
                 <input type="text" class="boss-code" maxlength="3" placeholder="저녁">
             </div>
-            <button class="btn" onclick="checkBossCode()">시스템 복구</button>
+            <button class="btn" onclick="checkBossCode()">만찬 시작</button>
         </section>
 
         <!-- 엔딩 -->
         <section id="ending" class="screen">
-            <div class="terminal">
-                <div class="terminal-header">SYSTEM RESTORED</div>
+            <div class="fairytale-book">
+                <div class="fairytale-header">THE END</div>
                 <div class="terminal-body" id="ending-text">
                     <!-- JS로 엔딩 텍스트 출력 -->
                 </div>

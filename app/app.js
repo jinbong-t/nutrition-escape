@@ -44,17 +44,18 @@ function checkCode(labNum) {
 }
 
 // --- 인트로 타이핑 효과 ---
-const introStory = `삐빅- 치명적인 악성코드 침입! 청소년 영양 연구소 메인 서버 다운.
-안녕, 신입 연구원! 나는 최고 보안 관리 AI "영양이"야.
-정크푸드 연합이 <백설공주 프로젝트> 데이터를 파괴하려고 해킹을 시도했어!
-데이터가 날아가기 직전, 내가 '가상현실(VR) 동화 시뮬레이션 - 난쟁이 마을' 곳곳에 쪼개서 숨겨버렸지.
-해커들이 시뮬레이션을 장악하기 전에 네가 마을로 다이브해서 4개의 데이터를 모두 구출해 와야 해!
-준비됐지? 가상현실 난쟁이 마을로 접속을 시작한다!`;
+const introText = `앗... 얘들아 상태가 왜 이래? ㅠㅠ
+
+숲속에서 만난 일곱 난쟁이들이 심각한 영양 불균형으로 앓아누워 있습니다.
+백설공주의 메디컬 스캐너 가동 완료!
+각 방을 돌며 난쟁이들의 식습관 데이터를 분석하고 올바른 처방을 내려줍시다.
+
+[진단 준비 완료]`;
 
 let typeIndex = 0;
 function typeWriter() {
-    if (typeIndex < introStory.length) {
-        introTextEl.innerHTML += introStory.charAt(typeIndex);
+    if (typeIndex < introText.length) {
+        introTextEl.innerHTML += introText.charAt(typeIndex);
         typeIndex++;
         setTimeout(typeWriter, 50);
     } else {
@@ -227,52 +228,31 @@ document.getElementById('water-slider').addEventListener('change', (e) => {
 // --- 보스룸 ---
 function checkBossCode() {
     const inputs = document.querySelectorAll('.boss-code');
-    // 씩씩이 식사 순서: 아침(잠보의 빵집) -> 점심(여림과 저리의 쉼터) -> 간식(어두운 숲) -> 저녁(부풍의 창고)
-    const correctOrder = [codes[1], codes[3], codes[4], codes[2]];
-    let isCorrect = true;
+    const codes = Array.from(inputs).map(i => i.value);
     
-    inputs.forEach((input, index) => {
-        if (input.value !== correctOrder[index]) {
-            isCorrect = false;
-        }
-    });
-
-    if (isCorrect) {
-        showScreen('ending');
-        playEnding();
+    // 건강한 씩씩이의 식단 순서: 아침(탄수 482) -> 점심(단백/무기 635) -> 간식(지방 197) -> 저녁(비타/물 806)
+    if(codes[0]==='482' && codes[1]==='635' && codes[2]==='197' && codes[3]==='806') {
+        document.getElementById('boss').classList.remove('active');
+        document.getElementById('ending').classList.add('active');
+        typeEnding();
     } else {
-        showModal("시스템 경고: 동기화 실패! 씩씩이의 식사 순서(아침->점심->간식->저녁)를 떠올려보세요.");
+        showModal('처방 순서나 암호가 틀렸습니다. 다시 한번 식단표를 확인하세요!');
     }
 }
 
 // --- 엔딩 ---
-const endingStory = `데이터 전송 완료. 가상현실 접속 해제 중...
+const endingText = "모든 처방 코드가 메인 시스템에 전송되었습니다...\n\n메디컬 치료 성공!\n백설공주의 완벽한 영양 진단과 식단 처방 덕분에 아팠던 난쟁이들이 모두 건강을 되찾았습니다.\n\n이제 숲속 오두막에는 다시 튼튼하고 건강한 웃음소리만 가득합니다!\n\n- HAPPY ENDING -";
+let endingIdx = 0;
 
-캡슐 문이 열렸다. 
-무사히 데이터들을 가지고 현실 연구소로 돌아왔어!
-
-정크푸드 연합의 해킹은 실패로 돌아갔고,
-우리는 <백설공주 프로젝트>를 전 세계에 발표했지.
-
-일곱 난쟁이가 다르게 자란 건 타고난 게 아니라, 
-'뭘 어떻게 먹었느냐'의 차이였어.
-골고루 챙겨 먹은 씩씩이만 아주 건강했잖아!
-
-네 덕분에 세상 어린이들은 진짜 건강의 비결을 알게 됐어.
-수고했어, 연구소의 에이스! 우리의 연구는 계속될 거야!`;
-
-function playEnding() {
-    const endingTextEl = document.getElementById('ending-text');
-    let idx = 0;
-    endingTextEl.innerHTML = "";
-    function typeEnding() {
-        if (idx < endingStory.length) {
-            endingTextEl.innerHTML += endingStory.charAt(idx) === '\n' ? '<br>' : endingStory.charAt(idx);
-            idx++;
+function typeEnding() {
+    const el = document.getElementById('ending-text');
+    if(el) {
+        if (endingIdx < endingText.length) {
+            el.innerHTML += endingText.charAt(endingIdx);
+            endingIdx++;
             setTimeout(typeEnding, 50);
         }
     }
-    typeEnding();
 }
 
 // --- 이벤트 바인딩 ---

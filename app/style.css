@@ -1,351 +1,376 @@
-/* 테마 변수 설정 */
 :root {
-    --bg-color: #0f172a;
-    --text-color: #e2e8f0;
-    --primary-color: #10b981;
-    --secondary-color: #3b82f6;
-    --danger-color: #ef4444;
-    --glass-bg: rgba(30, 41, 59, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --primary-color: #f59e0b; /* 따뜻한 오렌지/노랑 */
+    --bg-color: #fffbeb; /* 따뜻한 크림 배경 */
+    --text-color: #451a03; /* 짙은 갈색 텍스트 */
+    --glass-bg: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(251, 191, 36, 0.5);
+    --btn-color: #f97316;
+    --btn-hover: #ea580c;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 #game-container {
-    width: 100%;
-    max-width: 800px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
     position: relative;
-    overflow: hidden;
 }
 
-/* 화면 전환 */
+/* 모든 화면을 덮는 스크린 */
 .screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: none;
-    animation: fadeIn 0.5s ease-in-out;
-}
-.screen.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* 버튼 스타일 */
-.btn {
-    background: var(--primary-color);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 700;
-}
-.btn:hover {
-    background: #059669;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
-.btn.small {
-    padding: 5px 10px;
-    font-size: 0.9rem;
-}
-
-/* 인트로 터미널 스타일 */
-.terminal {
-    background: #000;
-    border-radius: 8px;
-    border: 1px solid #333;
-    overflow: hidden;
-}
-.terminal-header {
-    background: #1f2937;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-.dot.red { background: #ff5f56; }
-.dot.yellow { background: #ffbd2e; }
-.dot.green { background: #27c93f; }
-.terminal-title {
-    margin-left: 10px;
-    font-family: 'Orbit', sans-serif;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-.terminal-body {
-    padding: 20px;
-    font-family: 'Orbit', sans-serif;
-    color: #10b981;
-    min-height: 150px;
-    white-space: pre-wrap;
-    line-height: 1.6;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* --- 1실험실 효과 --- */
-.transparent-text {
-    color: transparent;
-    transition: color 0.3s;
-}
-.transparent-text::selection {
-    color: #fff;
-    background: var(--primary-color);
-}
-.highlight {
-    color: var(--danger-color);
-    font-weight: bold;
-}
-
-/* --- 2실험실 효과 --- */
-.mirror-text {
-    transform: scaleX(-1);
-    display: inline-block;
-    transition: transform 0.5s;
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 8px;
-    font-family: 'Orbit', monospace;
-    border: 1px dashed #475569;
-}
-.mirror-text.normal {
-    transform: scaleX(1);
-}
-
-/* --- 4실험실 효과 (UV) --- */
-.uv-container {
-    position: relative;
-    cursor: none; /* 마우스 커서 숨김 */
-}
-.uv-light {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(138,43,226,0.6) 0%, rgba(138,43,226,0) 70%);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    display: none;
+    flex-direction: column;
+    padding: 40px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: auto;
     z-index: 10;
 }
-.room-dark {
-    background: #000;
-    height: 200px;
-    position: relative;
-    border: 1px solid #333;
-    overflow: hidden;
-}
-.clue {
-    position: absolute;
-    color: #111; /* 배경과 비슷하게 숨김 */
-    font-weight: bold;
-    font-size: 1.2rem;
-    transition: color 0.3s, text-shadow 0.3s;
-}
-.uv-active .room-dark .clue.uv-target {
-    color: #0ff; /* 형광 파란색 */
-    text-shadow: 0 0 10px #0ff;
-}
-.uv-active .room-dark .clue.fake {
-    color: #111; /* 가짜는 반응 없음 */
+
+.screen.active {
+    display: flex;
 }
 
-/* 입력 영역 및 모달 */
+/* 공통 UI 요소 (귀여운 동화풍) */
+h2 {
+    font-family: 'Orbit', sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #78350f;
+    background: rgba(255, 255, 255, 0.85);
+    display: inline-block;
+    padding: 15px 40px;
+    border-radius: 30px;
+    border: 3px solid #fcd34d;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    align-self: center;
+}
+
+.mission-text {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 15px;
+    border: 2px dashed #fbbf24;
+    color: #451a03;
+    font-weight: bold;
+    max-width: 800px;
+    align-self: center;
+}
+
+.lab-content {
+    background: var(--glass-bg);
+    border: 4px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0 15px 30px rgba(217, 119, 6, 0.2);
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--btn-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 6px 0 #c2410c, 0 10px 15px rgba(0,0,0,0.2);
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.btn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0px 0 #c2410c, 0 5px 10px rgba(0,0,0,0.2);
+}
+
 .code-input-area {
     margin-top: 30px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-.code-input-area input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--primary-color);
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    width: 100px;
     text-align: center;
-    font-size: 1.5rem;
-    letter-spacing: 5px;
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+.code-input-area input {
+    font-size: 2rem;
+    width: 120px;
+    background: #fff;
+    border: 3px solid #f59e0b;
+    color: #d97706;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.hidden { display: none !important; }
+
+/* 모달 */
 .modal {
     display: none;
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
-    z-index: 100;
 }
-.modal.active {
-    display: flex;
-}
+.modal.active { display: flex; }
 .modal-content {
-    background: #1e293b;
-    padding: 30px;
-    border-radius: 12px;
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    border: 5px solid #f59e0b;
     text-align: center;
-    border: 1px solid var(--danger-color);
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #78350f;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    max-width: 400px;
 }
-.modal-content p {
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-}
+.modal-content .btn { margin-top: 20px; }
 
-/* 보스룸 인풋 */
-.boss-inputs {
-    display: flex;
-    gap: 10px;
+/* 네온/스캔라인 제거 */
+.neon-flicker-overlay, .scanlines { display: none; }
+
+/* --- 인트로 화면 --- */
+#intro {
+    background: url('assets/intro_bg.png') center/cover;
     justify-content: center;
-    margin: 20px 0;
+    align-items: center;
 }
-.boss-code {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #3b82f6;
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    width: 80px;
+.intro-terminal {
+    background: rgba(255, 255, 255, 0.95);
+    border: 5px solid #fcd34d;
+    border-radius: 30px;
+    padding: 40px;
+    max-width: 700px;
+    width: 90%;
     text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    position: relative;
+    margin-top: 150px;
 }
+.ai-character-container {
+    position: absolute;
+    top: -250px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounceFloat 3s infinite ease-in-out;
+}
+@keyframes bounceFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-20px); }
+}
+.terminal-header {
+    background: #fef3c7;
+    border-bottom: 3px dashed #fcd34d;
+    padding: 15px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+.terminal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #b45309;
+}
+.terminal-body {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #451a03;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+#start-btn { font-size: 1.5rem; padding: 15px 50px; }
 
-/* --- 추가 CSS --- */
-.lab-content { margin: 20px 0; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 8px; }
-.card-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; min-height: 50px; padding: 10px; border: 1px dashed var(--primary-color); }
-.food-card { background: var(--secondary-color); padding: 10px 15px; border-radius: 8px; cursor: grab; font-weight: bold; }
-.food-card:active { cursor: grabbing; }
-.drop-zones { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
-.drop-zone { flex: 1; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; min-height: 120px; border: 2px dashed #475569; }
-.drop-zone h3 { text-align: center; margin-bottom: 10px; border-bottom: 1px solid #475569; padding-bottom: 5px; }
-.slots { display: flex; gap: 5px; flex-wrap: wrap; min-height: 40px; }
-.secret-diary { background: #1e293b; padding: 15px; border-radius: 8px; border-left: 4px solid var(--danger-color); margin-top: 20px; font-family: serif; font-size: 1.1rem; }
-.quiz-container { margin-top: 20px; }
-.quiz-item { margin-bottom: 15px; }
-.quiz-item select { background: #334155; color: #fff; padding: 5px; border-radius: 4px; margin-top: 5px; width: 100%; border: 1px solid var(--primary-color); }
-.role-selector { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-bottom: 20px; }
-.role-content { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--secondary-color); }
-.diagnostic-area { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
-.diagnostic-area select { background: #334155; color: #fff; padding: 10px; border-radius: 8px; border: 1px solid var(--primary-color); }
-.slider-area { margin-top: 20px; text-align: center; }
-.slider-area input { width: 80%; margin-top: 10px; }
-
-/* --- Intro Page Overhaul --- */
-body { background: url('assets/intro_bg.png') no-repeat center center fixed; background-size: cover; }
-.intro-terminal { background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-.ai-character-container { margin-bottom: -30px; z-index: 10; animation: float 3s ease-in-out infinite; }
-.ai-character { width: 150px; filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8)); }
-@keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
-.terminal-content-box { width: 100%; z-index: 11; background: rgba(0,0,0,0.9); border-top: 1px solid var(--primary-color); border-radius: 8px; }
-
-/* --- Enhanced Intro Styling --- */
-#intro { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
-.intro-terminal { background: rgba(10, 20, 30, 0.7); border: 2px solid #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), inset 0 0 20px rgba(16, 185, 129, 0.2); backdrop-filter: blur(15px); border-radius: 16px; padding: 40px; position: relative; max-width: 700px; width: 90%; transform: scale(1.05); animation: pulseGlow 4s infinite alternate; }
-.ai-character-container { position: absolute; top: -100px; left: 50%; transform: translateX(-50%); z-index: 20; animation: floatHQ 3s ease-in-out infinite; }
-.ai-character { width: 220px; filter: drop-shadow(0 0 25px #10b981) brightness(1.2); }
-.terminal-content-box { margin-top: 80px; background: rgba(0,0,0,0.6); border: 1px solid #059669; border-radius: 8px; overflow: hidden; }
-.terminal-header { background: linear-gradient(90deg, #0f172a 0%, #064e3b 100%); border-bottom: 2px solid #10b981; padding: 15px; }
-.terminal-title { font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; text-shadow: 0 0 10px #10b981; }
-.terminal-body { padding: 30px; font-size: 1.2rem; line-height: 1.8; text-shadow: 0 0 5px #10b981; }
-#start-btn { display: block; margin: 30px auto 0; font-size: 1.5rem; padding: 15px 40px; background: linear-gradient(45deg, #10b981, #059669); border: 2px solid #34d399; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); border-radius: 50px; text-transform: uppercase; letter-spacing: 3px; animation: btnPulse 1.5s infinite; transition: transform 0.3s, box-shadow 0.3s; }
-#start-btn:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(16, 185, 129, 1); }
-@keyframes floatHQ { 0% { transform: translate(-50%, 0px); } 50% { transform: translate(-50%, -20px); } 100% { transform: translate(-50%, 0px); } }
-@keyframes pulseGlow { from { box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); } to { box-shadow: 0 0 60px rgba(16, 185, 129, 0.8); } }
-@keyframes btnPulse { 0% { box-shadow: 0 0 15px rgba(16,185,129,0.5); } 50% { box-shadow: 0 0 30px rgba(16,185,129,1); } 100% { box-shadow: 0 0 15px rgba(16,185,129,0.5); } }
-
-#intro { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100; margin: 0; border-radius: 0; border: none; }
-#game-container { padding: 0; border: none; background: none; box-shadow: none; max-width: 1000px; }
-.screen { padding: 40px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-#intro.screen { padding: 0; background: rgba(0,0,0,0.5); border: none; backdrop-filter: blur(5px); }
-
-/* --- Ultra 3D Neon Intro --- */
-#intro { perspective: 1000px; background: url('assets/intro_bg_v2.png') no-repeat center center fixed; background-size: cover; overflow: hidden; }
-.neon-flicker-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 70% 30%, rgba(0, 255, 255, 0.2) 0%, transparent 40%), radial-gradient(circle at 30% 80%, rgba(16, 185, 129, 0.2) 0%, transparent 40%); animation: envFlicker 3s infinite; pointer-events: none; mix-blend-mode: screen; z-index: 1; }
-.scanlines { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); background-size: 100% 4px; z-index: 2; pointer-events: none; opacity: 0.3; }
-.intro-3d-wrapper { transform-style: preserve-3d; transition: transform 0.1s; z-index: 10; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
-.intro-terminal { transform: translateZ(50px); box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(16, 185, 129, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.2); background: rgba(5, 15, 20, 0.85); border: 1px solid rgba(16, 185, 129, 0.5); }
-.holo-ring { position: absolute; top: 50%; left: 50%; width: 250px; height: 50px; transform: translate(-50%, -50%) rotateX(70deg); border: 2px solid rgba(16, 185, 129, 0.8); border-radius: 50%; box-shadow: 0 0 20px #10b981, inset 0 0 20px #10b981; animation: spinRing 4s linear infinite; z-index: -1; }
-.ai-character { transform: translateZ(80px); filter: drop-shadow(0 0 30px #0ff) brightness(1.3); }
-.terminal-content-box { transform: translateZ(30px); background: rgba(0,0,0,0.8); border: 1px solid rgba(0, 255, 255, 0.3); box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.1); }
-.blink-red { animation: blink 1s infinite; }
-.blink-green { animation: blink 0.5s infinite; }
-@keyframes envFlicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: 0.1; } }
-@keyframes spinRing { from { transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg); } to { transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg); } }
-@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.2; } }
-
-/* --- Lab 1 Overhaul --- */
-#lab1.screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 90; margin: 0; border-radius: 0; border: none; background: url('assets/lab1_bg.png') no-repeat center center fixed; background-size: cover; overflow-y: auto; padding: 40px; box-sizing: border-box; }
-#lab1 h2 { text-shadow: 0 0 10px #10b981; font-size: 2.5rem; text-align: center; margin-bottom: 10px; background: rgba(0,0,0,0.6); display: inline-block; padding: 10px 30px; border-radius: 12px; }
-.mission-text { font-size: 1.2rem; text-align: center; margin-bottom: 30px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; }
-.lab-content { background: rgba(10, 20, 30, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16,185,129,0.5); border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-width: 1000px; margin: 0 auto; }
-.food-card { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #fff; text-shadow: 0 0 5px #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.3); padding: 15px 20px; font-size: 1.2rem; border-radius: 12px; transition: all 0.3s ease; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.food-card:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 0 20px rgba(16,185,129,0.8); background: rgba(16, 185, 129, 0.2); }
+/* --- 1실험실 (탄수화물) --- */
+#lab1 { background: url('assets/lab1_bg.png') center/cover; }
+.food-card {
+    background: white;
+    border: 3px solid #fbbf24;
+    color: #92400e;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: grab;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 5px 0 #d97706;
+    margin: 5px;
+    transition: transform 0.2s;
+}
+.food-card:hover { transform: translateY(-5px); }
 .food-emoji { font-size: 2.5rem; }
 .drop-zones { display: flex; gap: 20px; margin-top: 30px; }
-.drop-zone { flex: 1; background: rgba(0,0,0,0.5); border: 2px dashed #10b981; border-radius: 16px; min-height: 200px; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); transition: background 0.3s; }
-.drop-zone.dragover { background: rgba(16, 185, 129, 0.2); border-style: solid; box-shadow: 0 0 20px rgba(16,185,129,0.5); }
-.drop-zone h3 { background: linear-gradient(90deg, transparent, rgba(16,185,129,0.4), transparent); text-align: center; padding: 10px; font-size: 1.3rem; letter-spacing: 2px; }
-.secret-diary { margin-top: 30px; background: rgba(40, 20, 10, 0.8); border: 2px solid #8b4513; border-radius: 8px; padding: 20px; font-family: 'Times New Roman', serif; box-shadow: 0 10px 20px rgba(0,0,0,0.5); position: relative; }
-.secret-diary::before { content: '비밀 일기장'; position: absolute; top: -15px; left: 20px; background: #8b4513; padding: 2px 10px; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; font-weight: bold; border-radius: 4px; }
-.transparent-text { background: rgba(0,0,0,0.5); padding: 5px; border-radius: 4px; border: 1px dotted rgba(255,255,255,0.2); }
-.code-input-area { margin-top: 30px; text-align: center; }
-.code-input-area input { font-family: 'Orbit', monospace; font-size: 2rem; width: 150px; background: rgba(0,0,0,0.8); border: 2px solid #10b981; color: #10b981; text-shadow: 0 0 10px #10b981; border-radius: 8px; padding: 10px; }
+.drop-zone {
+    flex: 1;
+    background: rgba(255,255,255,0.7);
+    border: 3px dashed #f59e0b;
+    border-radius: 20px;
+    min-height: 200px;
+    display: flex; flex-direction: column;
+}
+.drop-zone h3 {
+    background: #fef3c7;
+    padding: 10px;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+    color: #b45309;
+    border-bottom: 3px dashed #f59e0b;
+}
+.drop-zone.dragover { background: #fef3c7; border-style: solid; }
+.slots { padding: 10px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+.secret-diary {
+    margin-top: 30px;
+    background: #fdf6e3;
+    border: 2px solid #d4a373;
+    padding: 20px;
+    border-radius: 15px;
+    font-family: serif;
+    font-size: 1.2rem;
+    color: #5c4033;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+.secret-diary h3 { color: #8b4513; margin-bottom: 10px; }
+.highlight { color: #e63946; font-weight: bold; background: #ffe4e1; padding: 0 5px; }
+.transparent-text { background: #e9edc9; padding: 5px; border-radius: 5px; color: #a4a4a4; transition: color 0.3s; }
+.transparent-text:hover { color: #5c4033; }
 
-/* --- Lab 2 Overhaul --- */
-#lab2.screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 90; margin: 0; border-radius: 0; border: none; background: url('assets/lab2_bg.png') no-repeat center center fixed; background-size: cover; overflow-y: auto; padding: 40px; box-sizing: border-box; }
-#lab2 h2 { text-shadow: 0 0 15px #f472b6; font-size: 2.5rem; text-align: center; margin-bottom: 20px; color: #fdf2f8; background: rgba(0,0,0,0.7); display: inline-block; padding: 10px 30px; border-radius: 12px; border: 1px solid #db2777; box-shadow: 0 0 20px rgba(219, 39, 119, 0.5); }
-#lab2 .lab-content { background: rgba(10, 10, 15, 0.85); border: 1px solid #be185d; border-radius: 16px; padding: 40px; box-shadow: 0 0 40px rgba(190, 24, 93, 0.6); max-width: 900px; margin: 0 auto; display: flex; gap: 40px; align-items: flex-start; }
-.mirror-container { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.mirror-text { transform: scaleX(-1); background: linear-gradient(135deg, rgba(253,242,248,0.9), rgba(24bc,165,165,0.7)); color: #111; padding: 30px; border-radius: 4px; border: 2px solid #9d174d; font-family: 'Orbit', monospace; font-size: 1.5rem; font-weight: bold; box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.5); position: relative; }
-.mirror-text::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px); pointer-events: none; }
-#mirror-toggle { background: #db2777; border-color: #f472b6; box-shadow: 0 0 15px #db2777; font-size: 1.2rem; }
-#mirror-toggle:hover { background: #be185d; box-shadow: 0 0 25px #f472b6; }
-#lab2-quiz { flex: 1; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 12px; border-left: 3px solid #f472b6; }
-.quiz-item p { font-size: 1.2rem; margin-bottom: 10px; color: #fbcfe8; text-shadow: 0 0 5px #f472b6; }
-.quiz-item select { font-size: 1.1rem; padding: 10px; background: rgba(0,0,0,0.8); color: #fff; border: 1px solid #f472b6; margin-bottom: 20px; }
-#lab2-code { border-color: #f472b6; color: #f472b6; text-shadow: 0 0 10px #f472b6; }
+/* --- 2실험실 (지방) --- */
+#lab2 { background: url('assets/lab2_bg.png') center/cover; }
+.mirror-container { text-align: center; }
+.mirror-text {
+    transform: scaleX(-1);
+    background: #fff;
+    padding: 30px;
+    border: 4px solid #f472b6;
+    border-radius: 15px;
+    font-family: monospace;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #be185d;
+    box-shadow: 0 10px 20px rgba(244, 114, 182, 0.3);
+    display: inline-block;
+    margin-bottom: 20px;
+}
+#mirror-toggle { background: #ec4899; box-shadow: 0 6px 0 #be185d; }
+#mirror-toggle:active { box-shadow: 0 0px 0 #be185d; }
+#lab2-quiz { margin-top: 30px; background: rgba(255,255,255,0.9); padding: 20px; border-radius: 20px; border: 3px solid #fbcfe8; }
+.quiz-item { margin-bottom: 15px; }
+.quiz-item select { font-size: 1.1rem; padding: 8px; border-radius: 10px; border: 2px solid #f472b6; outline: none; }
 
-/* --- Lab 3 Overhaul (Fairytale x Tech) --- */
-#lab3.screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 90; margin: 0; border-radius: 0; border: none; background: url('assets/lab3_bg.png') no-repeat center center fixed; background-size: cover; overflow-y: auto; padding: 40px; box-sizing: border-box; }
-#lab3 h2 { text-shadow: 0 0 15px #3b82f6; font-size: 2.5rem; text-align: center; margin-bottom: 20px; color: #eff6ff; background: rgba(15, 23, 42, 0.8); display: inline-block; padding: 10px 30px; border-radius: 12px; border: 1px solid #2563eb; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-.role-selector { background: rgba(30, 20, 15, 0.85); border: 2px solid #8b4513; border-radius: 16px; padding: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(139, 69, 19, 0.5); max-width: 800px; margin: 0 auto; }
-.role-selector h3 { color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.5); margin-bottom: 20px; font-family: serif; }
-.role-btn { font-size: 1.3rem; padding: 15px 30px; background: linear-gradient(45deg, #1e3a8a, #2563eb); border: 2px solid #60a5fa; box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); font-family: 'Orbit', sans-serif; }
-.role-btn:hover { background: #3b82f6; box-shadow: 0 0 25px rgba(96, 165, 250, 1); transform: translateY(-3px); }
-.role-content { background: rgba(0, 30, 50, 0.9); border: 1px solid #38bdf8; box-shadow: 0 0 30px rgba(56, 189, 248, 0.5); color: #bae6fd; font-size: 1.2rem; padding: 30px; border-radius: 12px; margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto; text-shadow: 0 0 5px #38bdf8; }
-.diagnostic-area { background: rgba(15, 23, 42, 0.8); border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: inline-flex; justify-content: center; margin-top: 30px; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-#lab3-code { border-color: #3b82f6; color: #3b82f6; text-shadow: 0 0 10px #3b82f6; }
+/* --- 3실험실 (단백질/무기질) --- */
+#lab3 { background: url('assets/lab3_bg.png') center/cover; }
+.role-selector { text-align: center; margin-bottom: 20px; }
+.role-btn { background: #3b82f6; box-shadow: 0 6px 0 #1d4ed8; margin: 0 5px; }
+.role-btn:active { box-shadow: 0 0px 0 #1d4ed8; }
+.role-content {
+    background: white;
+    border: 3px solid #93c5fd;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: #1e3a8a;
+    text-align: center;
+}
+.diagnostic-area { display: flex; justify-content: center; gap: 15px; }
+.diagnostic-area select { font-size: 1.2rem; padding: 10px; border-radius: 15px; border: 3px solid #60a5fa; }
+
+/* --- 4실험실 (비타민/물) --- */
+#lab4 { background: url('assets/lab4_bg.png') center/cover; }
+.room-dark {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    pointer-events: none;
+    z-index: 5;
+    transition: background 0.3s;
+}
+.uv-active .room-dark { background: rgba(0,0,0,0.8); }
+.uv-light {
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(253, 224, 71, 0.6) 0%, transparent 70%);
+    position: absolute; pointer-events: none; z-index: 10;
+    mix-blend-mode: screen;
+}
+.hidden-clues { position: absolute; width:100%; height:100%; z-index: 6; pointer-events: none; }
+.clue { position: absolute; font-size: 1.5rem; font-weight: bold; color: rgba(255,255,255,0.1); transition: color 0.3s, text-shadow 0.3s; }
+.uv-active .clue.uv-target { color: #fef08a; text-shadow: 0 0 10px #eab308; }
+#uv-toggle { background: #eab308; box-shadow: 0 6px 0 #a16207; position: relative; z-index: 20; display: block; margin: 0 auto; }
+.slider-area { position: relative; z-index: 20; background: white; padding: 20px; border-radius: 15px; text-align: center; max-width: 400px; margin: 30px auto; border: 3px solid #fde047; }
+.slider-area input { width: 100%; margin-top: 10px; }
+
+/* --- 보스룸 --- */
+#boss { background: url('assets/boss_bg.png') center/cover; text-align: center; }
+.boss-inputs {
+    display: inline-flex;
+    gap: 15px;
+    background: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 30px;
+    border: 4px solid #10b981;
+    margin-top: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.boss-code {
+    font-size: 1.5rem;
+    width: 80px;
+    text-align: center;
+    padding: 10px;
+    border: 3px solid #34d399;
+    border-radius: 15px;
+    color: #047857;
+    font-weight: bold;
+}
+
+/* --- 엔딩 --- */
+#ending { background: url('assets/ending_bg.png') center/cover; justify-content: center; align-items: center; }
+.fairytale-book {
+    background: white;
+    border: 10px solid #fcd34d;
+    border-radius: 30px;
+    padding: 50px;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+.fairytale-book .fairytale-header {
+    font-size: 3rem;
+    color: #f59e0b;
+    font-family: 'Orbit', sans-serif;
+    margin-bottom: 30px;
+}
+.fairytale-book .terminal-body {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    color: #451a03;
+    font-weight: bold;
+}
