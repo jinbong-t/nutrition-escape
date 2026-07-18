@@ -9,34 +9,50 @@
 </head>
 <body>
     <div id="game-container">
-        <!-- 인트로 화면 -->
-        <section id="intro" class="screen active">
-            <!-- 배경 네온 반짝임 오버레이 -->
-            <div class="neon-flicker-overlay"></div>
-            <div class="scanlines"></div>
+        <!-- 대문 화면 (메인 사진) -->
+        <div id="door-screen" class="door-screen">
+            <div class="door-content" onclick="openDoor()">
+                <img src="assets/main_character.png" alt="일곱 난쟁이와 백설공주" class="door-image">
+                <p class="door-hint blink-text">클릭해서 동화책 열기</p>
+            </div>
+        </div>
 
-            <!-- 3D 회전하는 메인 컨테이너 -->
+        <!-- 인트로 화면 (3D 동화책) -->
+        <section id="intro" class="screen active">
             <div class="intro-3d-wrapper" id="intro-3d-wrapper">
-                <div class="terminal intro-terminal">
-                    <!-- 캐릭터 홀로그램 -->
-                    <div class="ai-character-container">
-                        <img src="assets/main_character.png" alt="일곱 난쟁이와 백설공주" class="ai-character" style="width: 500px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                
+                <!-- 3D 책 컨테이너 -->
+                <div class="book-container" id="intro-book-container">
+                    
+                    <!-- 책 덮개 (오른쪽에 덮여있다가 왼쪽으로 넘어감) -->
+                    <div class="book-cover" id="book-cover">
+                        <div class="cover-front">
+                            <h1>백설공주의 기록</h1>
+                            <p style="font-size:1.2rem; margin-top:10px;">~ 6대 영양소와 일곱 난쟁이 ~</p>
+                        </div>
+                        <div class="cover-back"></div>
                     </div>
                     
-                    <div class="terminal-content-box">
-                        <div class="terminal-header">
-                            <span class="dot red blink-red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green blink-green"></span>
-                            <div class="terminal-title">백설공주의 메디컬 스캐너 v1.0</div>
+                    <!-- 책 내부 (양면) -->
+                    <div class="book-inside">
+                        <!-- 왼쪽 페이지 (그림) -->
+                        <div class="page-left">
+                            <div class="fairytale-header" style="font-size:2rem; text-align:center; margin-bottom:20px; color:#92400e; font-family:'Orbit', sans-serif;">이야기의 시작</div>
+                            <div class="book-illustration">
+                                <img src="assets/main_character.png" alt="백설공주와 일곱 난쟁이 삽화">
+                            </div>
                         </div>
-                        <div class="terminal-body" id="intro-text">
-                            <!-- JS로 타이핑 효과 적용 -->
+                        <!-- 오른쪽 페이지 (글) -->
+                        <div class="page-right">
+                            <div class="book-body" id="intro-text">
+                                <!-- JS로 타이핑 효과 적용 -->
+                            </div>
+                            <button id="start-btn" class="btn hidden">
+                                <span class="btn-text">모험 시작하기 📖</span>
+                            </button>
                         </div>
-                        <button id="start-btn" class="btn hidden">
-                            <span class="btn-text">동화 속으로 들어가기</span>
-                        </button>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -165,7 +181,7 @@
         <section id="ending" class="screen">
             <div class="fairytale-book">
                 <div class="fairytale-header">THE END</div>
-                <div class="terminal-body" id="ending-text">
+                <div class="book-body" id="ending-text">
                     <!-- JS로 엔딩 텍스트 출력 -->
                 </div>
             </div>

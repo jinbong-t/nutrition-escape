@@ -44,20 +44,30 @@ function checkCode(labNum) {
 }
 
 // --- 인트로 타이핑 효과 ---
-const introText = `앗... 얘들아 상태가 왜 이래? ㅠㅠ
+const introText = `깊고 깊은 숲 속, 길을 잃고 헤매던 백설공주는 작은 오두막을 발견했습니다.
+그곳에는 일곱 난쟁이들이 살고 있었지만...
+어찌된 일인지 모두들 심각한 영양 불균형으로 앓아누워 있었습니다!
 
-숲속에서 만난 일곱 난쟁이들이 심각한 영양 불균형으로 앓아누워 있습니다.
-백설공주의 메디컬 스캐너 가동 완료!
-각 방을 돌며 난쟁이들의 식습관 데이터를 분석하고 올바른 처방을 내려줍시다.
+"이대로 둘 순 없어! 내가 도와줘야겠어."
 
-[진단 준비 완료]`;
+백설공주는 난쟁이들의 식습관을 분석하여 올바른 영양 처방을 내리기로 결심했습니다.`;
 
 let typeIndex = 0;
 function typeWriter() {
     if (typeIndex < introText.length) {
-        introTextEl.innerHTML += introText.charAt(typeIndex);
+        const char = introText.charAt(typeIndex);
+        const span = document.createElement('span');
+        span.className = 'magic-char';
+        // 줄바꿈 문자 처리
+        if (char === '\n') {
+            introTextEl.appendChild(document.createTextNode('\n'));
+        } else {
+            span.textContent = char;
+            introTextEl.appendChild(span);
+        }
+        
         typeIndex++;
-        setTimeout(typeWriter, 50);
+        setTimeout(typeWriter, 40); // 살짝 빠르게
     } else {
         startBtn.classList.remove('hidden');
     }
@@ -260,9 +270,42 @@ startBtn.addEventListener('click', () => {
     showScreen('lab1');
 });
 
+// --- 대문 열기 효과 ---
+function openDoor() {
+    const doorScreen = document.getElementById('door-screen');
+    if (!doorScreen) return;
+    
+    // 날아가는 애니메이션 클래스 추가
+    doorScreen.classList.add('fly-away');
+    
+    // 애니메이션 시간(1초) 후 요소를 숨기고 책 열기 애니메이션 시작
+    setTimeout(() => {
+        doorScreen.style.display = 'none';
+        
+        const bookContainer = document.getElementById('intro-book-container');
+        const bookCover = document.getElementById('book-cover');
+        
+        if (bookContainer && bookCover) {
+            bookContainer.classList.add('active'); // 책 나타나기
+            
+            // 0.5초 뒤 표지 넘기기 시작
+            setTimeout(() => {
+                bookCover.classList.add('open');
+                
+                // 표지 넘기는 애니메이션(1.5초) 완료 후 타이핑 시작
+                setTimeout(() => {
+                    typeWriter();
+                }, 1500);
+            }, 500);
+        } else {
+            typeWriter(); // fallback
+        }
+    }, 1000);
+}
+
 // 초기화
 window.onload = () => {
-    typeWriter();
+    // 이제 타이핑 효과는 대문이 열린 후에 시작됩니다.
 };
 
 // --- Intro 3D Parallax Effect ---
@@ -271,14 +314,14 @@ document.getElementById('intro').addEventListener('mousemove', (e) => {
     const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
     const wrapper = document.getElementById('intro-3d-wrapper');
     if(wrapper) {
-        wrapper.style.transform = \otateY(\deg) rotateX(\deg)\;
+        wrapper.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
     }
 });
 
 document.getElementById('intro').addEventListener('mouseleave', () => {
     const wrapper = document.getElementById('intro-3d-wrapper');
     if(wrapper) {
-        wrapper.style.transform = \otateY(0deg) rotateX(0deg)\;
+        wrapper.style.transform = `rotateY(0deg) rotateX(0deg)`;
         wrapper.style.transition = 'transform 0.5s ease';
     }
 });
