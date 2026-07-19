@@ -259,7 +259,6 @@ h2 {
 #hub {
     background: linear-gradient(180deg, #ffefc8 0%, #fffbeb 60%, #fef3c7 100%);
     padding: 0;
-    display: flex;
     flex-direction: column;
     align-items: center; /* 데스크톱에서 중앙 정렬 */
     overflow-y: auto;
