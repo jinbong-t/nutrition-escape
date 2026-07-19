@@ -79,9 +79,13 @@ function showModal(msg, isCorrect = null) {
     modalText.innerText = msg;
     modal.classList.remove('success', 'error'); // 기존 클래스 초기화
     
+    const dwarfImg = document.getElementById('modal-dwarf');
+    if (dwarfImg) dwarfImg.style.display = 'none';
+
     if (isCorrect === true) { 
         modalIcon.textContent = '✅'; 
         modal.classList.add('success'); 
+        if (dwarfImg) dwarfImg.style.display = 'block';
     }
     else if (isCorrect === false) { 
         modalIcon.textContent = '❌'; 
@@ -255,6 +259,11 @@ function checkOption(roomNum, qNum, btn, result) {
         btn.classList.add('wrong');
         allBtns.forEach(b => { if (b.getAttribute('onclick').includes("'correct'")) b.classList.add('correct'); });
         showModal('😅 틀렸어요! 정답을 확인하고 다시 도전해 보세요.', false);
+        
+        // 틀렸을 때 힌트 버튼 표시
+        const hintBtn = btn.closest('.quiz-stage').querySelector('.hint-btn');
+        if (hintBtn) hintBtn.classList.add('show-hint');
+
         setTimeout(() => {
             closeModal();
             allBtns.forEach(b => { b.disabled = false; b.classList.remove('correct', 'wrong'); });
@@ -277,6 +286,11 @@ function checkLie(roomNum, btn, isCorrect) {
     } else {
         btn.classList.add('lie-wrong');
         showModal('❌ 그 문장은 사실이에요! 다시 살펴보세요.', false);
+        
+        // 틀렸을 때 힌트 버튼 표시
+        const hintBtn = btn.closest('.quiz-stage').querySelector('.hint-btn');
+        if (hintBtn) hintBtn.classList.add('show-hint');
+
         setTimeout(() => { closeModal(); allBtns.forEach(b => { b.disabled = false; b.classList.remove('lie-wrong'); }); }, 2000);
     }
 }
@@ -296,6 +310,11 @@ function selectTableRow(el, roomNum, isCorrect) {
     } else {
         el.classList.add('row-wrong-flash');
         showModal('그 행은 올바른 정보예요! 다시 살펴보세요.', false);
+        
+        // 틀렸을 때 힌트 버튼 표시
+        const hintBtn = document.getElementById(`hint-${roomNum}-2`); // 방5 문제2
+        if (hintBtn) hintBtn.classList.add('show-hint');
+
         setTimeout(() => { el.classList.remove('row-selected', 'row-wrong-flash'); closeModal(); }, 1800);
     }
 }
@@ -347,6 +366,10 @@ function checkClassifyQ(roomNum) {
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
     } else {
         showModal('아직 틀린 분류가 있어요! 단당류(포도당·과당), 다당류(녹말·식이섬유)를 기억하세요.', false);
+        
+        // 틀렸을 때 힌트 버튼 표시
+        const hintBtn = document.getElementById('hint-1-2');
+        if (hintBtn) hintBtn.classList.add('show-hint');
     }
 }
 
@@ -526,6 +549,11 @@ function checkVitClassifyQ(roomNum) {
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1800);
     } else {
         showModal('틀린 분류가 있어요! 지용성: A·D·E·K, 수용성: B·C를 기억하세요!', false);
+        
+        // 틀렸을 때 힌트 버튼 표시
+        const hintBtn = document.getElementById('hint-4-3');
+        if (hintBtn) hintBtn.classList.add('show-hint');
+
         r4VitClassified = {};
         document.querySelectorAll('.vit-card').forEach(c => { c.classList.remove('vit-fat','vit-water','vit-selected'); delete c.dataset.classified; });
         document.getElementById('r4-fat-content').innerHTML = '';
