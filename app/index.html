@@ -19,12 +19,14 @@
         <img src="assets/main_character.png" alt="백설공주와 일곱 난쟁이" class="door-image">
         <p class="door-hint blink-text">✨ 클릭해서 동화책 열기 ✨</p>
     </div>
+    <!-- 선생님 전용 스킵 버튼 -->
+    <button onclick="event.stopPropagation(); skipIntro();" style="position:fixed; top:15px; right:15px; z-index:10001; background:rgba(255,255,255,0.15); color:white; border:2px solid rgba(255,255,255,0.4); border-radius:20px; padding:8px 16px; font-size:0.9rem; font-weight:bold; cursor:pointer; backdrop-filter:blur(4px);">⏭ 스킵</button>
 </div>
 
 <!-- ===================== 인트로 (3D 동화책) ===================== -->
 <section id="intro" class="screen active">
-    <!-- 선생님 전용 비밀 스킵 영역 (화면 우측 상단 투명 영역) -->
-    <div onclick="skipIntro()" style="position: absolute; top: 0; right: 0; width: 80px; height: 80px; cursor: pointer; z-index: 9999;" title="비밀 스킵 (더블클릭)"></div>
+    <!-- 선생님 전용 스킵 버튼 -->
+    <button onclick="skipIntro();" style="position: absolute; top: 15px; right: 15px; z-index: 9999; background:rgba(255,255,255,0.2); color:#78350f; border:2px solid #fcd34d; border-radius:20px; padding:8px 16px; font-size:0.9rem; font-weight:bold; cursor:pointer; backdrop-filter:blur(4px);">⏭ 스킵</button>
     
     <div class="intro-3d-wrapper" id="intro-3d-wrapper">
         <div class="book-container" id="intro-book-container">
