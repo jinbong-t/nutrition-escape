@@ -62,96 +62,127 @@
 
 <!-- ===================== 허브 (난쟁이 집) ===================== -->
 <section id="hub" class="screen">
-    <div class="hub-container">
-        <!-- 좌측: 캐릭터 -->
-        <div class="hub-left">
-            <div class="hub-speech-bubble">난쟁이들을 위해<br>영양 처방전을 완성해야 해!</div>
-            <div class="hub-character-frame">
-                <img src="백설공주.png" alt="백설공주" class="hub-character" onerror="this.src='assets/snow_white_user.jpg'">
-            </div>
+
+    <!-- 상단 HUD -->
+    <div class="hub-hud">
+        <img class="hud-char" src="백설공주.png" alt="백설공주" onerror="this.src='assets/snow_white_user.jpg'">
+        <div class="hud-info">
+            <div class="hud-title">🍎 영양 탐험대</div>
+            <div class="hud-progress-text" id="hud-progress-text">0 / 6 방 완료</div>
         </div>
-
-        <!-- 중앙: 방 목록 -->
-        <div class="hub-center">
-            <div class="hub-title">
-                <h2>난쟁이들의 방</h2>
-            </div>
-            <div class="hub-rooms">
-                <div class="room-card" id="room-1" onclick="enterRoom(1)">
-                    <div class="room-dwarf"><img src="잠보.png" alt="잠보" class="dwarf-icon"></div>
-                    <div class="room-name">잠보의 방</div>
-                    <div class="room-nutrient">탄수화물</div>
-                    <div class="room-symptom">"힘이 없어서 아무것도 못 해..."</div>
-                    <div class="room-status unlocked">🔓 입장하기</div>
-                </div>
-                <div class="room-card locked" id="room-2" onclick="enterRoom(2)">
-                    <div class="room-dwarf"><img src="여림이.png" alt="여림이" class="dwarf-icon"></div>
-                    <div class="room-name">여림이의 방</div>
-                    <div class="room-nutrient">단백질</div>
-                    <div class="room-symptom">"너무 말라서 아무것도 들 수 없어..."</div>
-                    <div class="room-status">🔒 1방 클리어 후 입장</div>
-                </div>
-                <div class="room-card locked" id="room-3" onclick="enterRoom(3)">
-                    <div class="room-dwarf"><img src="부풍이.png" alt="부풍이" class="dwarf-icon"></div>
-                    <div class="room-name">부풍이의 방</div>
-                    <div class="room-nutrient">지방</div>
-                    <div class="room-symptom">"항상 춥고 피부가 건조해..."</div>
-                    <div class="room-status">🔒 2방 클리어 후 입장</div>
-                </div>
-                <div class="room-card locked" id="room-4" onclick="enterRoom(4)">
-                    <div class="room-dwarf"><img src="흐림이.png" alt="흐림이" class="dwarf-icon"></div>
-                    <div class="room-name">흐림이의 방</div>
-                    <div class="room-nutrient">비타민</div>
-                    <div class="room-symptom">"피부에 반점이 생기고..."</div>
-                    <div class="room-status">🔒 3방 클리어 후 입장</div>
-                </div>
-                <div class="room-card locked" id="room-5" onclick="enterRoom(5)">
-                    <div class="room-dwarf"><img src="저리.png" alt="저리" class="dwarf-icon"></div>
-                    <div class="room-name">저리의 방</div>
-                    <div class="room-nutrient">무기질</div>
-                    <div class="room-symptom">"뼈가 자꾸 아파..."</div>
-                    <div class="room-status">🔒 4방 클리어 후 입장</div>
-                </div>
-                <div class="room-card locked" id="room-6" onclick="enterRoom(6)">
-                    <div class="room-dwarf"><img src="바싹이.png" alt="바싹이" class="dwarf-icon"></div>
-                    <div class="room-name">바싹이의 방</div>
-                    <div class="room-nutrient">물</div>
-                    <div class="room-symptom">"입이 바짝 말라서..."</div>
-                    <div class="room-status">🔒 5방 클리어 후 입장</div>
-                </div>
-            </div>
-        </div> <!-- // hub-center -->
-
-        <!-- 우측: 약병 및 코드판 -->
-        <div class="hub-right">
-            <!-- 비밀번호 코드판 -->
-            <div class="code-panel">
-                <div class="code-panel-title">🚪 영양 비밀 코드</div>
-                <div class="code-letters">
-                    <div class="code-letter" id="code-1" data-letter="영"><span class="code-lock">🔒</span></div>
-                    <div class="code-letter" id="code-2" data-letter="양"><span class="code-lock">🔒</span></div>
-                    <div class="code-letter" id="code-3" data-letter="전"><span class="code-lock">🔒</span></div>
-                    <div class="code-letter" id="code-4" data-letter="도"><span class="code-lock">🔒</span></div>
-                    <div class="code-letter" id="code-5" data-letter="사"><span class="code-lock">🔒</span></div>
-                    <div class="code-letter" id="code-6" data-letter="!"><span class="code-lock">🔒</span></div>
-                </div>
-                <div class="code-hint-text">6개 방 클리어 시 완성</div>
-            </div>
-
-            <!-- 거대 마법 약병 (인벤토리) -->
-            <div class="potion-inventory">
-                <div class="potion-title">🧪 영양 처방전</div>
-                <div class="big-flask">
-                    <div class="flask-layer" id="layer-6" style="background: rgba(59, 130, 246, 0.9);"><span>물</span></div>
-                    <div class="flask-layer" id="layer-5" style="background: rgba(168, 85, 247, 0.9);"><span>무기질</span></div>
-                    <div class="flask-layer" id="layer-4" style="background: rgba(236, 72, 153, 0.9);"><span>비타민</span></div>
-                    <div class="flask-layer" id="layer-3" style="background: rgba(234, 179, 8, 0.9);"><span>지방</span></div>
-                    <div class="flask-layer" id="layer-2" style="background: rgba(239, 68, 68, 0.9);"><span>단백질</span></div>
-                    <div class="flask-layer" id="layer-1" style="background: rgba(249, 115, 22, 0.9);"><span>탄수화물</span></div>
-                </div>
-            </div>
+        <div class="hud-code-mini">
+            <div class="hud-code-dot" id="hdot-1">🔒</div>
+            <div class="hud-code-dot" id="hdot-2">🔒</div>
+            <div class="hud-code-dot" id="hdot-3">🔒</div>
+            <div class="hud-code-dot" id="hdot-4">🔒</div>
+            <div class="hud-code-dot" id="hdot-5">🔒</div>
+            <div class="hud-code-dot" id="hdot-6">🔒</div>
         </div>
-    </div> <!-- // hub-container -->
+    </div>
+
+    <!-- 미션 배너 -->
+    <div class="hub-mission-banner">
+        <img class="mission-banner-img" src="건강 난쟁이들 단체사진.png" alt="난쟁이들" onerror="this.style.display='none'">
+        <div>
+            <div class="mission-label">✦ MISSION ✦</div>
+            <div class="mission-desc">일곱 난쟁이의<br>영양 처방전을 완성하라!</div>
+            <div class="mission-sub">각 방에서 퀴즈를 풀어 코드를 모으세요 🔐</div>
+        </div>
+    </div>
+
+    <!-- 스테이지 그리드 -->
+    <div class="hub-stages-wrap">
+        <div class="stages-section-title">⭐ 난쟁이들의 방</div>
+        <div class="stages-grid">
+
+            <!-- 방 1: 잠보 -->
+            <div class="stage-card" id="room-1" onclick="enterRoom(1)">
+                <div class="stage-num-badge">1</div>
+                <div class="stage-img-wrap">
+                    <img src="잠보.png" alt="잠보" class="stage-dwarf">
+                </div>
+                <div class="stage-name">잠보</div>
+                <div class="stage-nutrient-badge">탄수화물</div>
+                <div class="stage-enter-btn enter-open" id="room-status-1">🔓 입장하기</div>
+            </div>
+
+            <!-- 방 2: 여림이 -->
+            <div class="stage-card locked" id="room-2" onclick="enterRoom(2)">
+                <div class="stage-num-badge">2</div>
+                <div class="stage-img-wrap">
+                    <img src="여림이.png" alt="여림이" class="stage-dwarf">
+                    <div class="stage-lock-overlay">🔒</div>
+                </div>
+                <div class="stage-name">여림이</div>
+                <div class="stage-nutrient-badge">단백질</div>
+                <div class="stage-enter-btn enter-locked" id="room-status-2">🔒 잠김</div>
+            </div>
+
+            <!-- 방 3: 부풍이 -->
+            <div class="stage-card locked" id="room-3" onclick="enterRoom(3)">
+                <div class="stage-num-badge">3</div>
+                <div class="stage-img-wrap">
+                    <img src="부풍이.png" alt="부풍이" class="stage-dwarf">
+                    <div class="stage-lock-overlay">🔒</div>
+                </div>
+                <div class="stage-name">부풍이</div>
+                <div class="stage-nutrient-badge">지방</div>
+                <div class="stage-enter-btn enter-locked" id="room-status-3">🔒 잠김</div>
+            </div>
+
+            <!-- 방 4: 흐림이 -->
+            <div class="stage-card locked" id="room-4" onclick="enterRoom(4)">
+                <div class="stage-num-badge">4</div>
+                <div class="stage-img-wrap">
+                    <img src="흐림이.png" alt="흐림이" class="stage-dwarf">
+                    <div class="stage-lock-overlay">🔒</div>
+                </div>
+                <div class="stage-name">흐림이</div>
+                <div class="stage-nutrient-badge">비타민</div>
+                <div class="stage-enter-btn enter-locked" id="room-status-4">🔒 잠김</div>
+            </div>
+
+            <!-- 방 5: 저리 -->
+            <div class="stage-card locked" id="room-5" onclick="enterRoom(5)">
+                <div class="stage-num-badge">5</div>
+                <div class="stage-img-wrap">
+                    <img src="저리.png" alt="저리" class="stage-dwarf">
+                    <div class="stage-lock-overlay">🔒</div>
+                </div>
+                <div class="stage-name">저리</div>
+                <div class="stage-nutrient-badge">무기질</div>
+                <div class="stage-enter-btn enter-locked" id="room-status-5">🔒 잠김</div>
+            </div>
+
+            <!-- 방 6: 바싹이 -->
+            <div class="stage-card locked" id="room-6" onclick="enterRoom(6)">
+                <div class="stage-num-badge">6</div>
+                <div class="stage-img-wrap">
+                    <img src="바싹이.png" alt="바싹이" class="stage-dwarf">
+                    <div class="stage-lock-overlay">🔒</div>
+                </div>
+                <div class="stage-name">바싹이</div>
+                <div class="stage-nutrient-badge">물</div>
+                <div class="stage-enter-btn enter-locked" id="room-status-6">🔒 잠김</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 하단 코드 패널 -->
+    <div class="hub-code-panel">
+        <div class="code-panel-title">🔐 영양 비밀 코드</div>
+        <div class="code-letters">
+            <div class="code-letter" id="code-1"><span class="code-lock">🔒</span></div>
+            <div class="code-letter" id="code-2"><span class="code-lock">🔒</span></div>
+            <div class="code-letter" id="code-3"><span class="code-lock">🔒</span></div>
+            <div class="code-letter" id="code-4"><span class="code-lock">🔒</span></div>
+            <div class="code-letter" id="code-5"><span class="code-lock">🔒</span></div>
+            <div class="code-letter" id="code-6"><span class="code-lock">🔒</span></div>
+        </div>
+        <div class="code-hint-text" id="code-hint-text-hub">6개 방 클리어 시 완성</div>
+    </div>
+
 </section>
 
 <!-- ===================== 방 1: 잠보 (탄수화물) ===================== -->

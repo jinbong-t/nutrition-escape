@@ -629,9 +629,15 @@ function revealCode(roomNum) {
     if (!codeEl) return;
     codeEl.classList.add('code-revealed');
     codeEl.innerHTML = `<span class="code-char">${codeLetters[roomNum]}</span>`;
+    // HUD 돷 업데이트
+    const hudDot = document.getElementById(`hdot-${roomNum}`);
+    if (hudDot) {
+        hudDot.classList.add('dot-revealed');
+        hudDot.textContent = codeLetters[roomNum];
+    }
     // 힌트 텍스트 업데이트
     const cleared = clearedRooms.length;
-    const hintEl = document.querySelector('.code-hint-text');
+    const hintEl = document.getElementById('code-hint-text-hub') || document.querySelector('.code-hint-text');
     if (hintEl) {
         if (cleared < 6) hintEl.textContent = `${cleared} / 6 완료! 앞으로 ${6 - cleared}방 남았어요!`;
         else hintEl.textContent = '🎉 코드 완성! 영양전도사!';
@@ -639,15 +645,40 @@ function revealCode(roomNum) {
 }
 
 function updateHubRooms() {
+    const cleared = clearedRooms.length;
+
+    // HUD 진행 텍스트 업데이트
+    const hudText = document.getElementById('hud-progress-text');
+    if (hudText) hudText.textContent = `${cleared} / 6 방 완료`;
+
     for (let i = 1; i <= 6; i++) {
         const card = document.getElementById(`room-${i}`);
         if (!card) continue;
+
+        const statusBtn = document.getElementById(`room-status-${i}`);
+        const imgWrap = card.querySelector('.stage-img-wrap');
+        const lockOverlay = imgWrap ? imgWrap.querySelector('.stage-lock-overlay') : null;
+        const hudDot = document.getElementById(`hdot-${i}`);
+
         if (clearedRooms.includes(i)) {
-            card.classList.remove('locked'); card.classList.add('cleared');
-            card.querySelector('.room-status').textContent = '✅ 치료 완료!';
+            card.classList.remove('locked');
+            card.classList.add('cleared');
+            if (statusBtn) {
+                statusBtn.textContent = '✅ 치료 완료!';
+                statusBtn.className = 'stage-enter-btn enter-cleared';
+            }
+            if (lockOverlay) lockOverlay.remove();
+            if (hudDot) {
+                hudDot.classList.add('dot-revealed');
+                hudDot.textContent = codeLetters[i];
+            }
         } else if (i === 1 || clearedRooms.includes(i - 1)) {
             card.classList.remove('locked', 'cleared');
-            card.querySelector('.room-status').textContent = '🔓 입장하기';
+            if (statusBtn) {
+                statusBtn.textContent = '🔓 입장하기';
+                statusBtn.className = 'stage-enter-btn enter-open';
+            }
+            if (lockOverlay) lockOverlay.remove();
         }
     }
 }
