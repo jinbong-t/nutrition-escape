@@ -751,7 +751,7 @@ h2 {
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;
-    background-color: rgba(255, 255, 255, 0.85); /* 가독성을 위해 흰색 반투명 오버레이 */
+    background-color: rgba(255, 255, 255, 0.5); /* 그림이 더 잘 보이도록 투명도 조절 */
 }
 
 #room-screen-1 { background-image: url('assets/lab1_bg.png'); }
