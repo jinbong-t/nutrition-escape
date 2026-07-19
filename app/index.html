@@ -50,12 +50,26 @@
                     </div>
 
                     <button id="start-btn" class="btn hidden" style="margin-top: 30px; position: relative; z-index: 200;" onclick="event.stopPropagation(); showScreen('hub'); updateHubRooms();">
-                        <span clas        <div class="hub-left">
+                        <span class="btn-text">모험 시작하기 📖</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== 허브 (난쟁이 집) ===================== -->
+<section id="hub" class="screen">
+    <div class="hub-container">
+        <!-- 좌측: 캐릭터 -->
+        <div class="hub-left">
             <div class="hub-speech-bubble">난쟁이들을 위해<br>영양 처방전을 완성해야 해!</div>
             <div class="hub-character-frame">
                 <img src="백설공주.png" alt="백설공주" class="hub-character" onerror="this.src='assets/snow_white_user.jpg'">
             </div>
         </div>
+
+        <!-- 중앙: 방 목록 -->
         <div class="hub-center">
             <div class="hub-title">
                 <h2>난쟁이들의 방</h2>
@@ -126,7 +140,6 @@
             <div class="potion-inventory">
                 <div class="potion-title">🧪 영양 처방전</div>
                 <div class="big-flask">
-                    <!-- 아래서부터 차례대로 층이 쌓임 (6층 -> 1층 순서) -->
                     <div class="flask-layer" id="layer-6" style="background: rgba(59, 130, 246, 0.9);"><span>물</span></div>
                     <div class="flask-layer" id="layer-5" style="background: rgba(168, 85, 247, 0.9);"><span>무기질</span></div>
                     <div class="flask-layer" id="layer-4" style="background: rgba(236, 72, 153, 0.9);"><span>비타민</span></div>
