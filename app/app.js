@@ -191,10 +191,19 @@ function openDoor() {
 
 // 선생님 전용 스킵 기능
 function skipIntro() {
+    // 도어 스크린 즉시 숨기기
+    const doorScreen = document.getElementById('door-screen');
+    if (doorScreen) {
+        doorScreen.style.opacity = '0';
+        doorScreen.style.pointerEvents = 'none';
+        setTimeout(() => { doorScreen.style.display = 'none'; }, 400);
+    }
     if (typeTimer) clearTimeout(typeTimer);
     isTyping = false;
-    showScreen('hub');
-    updateHubRooms();
+    setTimeout(() => {
+        showScreen('hub');
+        updateHubRooms();
+    }, 300);
 }
 
 // startBtn 이벤트 리스너 제거 (HTML inline onclick으로 이동함)
