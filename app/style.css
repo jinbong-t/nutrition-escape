@@ -265,7 +265,8 @@ h2 {
     background: #fdf4ff;
     box-shadow: 0 0 50px rgba(147, 51, 234, 0.8);
     color: #4c1d95;
-    max-width: 450px;
+    max-width: 600px;
+    padding: 50px;
 }
 
 /* 네온/스캔라인 제거 */

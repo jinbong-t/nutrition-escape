@@ -257,7 +257,11 @@ function nextQuizStage(roomNum, currentQ) {
         // 마녀 깜짝 등장 (3번 방 클리어 시)
         if (roomNum === 3) {
             setTimeout(() => {
-                const witchHTML = `<div style="text-align:center; font-size: 6rem; margin-bottom: 10px;">🧙‍♀️</div><b style="color:#a855f7; font-size:1.5rem;">나쁜 식습관 마녀 등장!</b><br><br>"히히히! 영양소들을 다 모으게 둘 순 없지!<br>다음 방부터는 더 어려워질 거다!"`;
+                const witchHTML = `
+                    <div style="text-align:center; font-size: 10rem; line-height: 1; margin-bottom: 20px; animation: modalShake 2s infinite;">🧙‍♀️</div>
+                    <b style="color:#a855f7; font-size:2rem; display:block; margin-bottom: 10px;">나쁜 식습관 마녀 등장!</b>
+                    <span style="font-size:1.4rem; color: #4c1d95;">"히히히! 영양소들을 다 모으게 둘 순 없지!<br>다음 방부터는 더 어려워질 거다!"</span>
+                `;
                 showModal(witchHTML, 'witch');
             }, 800);
         }
