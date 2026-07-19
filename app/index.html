@@ -298,11 +298,11 @@
             <p>오늘도 몸이 너무 약해... 의사 선생님이 <span class="blank" id="blank1" onclick="fillBlank(1)">?</span>이/가 부족해서 <span class="blank" id="blank2" onclick="fillBlank(2)">?</span>이 줄었다고 했어. 앞으로는 <span class="blank" id="blank3" onclick="fillBlank(3)">?</span>을/를 많이 먹어야지!</p>
         </div>
         <div class="word-cards" id="r2-word-cards">
-            <button class="word-card" data-word="단백질">단백질</button>
-            <button class="word-card" data-word="근육">근육</button>
             <button class="word-card" data-word="달걀·고기·콩">달걀·고기·콩</button>
-            <button class="word-card" data-word="지방">지방 (오답)</button>
-            <button class="word-card" data-word="뼈">뼈 (오답)</button>
+            <button class="word-card" data-word="뼈">뼈</button>
+            <button class="word-card" data-word="단백질">단백질</button>
+            <button class="word-card" data-word="지방">지방</button>
+            <button class="word-card" data-word="근육">근육</button>
         </div>
         <button class="btn" onclick="checkDiaryQ(2)">확인하기</button>
         <button class="hint-btn" id="hint-2-2" onclick="showHint('2-2', this)">💡 힌트 (1회용)</button>
@@ -654,7 +654,6 @@
 <!-- 피드백 모달 -->
 <div id="modal" class="modal">
     <div class="modal-content">
-        <img id="modal-dwarf" src="assets/dwarfs.png" style="display: none; width: 120px; margin: 0 auto 10px auto; border-radius: 12px;">
         <div id="modal-icon" class="modal-icon">💬</div>
         <p id="modal-text"></p>
         <button class="btn" onclick="closeModal()">확인</button>

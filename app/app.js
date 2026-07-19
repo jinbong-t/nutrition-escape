@@ -79,13 +79,9 @@ function showModal(msg, isCorrect = null) {
     modalText.innerText = msg;
     modal.classList.remove('success', 'error'); // 기존 클래스 초기화
     
-    const dwarfImg = document.getElementById('modal-dwarf');
-    if (dwarfImg) dwarfImg.style.display = 'none';
-
     if (isCorrect === true) { 
         modalIcon.textContent = '✅'; 
         modal.classList.add('success'); 
-        if (dwarfImg) dwarfImg.style.display = 'block';
     }
     else if (isCorrect === false) { 
         modalIcon.textContent = '❌'; 
