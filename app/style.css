@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --primary-color: #f59e0b; /* 따뜻한 오렌지/노랑 */
     --bg-color: #fffbeb; /* 따뜻한 크림 배경 */
     --text-color: #451a03; /* 짙은 갈색 텍스트 */
@@ -12,30 +12,24 @@
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background: radial-gradient(ellipse at center, #2d6a1f 0%, #0d3319 100%);
-    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    color: #451a03;
 }
 
 #game-container {
-    width: 100%;
-    max-width: 430px;
+    width: 100vw;
     height: 100vh;
     position: relative;
-    overflow: hidden;
-    background: #fffbeb;
-    box-shadow: 0 0 60px rgba(0,0,0,0.6);
 }
 
 /* 모든 화면을 덮는 스크린 */
 .screen {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: none;
     flex-direction: column;
     background-size: cover;
@@ -43,11 +37,12 @@ body {
     background-repeat: no-repeat;
     overflow-y: auto;
     overflow-x: hidden;
+    z-index: 10;
 }
 
 .screen.active {
     display: flex;
-    animation: screenFadeIn 0.3s ease forwards;
+    animation: screenFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes screenFadeIn {
@@ -146,10 +141,10 @@ h2 {
 
 /* 대문 화면 (첫 화면 메인 사진) */
 .door-screen {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.92);
-    z-index: 100;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -259,13 +254,27 @@ h2 {
 .neon-flicker-overlay, .scanlines { display: none; }
 
 /* ===========================
-   허브 화면 — 모바일 게임 스타일
+   허브 화면 — 모바일 게임 스타일 (모든 기기 최적화)
    =========================== */
 #hub {
     background: linear-gradient(180deg, #ffefc8 0%, #fffbeb 60%, #fef3c7 100%);
     padding: 0;
     display: flex;
     flex-direction: column;
+    align-items: center; /* 데스크톱에서 중앙 정렬 */
+    overflow-y: auto;
+}
+
+/* 허브 내 모든 직접 자식을 중앙 정렬 */
+#hub > * {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* HUD는 전체 너비 유지 */
+.hub-hud {
+    max-width: none !important;
+    width: 100% !important;
 }
 
 /* 상단 HUD 바 */
@@ -1939,5 +1948,37 @@ h2 {
 .classify-bin.drag-over { background: #fef9c3; }
 .bin-label { font-size: 1rem; font-weight: 900; color: #78350f; margin-bottom: 8px; }
 .bin-content { display: flex; flex-wrap: wrap; gap: 8px; }
-@ m e d i a   ( m a x - w i d t h :   1 0 2 4 p x )   {   . h u b - c o n t a i n e r   {   f l e x - d i r e c t i o n :   c o l u m n ;   h e i g h t :   a u t o ;   a l i g n - i t e m s :   c e n t e r ;   }   . h u b - r o o m s   {   g r i d - t e m p l a t e - c o l u m n s :   r e p e a t ( 3 ,   1 f r ) ;   }   }   @ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   {   . h u b - r o o m s   {   g r i d - t e m p l a t e - c o l u m n s :   r e p e a t ( 2 ,   1 f r ) ;   }   }   @ m e d i a   ( m a x - w i d t h :   4 8 0 p x )   {   . h u b - r o o m s   {   g r i d - t e m p l a t e - c o l u m n s :   r e p e a t ( 2 ,   1 f r ) ;   }   . r o o m - c a r d   {   p a d d i n g :   1 0 p x ;   }   . r o o m - n a m e   {   f o n t - s i z e :   1 r e m ;   }   }  
- 
+
+/* ===========================
+   반응형 미디어 쿼리 (모든 기기 최적화)
+   =========================== */
+
+/* 데스크톱 (769px 이상): 3열 그리드 */
+@media (min-width: 769px) {
+    .stages-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .stage-img-wrap { width: 85px; height: 85px; }
+    .stage-name { font-size: 1rem; }
+    .hub-hud { padding: 12px 20px; }
+    .hud-char { width: 50px; height: 50px; }
+    .hub-mission-banner { padding: 14px 18px; margin: 14px; }
+    .mission-banner-img { width: 80px; height: 80px; }
+    .hub-stages-wrap { padding: 0 14px; }
+    .hub-code-panel { margin: 14px; padding: 16px; }
+    .code-letter { width: 42px; height: 42px; font-size: 1.1rem; }
+    [id^="room-screen-"] { padding: 30px 60px; }
+}
+
+/* 모바일 (480px 이하) */
+@media (max-width: 480px) {
+    .stages-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stage-img-wrap { width: 60px; height: 60px; }
+    .stage-name { font-size: 0.82rem; }
+    .hub-mission-banner { padding: 8px 10px; gap: 8px; }
+    .mission-banner-img { width: 55px; height: 55px; }
+    .hub-code-panel { margin: 8px; padding: 10px; }
+    .code-letter { width: 32px; height: 32px; font-size: 0.85rem; }
+    .hud-code-dot { width: 17px; height: 17px; font-size: 0.6rem; }
+    [id^="room-screen-"] { padding: 15px 16px; }
+    h2 { font-size: 1.2rem; padding: 8px 14px; }
+    .option-btn { font-size: 0.9rem; padding: 10px 14px; }
+}
