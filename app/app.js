@@ -240,8 +240,22 @@ function showQuizStage(roomNum, stageNum) {
 }
 
 function nextQuizStage(roomNum, currentQ) {
-    if (currentQ < 3) { roomQuizState[roomNum] = currentQ + 1; showQuizStage(roomNum, currentQ + 1); }
-    else { showQuizStage(roomNum, 99); const clearEl = document.getElementById(`r${roomNum}-clear`); if (clearEl) clearEl.classList.remove('hidden'); }
+    if (currentQ < 3) { 
+        roomQuizState[roomNum] = currentQ + 1; 
+        showQuizStage(roomNum, currentQ + 1); 
+    }
+    else { 
+        showQuizStage(roomNum, 99); 
+        const clearEl = document.getElementById(`r${roomNum}-clear`); 
+        if (clearEl) clearEl.classList.remove('hidden'); 
+        
+        // 마녀 깜짝 등장 (3번 방 클리어 시)
+        if (roomNum === 3) {
+            setTimeout(() => {
+                showModal('⚡ 콰쾅! 🧙‍♀️ 나쁜 식습관 마녀의 등장!\n\n"히히히! 영양소들을 다 모으게 둘 순 없지! 다음 방부터는 더 어려워질 거다!"', false);
+            }, 800);
+        }
+    }
 }
 
 // ===========================
