@@ -1116,6 +1116,7 @@ h2 {
 }
 
 .intro-3d-wrapper {
+    position: relative;
     z-index: 2;
     perspective: 1200px;
 }
@@ -1127,7 +1128,7 @@ h2 {
     height: 500px;
     max-width: 90vw;
     perspective: 2000px; /* 3D 효과를 위한 깊이감 */
-    margin: 100px auto 0;
+    margin: 0 auto;
     opacity: 0; /* 처음엔 숨김 */
     transition: opacity 1s ease;
     transform: rotateX(15deg); /* 밑에서 위로 올려다보는 구도 */
