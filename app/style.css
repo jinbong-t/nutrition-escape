@@ -250,23 +250,40 @@ h2 {
 .modal-content .btn { margin-top: 20px; }
 .modal-icon { font-size: 3rem; margin-bottom: 10px; }
 
-/* 마녀 팝업 스타일 */
+/* 마녀 팝업 스타일 (입체적 3D 팝업) */
 @keyframes witchAppear {
-    0% { transform: scale(0.1) rotate(-10deg); opacity: 0; }
-    60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
-    100% { transform: scale(1) rotate(0); opacity: 1; }
+    0% { transform: scale(0) rotateX(90deg); opacity: 0; }
+    50% { transform: scale(1.2) rotateX(-20deg); opacity: 1; }
+    100% { transform: scale(1) rotateX(0); opacity: 1; }
 }
+
+@keyframes floatingWitch {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.1); }
+}
+
 .modal.witch {
-    background: rgba(30, 0, 40, 0.85); /* 마녀스러운 어두운 보라색 배경 */
+    background: rgba(20, 0, 30, 0.9); /* 더 어두운 배경 */
+    perspective: 1000px;
 }
 .modal.witch .modal-content {
-    animation: witchAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border-color: #9333ea !important;
-    background: #fdf4ff;
-    box-shadow: 0 0 50px rgba(147, 51, 234, 0.8);
+    animation: witchAppear 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 8px solid #7e22ce !important;
+    background: linear-gradient(135deg, #faf5ff, #e9d5ff);
+    box-shadow: 0 40px 80px rgba(147, 51, 234, 0.9), 
+                inset 0 10px 20px rgba(255, 255, 255, 0.7), 
+                inset 0 -10px 20px rgba(0, 0, 0, 0.3);
     color: #4c1d95;
-    max-width: 600px;
-    padding: 50px;
+    max-width: 650px;
+    padding: 60px 40px;
+    border-radius: 40px;
+}
+.witch-emoji {
+    font-size: 13rem;
+    text-shadow: 10px 20px 30px rgba(0,0,0,0.5), -5px -5px 20px rgba(255,255,255,0.8);
+    animation: floatingWitch 2.5s ease-in-out infinite;
+    display: inline-block;
+    margin-top: -80px; /* 팝업 밖으로 살짝 튀어나오게 */
 }
 
 /* 네온/스캔라인 제거 */
