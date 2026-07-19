@@ -325,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDragAndDrop();
     initOXCards();
     initMatchingGame();
+    initR3LineGame();
     initWordCards();
 });
 
@@ -483,13 +484,12 @@ function checkOXQ(roomNum) {
 // 방4: 비타민 매칭
 // ===========================
 function initMatchingGame() {
-    document.querySelectorAll('.match-item').forEach(item => {
+    document.querySelectorAll('.match-item:not(.r3-item)').forEach(item => {
         item.addEventListener('click', () => {
             if (item.classList.contains('matched')) return;
             const side = item.classList.contains('left') ? 'left' : 'right';
             const container = item.closest('.match-container');
-            const isR3 = item.closest('#r3-q2') !== null;
-            const state = isR3 ? r3MatchingSelected : r4MatchingSelected;
+            const state = r4MatchingSelected;
 
             container.querySelectorAll(`.match-item.${side}`).forEach(i => i.classList.remove('selected'));
             item.classList.add('selected');
@@ -510,14 +510,80 @@ function initMatchingGame() {
         });
     });
 }
+
+let r3MatchedCount = 0;
+let r3SelectedLeft = null;
+function initR3LineGame() {
+    const svg = document.getElementById('r3-svg');
+    const container = document.getElementById('r3-match-container');
+    if (!svg || !container) return;
+
+    document.querySelectorAll('.r3-item.left').forEach(item => {
+        item.addEventListener('click', () => {
+            if (item.classList.contains('matched')) return;
+            document.querySelectorAll('.r3-item.left').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            r3SelectedLeft = item;
+        });
+    });
+
+    document.querySelectorAll('.r3-item.right').forEach(item => {
+        item.addEventListener('click', () => {
+            if (!r3SelectedLeft) {
+                showModal('먼저 왼쪽에서 음식을 선택하세요!', false);
+                return;
+            }
+            const expectedType = r3SelectedLeft.dataset.type;
+            const clickedType = item.dataset.type;
+
+            if (expectedType === clickedType) {
+                r3SelectedLeft.classList.add('matched');
+                r3SelectedLeft.classList.remove('selected');
+                
+                const cRect = container.getBoundingClientRect();
+                const lRect = r3SelectedLeft.getBoundingClientRect();
+                const rRect = item.getBoundingClientRect();
+                
+                const x1 = lRect.right - cRect.left;
+                const y1 = lRect.top + lRect.height/2 - cRect.top;
+                const x2 = rRect.left - cRect.left;
+                const y2 = rRect.top + rRect.height/2 - cRect.top;
+                
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                const color = expectedType === 'good' ? '#22c55e' : '#ef4444';
+                line.setAttribute('stroke', color);
+                line.setAttribute('stroke-width', '4');
+                line.setAttribute('stroke-linecap', 'round');
+                
+                svg.appendChild(line);
+                r3MatchedCount++;
+                r3SelectedLeft = null;
+            } else {
+                r3SelectedLeft.classList.add('wrong-flash');
+                item.classList.add('wrong-flash');
+                const prevLeft = r3SelectedLeft;
+                setTimeout(() => {
+                    prevLeft.classList.remove('wrong-flash', 'selected');
+                    item.classList.remove('wrong-flash');
+                }, 600);
+                r3SelectedLeft = null;
+            }
+        });
+    });
+}
+
 function checkFatMatchingQ(roomNum) {
-    if (r3MatchingSelected.pairs.length < 6) { 
-        showModal(`아직 ${6 - r3MatchingSelected.pairs.length}개 연결이 남았어요!`, false); 
+    if (r3MatchedCount < 6) { 
+        showModal(`아직 ${6 - r3MatchedCount}개 연결이 남았어요!`, false); 
         const hintBtn = document.getElementById('hint-3-2');
         if (hintBtn) hintBtn.classList.add('show-hint');
         return; 
     }
-    showModal('🎉 완벽해요! 모든 지방과 특징을 정확히 연결했어요!', true);
+    showModal('🎉 완벽해요! 모든 지방을 올바르게 판별했어요!', true);
     setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1500);
 }
 function checkMatchingQ(roomNum) {
