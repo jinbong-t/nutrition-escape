@@ -748,7 +748,18 @@ h2 {
     padding: 20px 40px;
     gap: 15px;
     align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-color: rgba(255, 255, 255, 0.85); /* 가독성을 위해 흰색 반투명 오버레이 */
 }
+
+#room-screen-1 { background-image: url('assets/lab1_bg.png'); }
+#room-screen-2 { background-image: url('assets/lab2_bg.png'); }
+#room-screen-3 { background-image: url('assets/lab3_bg.png'); }
+#room-screen-4 { background-image: url('assets/lab4_bg.png'); }
+#room-screen-5 { background-image: url('assets/boss_bg.png'); } /* 5방은 일단 보스 배경 */
+#room-screen-6 { background-image: url('assets/intro_bg.png'); } /* 6방은 마땅한게 없어 인트로 활용 */
 .room-header {
     display: flex;
     align-items: center;
