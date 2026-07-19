@@ -440,23 +440,32 @@
     </div>
 
     <div class="quiz-stage hidden" id="r4-q2">
-        <div class="quiz-label">🔗 문제 2 / 3 — 탐정 매칭 게임</div>
-        <div class="quiz-question">비타민 탐정이 되어 비타민과 결핍 증상을 연결해 주세요!</div>
-        <div class="matching-game" id="r4-matching">
-            <div class="match-col left-col">
-                <div class="match-item left" data-id="A">비타민 A</div>
-                <div class="match-item left" data-id="C">비타민 C</div>
-                <div class="match-item left" data-id="D">비타민 D</div>
-                <div class="match-item left" data-id="B1">비타민 B1</div>
+        <div class="quiz-label">🧩 문제 2 / 3 — 비타민 결핍증 채우기</div>
+        <div class="quiz-question">비타민 탐정이 되어 각 비타민이 부족할 때 생기는 질병 카드를 알맞은 빈칸에 쏙쏙 넣어주세요!</div>
+        
+        <div class="classify-source" id="r4-source" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; min-height: 50px;">
+            <div class="drag-card" draggable="true" data-category="A" style="font-size: 1rem; padding: 10px;">👀 야맹증 (밤에 안 보임)</div>
+            <div class="drag-card" draggable="true" data-category="C" style="font-size: 1rem; padding: 10px;">🩸 괴혈병 (잇몸 피)</div>
+            <div class="drag-card" draggable="true" data-category="D" style="font-size: 1rem; padding: 10px;">🦴 구루병 (뼈 휘어짐)</div>
+            <div class="drag-card" draggable="true" data-category="B1" style="font-size: 1rem; padding: 10px;">😫 각기병 (기운 없음)</div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
+                🥕 비타민 A 부족 ➡️ <div class="classify-bin" id="r4-bin-A" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
             </div>
-            <div class="match-col right-col">
-                <div class="match-item right" data-id="C">잇몸에서 피 (괴혈병)</div>
-                <div class="match-item right" data-id="D">뼈가 휘어짐 (구루병)</div>
-                <div class="match-item right" data-id="A">밤에 잘 안 보임 (야맹증)</div>
-                <div class="match-item right" data-id="B1">기운 없고 각기병</div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
+                🍋 비타민 C 부족 ➡️ <div class="classify-bin" id="r4-bin-C" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
+                ☀️ 비타민 D 부족 ➡️ <div class="classify-bin" id="r4-bin-D" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
+                🌾 비타민 B1 부족 ➡️ <div class="classify-bin" id="r4-bin-B1" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
             </div>
         </div>
-        <button class="btn" onclick="checkMatchingQ(4)">확인하기</button>
+        
+        <button class="btn" style="margin-top: 20px;" onclick="checkR4Q2(4)">확인하기</button>
         <button class="hint-btn" id="hint-4-2" onclick="showHint('4-2', this)">💡 힌트 (1회용)</button>
     </div>
 
