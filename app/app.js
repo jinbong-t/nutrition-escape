@@ -554,7 +554,7 @@ function initR3LineGame() {
                 line.setAttribute('y1', y1);
                 line.setAttribute('x2', x2);
                 line.setAttribute('y2', y2);
-                const color = expectedType === 'good' ? '#22c55e' : '#ef4444';
+                const color = '#3b82f6'; // 성공 시 파란색 선
                 line.setAttribute('stroke', color);
                 line.setAttribute('stroke-width', '4');
                 line.setAttribute('stroke-linecap', 'round');
