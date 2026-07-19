@@ -50,63 +50,61 @@
                     </div>
 
                     <button id="start-btn" class="btn hidden" style="margin-top: 30px; position: relative; z-index: 200;" onclick="event.stopPropagation(); showScreen('hub'); updateHubRooms();">
-                        <span class="btn-text">모험 시작하기 📖</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== 허브 (난쟁이 집) ===================== -->
-<section id="hub" class="screen">
-
-    <div class="hub-container">
-        <!-- 좌측: 캐릭터 -->
-        <div class="hub-left">
+                        <span clas        <div class="hub-left">
             <div class="hub-speech-bubble">난쟁이들을 위해<br>영양 처방전을 완성해야 해!</div>
             <div class="hub-character-frame">
-          <div class="room-card" id="room-1" onclick="enterRoom(1)">
-            <div class="room-dwarf"><img src="assets/dwarfs.png" alt="난쟁이" style="width:70px; height:70px; object-fit:cover; border-radius:50%; border:3px solid #f59e0b; background:#fff;"></div>
-            <div class="room-name">잠보의 방</div>
-            <div class="room-nutrient">탄수화물</div>
-            <div class="room-symptom">"힘이 없어서 아무것도 못 해..."</div>
-            <div class="room-status unlocked">🔓 입장하기</div>
+                <img src="백설공주.png" alt="백설공주" class="hub-character" onerror="this.src='assets/snow_white_user.jpg'">
+            </div>
         </div>
-        <div class="room-card locked" id="room-2" onclick="enterRoom(2)">
-            <div class="room-dwarf"><img src="assets/dwarfs.png" alt="난쟁이" style="width:70px; height:70px; object-fit:cover; border-radius:50%; border:3px solid #f59e0b; background:#fff;"></div>
-            <div class="room-name">여림이의 방</div>
-            <div class="room-nutrient">단백질</div>
-            <div class="room-symptom">"너무 말라서 아무것도 들 수 없어..."</div>
-            <div class="room-status">🔒 1방 클리어 후 입장</div>
-        </div>
-        <div class="room-card locked" id="room-3" onclick="enterRoom(3)">
-            <div class="room-dwarf"><img src="assets/dwarfs.png" alt="난쟁이" style="width:70px; height:70px; object-fit:cover; border-radius:50%; border:3px solid #f59e0b; background:#fff;"></div>
-            <div class="room-name">부풍이의 방</div>
-            <div class="room-nutrient">지방</div>
-            <div class="room-symptom">"항상 춥고 피부가 너무 건조해..."</div>
-            <div class="room-status">🔒 2방 클리어 후 입장</div>
-        </div>
-        <div class="room-card locked" id="room-4" onclick="enterRoom(4)">
-            <div class="room-dwarf"><img src="assets/dwarfs.png" alt="난쟁이" style="width:70px; height:70px; object-fit:cover; border-radius:50%; border:3px solid #f59e0b; background:#fff;"></div>
-            <div class="room-name">흐림이의 방</div>
-            <div class="room-nutrient">비타민</div>
-            <div class="room-symptom">"피부에 반점이 생기고 잇몸에서 피가..."</div>
-            <div class="room-status">🔒 3방 클리어 후 입장</div>
-        </div>
-        <div class="room-card locked" id="room-5" onclick="enterRoom(5)">
-            <div class="room-dwarf"><img src="assets/dwarfs.png" alt="난쟁이" style="width:70px; height:70px; object-fit:cover; border-radius:50%; border:3px solid #f59e0b; background:#fff;"></div>
-            <div class="room-name">저리의 방</div>
-            <div class="room-nutrient">무기질</div>
-            <div class="room-symptom">"피부가 창백하고 뼈가 자꾸 아파..."</div>
-            <div class="room-status">🔒 4방 클리어 후 입장</div>
-        </div>
-        <div class="room-card locked" id="room-6" onclick="enterRoom(6)">
-            <div class="room-dwarf"><img src="assets/dwarfs.png" alt="난쟁이" style="width:70px; height:70px; object-fit:cover; border-radius:50%; border:3px solid #f59e0b; background:#fff;"></div>��</div>
-            <div class="room-symptom">"피부에 반점이 생기고 잇몸에서 피가..."</div>
-            <div class="room-status">🔒 3방 클리어 후 입장</div>
-        </div>
-        <div class="room-card locked" id="room-5" onclick="enterRoom(5)">
+        <div class="hub-center">
+            <div class="hub-title">
+                <h2>난쟁이들의 방</h2>
+            </div>
+            <div class="hub-rooms">
+                <div class="room-card" id="room-1" onclick="enterRoom(1)">
+                    <div class="room-dwarf"><img src="잠보.png" alt="잠보" class="dwarf-icon"></div>
+                    <div class="room-name">잠보의 방</div>
+                    <div class="room-nutrient">탄수화물</div>
+                    <div class="room-symptom">"힘이 없어서 아무것도 못 해..."</div>
+                    <div class="room-status unlocked">🔓 입장하기</div>
+                </div>
+                <div class="room-card locked" id="room-2" onclick="enterRoom(2)">
+                    <div class="room-dwarf"><img src="여림이.png" alt="여림이" class="dwarf-icon"></div>
+                    <div class="room-name">여림이의 방</div>
+                    <div class="room-nutrient">단백질</div>
+                    <div class="room-symptom">"너무 말라서 아무것도 들 수 없어..."</div>
+                    <div class="room-status">🔒 1방 클리어 후 입장</div>
+                </div>
+                <div class="room-card locked" id="room-3" onclick="enterRoom(3)">
+                    <div class="room-dwarf"><img src="부풍이.png" alt="부풍이" class="dwarf-icon"></div>
+                    <div class="room-name">부풍이의 방</div>
+                    <div class="room-nutrient">지방</div>
+                    <div class="room-symptom">"항상 춥고 피부가 건조해..."</div>
+                    <div class="room-status">🔒 2방 클리어 후 입장</div>
+                </div>
+                <div class="room-card locked" id="room-4" onclick="enterRoom(4)">
+                    <div class="room-dwarf"><img src="흐림이.png" alt="흐림이" class="dwarf-icon"></div>
+                    <div class="room-name">흐림이의 방</div>
+                    <div class="room-nutrient">비타민</div>
+                    <div class="room-symptom">"피부에 반점이 생기고..."</div>
+                    <div class="room-status">🔒 3방 클리어 후 입장</div>
+                </div>
+                <div class="room-card locked" id="room-5" onclick="enterRoom(5)">
+                    <div class="room-dwarf"><img src="저리.png" alt="저리" class="dwarf-icon"></div>
+                    <div class="room-name">저리의 방</div>
+                    <div class="room-nutrient">무기질</div>
+                    <div class="room-symptom">"뼈가 자꾸 아파..."</div>
+                    <div class="room-status">🔒 4방 클리어 후 입장</div>
+                </div>
+                <div class="room-card locked" id="room-6" onclick="enterRoom(6)">
+                    <div class="room-dwarf"><img src="바싹이.png" alt="바싹이" class="dwarf-icon"></div>
+                    <div class="room-name">바싹이의 방</div>
+                    <div class="room-nutrient">물</div>
+                    <div class="room-symptom">"입이 바짝 말라서..."</div>
+                    <div class="room-status">🔒 5방 클리어 후 입장</div>
+                </div>
+            </div>
+        </div> <!-- // hub-center -->      <div class="room-card locked" id="room-5" onclick="enterRoom(5)">
             <div class="room-dwarf">🧑‍🦳</div>
             <div class="room-name">저리의 방</div>
             <div class="room-nutrient">무기질</div>
@@ -149,8 +147,6 @@
                     <div class="flask-layer" id="layer-3" style="background: rgba(234, 179, 8, 0.9);"><span>지방</span></div>
                     <div class="flask-layer" id="layer-2" style="background: rgba(239, 68, 68, 0.9);"><span>단백질</span></div>
                     <div class="flask-layer" id="layer-1" style="background: rgba(249, 115, 22, 0.9);"><span>탄수화물</span></div>
-                    <!-- 약병 이미지 오버레이 (multiply 블렌드 모드로 겹치기) -->
-                    <img src="assets/potion_bottle.png" alt="약병" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: 20; pointer-events: none; mix-blend-mode: multiply;">
                 </div>
             </div>
         </div>
