@@ -360,20 +360,27 @@
     </div>
 
     <div class="quiz-stage hidden" id="r3-q2">
-        <div class="quiz-label">✅❌ 문제 2 / 3 — 좋은 지방 / 나쁜 지방 판별</div>
-        <div class="quiz-question">부풍이에게 좋은 음식인지 판별해 주세요! 음식을 클릭한 뒤 ✅ 또는 ❌ 버튼을 누르세요.</div>
-        <div class="ox-cards" id="r3-ox-cards">
-            <div class="ox-card" data-food="아보카도" data-answer="O" onclick="selectOX(this)">🥑 아보카도</div>
-            <div class="ox-card" data-food="고등어" data-answer="O" onclick="selectOX(this)">🐟 고등어</div>
-            <div class="ox-card" data-food="감자튀김" data-answer="X" onclick="selectOX(this)">🍟 감자튀김</div>
-            <div class="ox-card" data-food="올리브오일" data-answer="O" onclick="selectOX(this)">🫒 올리브오일</div>
-            <div class="ox-card" data-food="피자" data-answer="X" onclick="selectOX(this)">🍕 피자</div>
+        <div class="quiz-label">🔗 문제 2 / 3 — 지방 짝꿍 찾기</div>
+        <div class="quiz-question">부풍이에게 좋은 지방과 나쁜 지방의 특징을 알려주세요! 음식과 알맞은 설명을 선으로(클릭해서) 연결하세요.</div>
+        <div class="match-container">
+            <div class="match-col left-col">
+                <div class="match-item left" data-id="A">🥑 아보카도</div>
+                <div class="match-item left" data-id="D">🍟 감자튀김</div>
+                <div class="match-item left" data-id="B">🐟 고등어</div>
+                <div class="match-item left" data-id="F">🥓 삼겹살</div>
+                <div class="match-item left" data-id="C">🫒 올리브오일</div>
+                <div class="match-item left" data-id="E">🍕 피자</div>
+            </div>
+            <div class="match-col right-col">
+                <div class="match-item right" data-id="F">혈관을 좁히는 동물성 고기 기름 (나쁜 지방)</div>
+                <div class="match-item right" data-id="B">머리가 좋아지는 생선 지방 (좋은 지방)</div>
+                <div class="match-item right" data-id="D">트랜스지방이 많은 튀긴 음식 (나쁜 지방)</div>
+                <div class="match-item right" data-id="A">심장에 좋은 식물성 지방 (좋은 지방)</div>
+                <div class="match-item right" data-id="E">포화지방이 많은 패스트푸드 (나쁜 지방)</div>
+                <div class="match-item right" data-id="C">건강한 샐러드 드레싱 기름 (좋은 지방)</div>
+            </div>
         </div>
-        <div class="ox-buttons">
-            <button class="ox-btn o-btn" onclick="markOX('O')">✅ 좋은 지방</button>
-            <button class="ox-btn x-btn" onclick="markOX('X')">❌ 나쁜 지방</button>
-        </div>
-        <button class="btn" onclick="checkOXQ(3)">확인하기</button>
+        <button class="btn" onclick="checkFatMatchingQ(3)">확인하기</button>
         <button class="hint-btn" id="hint-3-2" onclick="showHint('3-2', this)">💡 힌트 (1회용)</button>
     </div>
 

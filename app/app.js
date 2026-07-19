@@ -18,6 +18,9 @@ let r1DraggedCard = null;
 // 방3 OX 상태
 let r3OXAnswers = {};
 
+// 방3 매칭 상태
+let r3MatchingSelected = { left: null, right: null, pairs: [] };
+
 // 방4 매칭 상태
 let r4MatchingSelected = { left: null, right: null, pairs: [] };
 
@@ -484,23 +487,38 @@ function initMatchingGame() {
         item.addEventListener('click', () => {
             if (item.classList.contains('matched')) return;
             const side = item.classList.contains('left') ? 'left' : 'right';
-            document.querySelectorAll(`.match-item.${side}`).forEach(i => i.classList.remove('selected'));
+            const container = item.closest('.match-container');
+            const isR3 = item.closest('#r3-q2') !== null;
+            const state = isR3 ? r3MatchingSelected : r4MatchingSelected;
+
+            container.querySelectorAll(`.match-item.${side}`).forEach(i => i.classList.remove('selected'));
             item.classList.add('selected');
-            r4MatchingSelected[side] = item.dataset.id;
-            if (r4MatchingSelected.left && r4MatchingSelected.right) {
-                const leftEl = document.querySelector('.match-item.left.selected');
-                const rightEl = document.querySelector('.match-item.right.selected');
-                if (r4MatchingSelected.left === r4MatchingSelected.right) {
+            state[side] = item.dataset.id;
+            
+            if (state.left && state.right) {
+                const leftEl = container.querySelector('.match-item.left.selected');
+                const rightEl = container.querySelector('.match-item.right.selected');
+                if (state.left === state.right) {
                     leftEl.classList.add('matched'); rightEl.classList.add('matched');
-                    r4MatchingSelected.pairs.push(r4MatchingSelected.left);
+                    state.pairs.push(state.left);
                 } else {
                     leftEl.classList.add('wrong-flash'); rightEl.classList.add('wrong-flash');
                     setTimeout(() => { leftEl.classList.remove('wrong-flash','selected'); rightEl.classList.remove('wrong-flash','selected'); }, 600);
                 }
-                r4MatchingSelected.left = null; r4MatchingSelected.right = null;
+                state.left = null; state.right = null;
             }
         });
     });
+}
+function checkFatMatchingQ(roomNum) {
+    if (r3MatchingSelected.pairs.length < 6) { 
+        showModal(`아직 ${6 - r3MatchingSelected.pairs.length}개 연결이 남았어요!`, false); 
+        const hintBtn = document.getElementById('hint-3-2');
+        if (hintBtn) hintBtn.classList.add('show-hint');
+        return; 
+    }
+    showModal('🎉 완벽해요! 모든 지방과 특징을 정확히 연결했어요!', true);
+    setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1500);
 }
 function checkMatchingQ(roomNum) {
     if (r4MatchingSelected.pairs.length < 4) { showModal(`아직 ${4 - r4MatchingSelected.pairs.length}개 연결이 남았어요!`, false); return; }
