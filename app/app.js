@@ -340,7 +340,7 @@ function checkClassifyQ(roomNum) {
 
     const trapInBins = [...monoCards, ...polyCards].filter(c => c.dataset.category === 'trap');
     if (trapInBins.length > 0) allCorrect = false;
-    if (monoCards.length !== 2 || polyCards.length !== 2) allCorrect = false;
+    if (monoCards.length !== 3 || polyCards.length !== 3) allCorrect = false;
 
     if (allCorrect) {
         showModal('🎉 완벽해요! 단당류와 다당류를 정확히 구분했어요!', true);

@@ -887,19 +887,31 @@ h2 {
     min-height: 60px;
 }
 .drag-card {
-    background: #fef9c3;
-    border: 2px solid #fbbf24;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    background: linear-gradient(145deg, #fffbeb, #fef3c7);
+    border: 3px solid #f59e0b;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 1.2rem;
+    font-weight: 900;
     cursor: grab;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     user-select: none;
-    color: #451a03;
+    color: #78350f;
+    box-shadow: 0 4px 0 #d97706, 0 8px 10px rgba(0,0,0,0.1);
 }
-.drag-card:hover { background: #fde68a; transform: scale(1.05); }
-.drag-card.dragging { opacity: 0.4; }
+.drag-card:active {
+    cursor: grabbing;
+}
+.drag-card:hover { 
+    background: linear-gradient(145deg, #fef3c7, #fde68a); 
+    transform: translateY(-4px) scale(1.05); 
+    box-shadow: 0 8px 0 #d97706, 0 12px 15px rgba(0,0,0,0.15);
+}
+.drag-card.dragging { 
+    opacity: 0.8; 
+    transform: scale(1.1);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+}
 .drag-plate {
     min-height: 100px;
     background: rgba(255,255,255,0.7);
@@ -1661,19 +1673,36 @@ h2 {
 .vit-classify-area { display: flex; flex-direction: column; gap: 12px; }
 .vit-source { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
 .vit-card {
-    background: #fef9c3;
-    border: 2px solid #fbbf24;
-    border-radius: 12px;
-    padding: 10px 18px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    background: linear-gradient(145deg, #fffbeb, #fef3c7);
+    border: 3px solid #f59e0b;
+    border-radius: 20px;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    font-weight: 900;
     cursor: pointer;
-    color: #451a03;
-    transition: all 0.2s;
+    color: #78350f;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 0 #d97706, 0 8px 10px rgba(0,0,0,0.1);
+    user-select: none;
 }
-.vit-card:hover { background: #fde68a; }
-.vit-card.vit-selected { background: #f59e0b; color: white; border-color: #d97706; transform: scale(1.08); }
-.vit-card.vit-fat { background: #fed7aa; border-color: #f97316; color: #7c2d12; opacity: 0.6; cursor: default; }
+.vit-card:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #d97706, 0 2px 5px rgba(0,0,0,0.1);
+}
+.vit-card:hover { 
+    background: linear-gradient(145deg, #fef3c7, #fde68a); 
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 0 #d97706, 0 12px 15px rgba(0,0,0,0.15);
+}
+.vit-card.vit-selected { 
+    background: linear-gradient(145deg, #f59e0b, #d97706); 
+    color: white; 
+    border-color: #b45309; 
+    transform: scale(1.1); 
+    box-shadow: 0 6px 0 #92400e, 0 10px 15px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 0px #78350f;
+}
+.vit-card.vit-fat { background: #fed7aa; border-color: #f97316; color: #7c2d12; opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
 .vit-card.vit-water { background: #bfdbfe; border-color: #3b82f6; color: #1e3a8a; opacity: 0.6; cursor: default; }
 .vit-action-row { display: flex; gap: 10px; }
 .vit-classify-btn {
@@ -1942,16 +1971,21 @@ h2 {
 .classify-bins { display: flex; gap: 12px; }
 .classify-bin {
     flex: 1;
-    border: 3px dashed #f59e0b;
-    border-radius: 12px;
-    padding: 12px;
-    min-height: 80px;
-    background: rgba(255,255,255,0.5);
-    transition: background 0.2s;
+    border: 4px dashed #f59e0b;
+    border-radius: 20px;
+    padding: 15px;
+    min-height: 100px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.05);
 }
-.classify-bin.drag-over { background: #fef9c3; }
-.bin-label { font-size: 1rem; font-weight: 900; color: #78350f; margin-bottom: 8px; }
-.bin-content { display: flex; flex-wrap: wrap; gap: 8px; }
+.classify-bin.drag-over { 
+    background: #fef9c3; 
+    transform: scale(1.02);
+    border-color: #d97706;
+}
+.bin-label { font-size: 1.2rem; font-weight: 900; color: #78350f; margin-bottom: 12px; text-shadow: 1px 1px 0px white; }
+.bin-content { display: flex; flex-wrap: wrap; gap: 10px; }
 
 /* ===========================
    반응형 미디어 쿼리 (모든 기기 최적화)
