@@ -250,6 +250,24 @@ h2 {
 .modal-content .btn { margin-top: 20px; }
 .modal-icon { font-size: 3rem; margin-bottom: 10px; }
 
+/* 마녀 팝업 스타일 */
+@keyframes witchAppear {
+    0% { transform: scale(0.1) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.modal.witch {
+    background: rgba(30, 0, 40, 0.85); /* 마녀스러운 어두운 보라색 배경 */
+}
+.modal.witch .modal-content {
+    animation: witchAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-color: #9333ea !important;
+    background: #fdf4ff;
+    box-shadow: 0 0 50px rgba(147, 51, 234, 0.8);
+    color: #4c1d95;
+    max-width: 450px;
+}
+
 /* 네온/스캔라인 제거 */
 .neon-flicker-overlay, .scanlines { display: none; }
 
