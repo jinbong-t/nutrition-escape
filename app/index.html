@@ -440,32 +440,39 @@
     </div>
 
     <div class="quiz-stage hidden" id="r4-q2">
-        <div class="quiz-label">🧩 문제 2 / 3 — 비타민 결핍증 채우기</div>
-        <div class="quiz-question">비타민 탐정이 되어 각 비타민이 부족할 때 생기는 질병 카드를 알맞은 빈칸에 쏙쏙 넣어주세요!</div>
+        <div class="quiz-label">🩺 문제 2 / 3 — 비타민 병원</div>
+        <div class="quiz-question">비타민 의사선생님! 아픈 환자들에게 꼭 맞는 <b>비타민 알약</b>을 처방해 주세요! (알약을 환자에게 드래그)</div>
         
-        <div class="classify-source" id="r4-source" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; min-height: 50px;">
-            <div class="drag-card" draggable="true" data-category="A" style="font-size: 1rem; padding: 10px;">👀 야맹증 (밤에 안 보임)</div>
-            <div class="drag-card" draggable="true" data-category="C" style="font-size: 1rem; padding: 10px;">🩸 괴혈병 (잇몸 피)</div>
-            <div class="drag-card" draggable="true" data-category="D" style="font-size: 1rem; padding: 10px;">🦴 구루병 (뼈 휘어짐)</div>
-            <div class="drag-card" draggable="true" data-category="B1" style="font-size: 1rem; padding: 10px;">😫 각기병 (기운 없음)</div>
+        <div class="classify-source" id="r4-source" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; min-height: 60px;">
+            <div class="drag-card pill-card" draggable="true" data-category="A" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 A</div>
+            <div class="drag-card pill-card" draggable="true" data-category="C" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 C</div>
+            <div class="drag-card pill-card" draggable="true" data-category="D" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 D</div>
+            <div class="drag-card pill-card" draggable="true" data-category="B1" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 B1</div>
         </div>
         
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
-                🥕 비타민 A 부족 ➡️ <div class="classify-bin" id="r4-bin-A" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">👀 "밤눈이 어두워요 (야맹증)"</div>
+                <div class="classify-bin" id="r4-bin-A" style="width: 140px; height: 60px; border: 3px dashed #cbd5e1; border-radius: 50px; background: #f8fafc; display: flex; align-items: center; justify-content: center;"><div class="bin-content" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div></div>
             </div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
-                🍋 비타민 C 부족 ➡️ <div class="classify-bin" id="r4-bin-C" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
+            
+            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">🩸 "잇몸에서 피가 나요 (괴혈병)"</div>
+                <div class="classify-bin" id="r4-bin-C" style="width: 140px; height: 60px; border: 3px dashed #cbd5e1; border-radius: 50px; background: #f8fafc; display: flex; align-items: center; justify-content: center;"><div class="bin-content" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div></div>
             </div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
-                ☀️ 비타민 D 부족 ➡️ <div class="classify-bin" id="r4-bin-D" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
+
+            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">🦴 "뼈가 휘어졌어요 (구루병)"</div>
+                <div class="classify-bin" id="r4-bin-D" style="width: 140px; height: 60px; border: 3px dashed #cbd5e1; border-radius: 50px; background: #f8fafc; display: flex; align-items: center; justify-content: center;"><div class="bin-content" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div></div>
             </div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem; font-weight: bold;">
-                🌾 비타민 B1 부족 ➡️ <div class="classify-bin" id="r4-bin-B1" style="width: 250px; min-height: 50px; border: 2px dashed #fbbf24; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.5);"><div class="bin-content" style="min-height: 40px; display:flex; justify-content:center; align-items:center;"></div></div>
+
+            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">😫 "기운이 없어요 (각기병)"</div>
+                <div class="classify-bin" id="r4-bin-B1" style="width: 140px; height: 60px; border: 3px dashed #cbd5e1; border-radius: 50px; background: #f8fafc; display: flex; align-items: center; justify-content: center;"><div class="bin-content" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div></div>
             </div>
         </div>
         
-        <button class="btn" style="margin-top: 20px;" onclick="checkR4Q2(4)">확인하기</button>
+        <button class="btn" style="margin-top: 30px;" onclick="checkR4Q2(4)">확인하기</button>
         <button class="hint-btn" id="hint-4-2" onclick="showHint('4-2', this)">💡 힌트 (1회용)</button>
     </div>
 
