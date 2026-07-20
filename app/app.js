@@ -1,7 +1,7 @@
 // ===========================
 // 상태 관리
 // ===========================
-let clearedRooms = [];
+let clearedRooms = [1, 2, 3];
 let currentRoom = 0;
 let roomQuizState = {};
 
@@ -809,10 +809,7 @@ function updateHubRooms() {
                 statusBtn.className = 'stage-enter-btn enter-cleared';
             }
             if (lockOverlay) lockOverlay.remove();
-            if (hudDot) {
-                hudDot.classList.add('dot-revealed');
-                hudDot.textContent = codeLetters[i];
-            }
+            revealCode(i);
         } else if (i === 1 || clearedRooms.includes(i - 1)) {
             card.classList.remove('locked', 'cleared');
             if (statusBtn) {
