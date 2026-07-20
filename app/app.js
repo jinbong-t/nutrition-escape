@@ -663,7 +663,7 @@ function changeDial(index, dir) {
 
 function checkSafeCode(roomNum) {
     const code = safeState.join('');
-    if (code === 'CDKB') {
+    if (code === 'CDAB') {
         showModal('🔓 찰칵! 금고 문이 열렸습니다!', true);
         setTimeout(() => { 
             closeModal(); 
