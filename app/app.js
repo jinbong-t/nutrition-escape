@@ -1,7 +1,7 @@
 // ===========================
 // 상태 관리
 // ===========================
-let clearedRooms = [];
+let clearedRooms = [1, 2, 3, 4];
 let currentRoom = 0;
 let roomQuizState = {};
 
@@ -696,7 +696,7 @@ function addToCart(el) {
 }
 function checkCartQ(roomNum) {
     if (r5CartItems.length < 3) { showModal(`3개를 담아야 해요! 현재 ${r5CartItems.length}개입니다.`, false); return; }
-    const correctItems = ['🥛 우유 (칼슘)', '🐟 뱅어포 (칼슘)', '🍄 표고버섯 (비타민 D)'];
+    const correctItems = ['🥛 우유', '🐟 뱅어포', '🍄 표고버섯'];
     const allCorrect = r5CartItems.every(item => correctItems.includes(item));
     if (allCorrect) {
         showModal('🎉 완벽한 장보기! 뼈가 아주 튼튼해지겠어요!', true);
@@ -739,8 +739,17 @@ function startBoneGame() {
     const container = document.getElementById('bone-game-container');
     container.addEventListener('mousemove', handleBoneMove);
     
-    boneSpawnInterval = setInterval(spawnBoneItem, 1000);
+    // 재귀적 setTimeout을 통해 동적 스폰 주기 적용
+    scheduleNextSpawn();
     boneGameInterval = setInterval(updateBoneGame, 30);
+}
+
+function scheduleNextSpawn() {
+    if (!boneGameActive) return;
+    spawnBoneItem();
+    // 점수가 오를수록 스폰 주기가 짧아짐 (긴박감 UP!)
+    let spawnDelay = Math.max(300, 1000 - (boneScore * 120));
+    boneSpawnInterval = setTimeout(scheduleNextSpawn, spawnDelay);
 }
 
 let lastMouseX = 0;
@@ -791,11 +800,14 @@ function spawnBoneItem() {
     
     container.appendChild(el);
     
+    // 점수에 따라 초기 속도와 가속도가 증가
+    let diffMult = 1 + (boneScore * 0.25);
+    
     boneItems.push({
         el: el,
         x: startX,
         y: -40,
-        vy: 2 + Math.random() * 2, // 초기 속도
+        vy: (2 + Math.random() * 3) * diffMult, // 난이도에 따른 초기 속도
         isGood: isGood,
         name: itemData.name
     });
@@ -811,11 +823,12 @@ function updateBoneGame() {
     const contRect = container.getBoundingClientRect();
     const px = playerRect.left - contRect.left + playerRect.width/2;
     const py = playerRect.top - contRect.top + playerRect.height/2;
-    const hitRadius = 35;
+    const hitRadius = 55; // 뼈다귀 크기 확대로 인한 충돌 판정 확대
     
     for (let i = boneItems.length - 1; i >= 0; i--) {
         const item = boneItems[i];
-        item.vy += 0.15; // 중력 가속도
+        let diffMult = 1 + (boneScore * 0.1);
+        item.vy += (0.15 * diffMult); // 중력 가속도도 점수에 비례
         item.y += item.vy;
         item.el.style.top = `${item.y}px`;
         

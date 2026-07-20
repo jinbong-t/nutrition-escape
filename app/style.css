@@ -2366,3 +2366,11 @@ h2 {
 .item-spin { animation: spin 2s linear infinite; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
+
+/* 모바일 게임 느낌 고도화 */
+#bone-game-container { background: radial-gradient(circle at center, #1e293b, #0f172a) !important; border: 3px solid #3b82f6; box-shadow: 0 0 30px rgba(59,130,246,0.5); overflow: hidden; position: relative; }
+#bone-player { font-size: 5rem !important; z-index: 20; }
+.bone-item { font-size: 3.5rem !important; z-index: 10; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+#bone-health-bar-container { box-shadow: 0 0 15px rgba(16,185,129,0.8); border: 1px solid #10b981; }
+#bone-health-bar { transition: width 0.2s ease, background-color 0.2s ease; }
+
