@@ -632,8 +632,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const y = e.clientY - rect.top;
             const overlay = document.getElementById('dark-overlay');
             if (overlay) {
-                // radial gradient 중심을 마우스 위치로 업데이트 (시야 조절: 90px)
-                overlay.style.background = `radial-gradient(circle 90px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.98) 100%)`;
+                // radial gradient 중심을 마우스 위치로 업데이트 (시야 아주 좁게: 60px)
+                overlay.style.background = `radial-gradient(circle 60px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.99) 100%)`;
             }
         });
     }
