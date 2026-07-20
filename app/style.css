@@ -2101,3 +2101,58 @@ h2 {
     h2 { font-size: 1.2rem; padding: 8px 14px; }
     .option-btn { font-size: 0.9rem; padding: 10px 14px; }
 }
+
+/* 비타민 병원 환자 입 디자인 */
+.mouth-bin {
+    width: 140px; height: 60px;
+    border: 3px dashed #cbd5e1;
+    border-radius: 50px;
+    background: #f8fafc;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+.mouth-bin .bin-content {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+}
+.mouth-bg {
+    position: absolute;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #94a3b8;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.mouth-bg::after {
+    content: '??';
+    margin-bottom: -5px;
+}
+.mouth-bg::before {
+    content: '아~';
+    font-size: 0.8rem;
+}
+.mouth-bin.drag-over {
+    background: #fef08a;
+    border-color: #eab308;
+    transform: scale(1.1);
+}
+.mouth-bin.drag-over .mouth-bg {
+    transform: scale(1.2);
+    color: #ca8a04;
+}
+.mouth-bin.drag-over .mouth-bg::after {
+    content: '??';
+}
+.mouth-bin.drag-over .mouth-bg::before {
+    content: '냠!';
+}
+/* 약을 먹이면 배경 숨기기 */
+.mouth-bin .bin-content:not(:empty) + .mouth-bg {
+    opacity: 0;
+}
+
