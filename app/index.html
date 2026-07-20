@@ -526,27 +526,33 @@
     </div>
 
     <div class="quiz-stage" id="r5-q1">
-        <div class="quiz-label">📝 문제 1 / 4 — 객관식</div>
-        <div class="quiz-question">뼈와 이를 튼튼하게 만드는 무기질은 무엇인가요?</div>
+        <div class="quiz-label">📝 문제 1 / 4 — 상황 추론</div>
+        <div class="quiz-question">
+            저리는 최근 우유를 멀리하여 뼈가 약해졌고, 짠 음식을 자주 먹어 몸이 심하게 붓고 있습니다.<br>
+            현재 저리에게 <b>가장 필요한 영양소(부족)</b>와 <b>문제를 일으키는 영양소(과다)</b>가 바르게 짝지어진 것은?
+        </div>
         <div class="quiz-options">
-            <button class="option-btn" onclick="checkOption(5,1,this,'wrong')">① 철분 (Fe)</button>
-            <button class="option-btn" onclick="checkOption(5,1,this,'wrong')">② 나트륨 (Na)</button>
-            <button class="option-btn" onclick="checkOption(5,1,this,'correct')">③ 칼슘 (Ca)</button>
-            <button class="option-btn" onclick="checkOption(5,1,this,'wrong')">④ 아이오딘 (I)</button>
+            <button class="option-btn" onclick="checkOption(5,1,this,'wrong')">① 철분 (부족), 칼슘 (과다)</button>
+            <button class="option-btn" onclick="checkOption(5,1,this,'correct')">② 칼슘 (부족), 나트륨 (과다)</button>
+            <button class="option-btn" onclick="checkOption(5,1,this,'wrong')">③ 나트륨 (부족), 철분 (과다)</button>
+            <button class="option-btn" onclick="checkOption(5,1,this,'wrong')">④ 칼슘 (부족), 인산 (과다)</button>
         </div>
         <button class="hint-btn" id="hint-5-1" onclick="showHint('5-1', this)">💡 힌트 (1회용)</button>
     </div>
 
     <div class="quiz-stage hidden" id="r5-q2">
-        <div class="quiz-label">🛒 문제 2 / 4 — 장바구니 미션</div>
-        <div class="quiz-question">저리의 뼈를 튼튼하게 할 식품 3개를 장바구니에 담아주세요!</div>
+        <div class="quiz-label">🛒 문제 2 / 4 — 까다로운 장바구니 미션</div>
+        <div class="quiz-question">
+            저리의 뼈 건강을 위해 <b>칼슘이 풍부한 식품 2가지</b>와 칼슘 흡수를 돕는 <b>비타민 D 식품 1가지</b>를 고르세요!<br>
+            <span style="font-size:0.9rem; color:#64748b;">(주의: 철분은 많지만 칼슘 흡수를 방해하는 '옥살산'이 든 함정 식품을 피하세요!)</span>
+        </div>
         <div class="market-items" id="r5-market">
-            <div class="market-item" data-answer="yes" onclick="addToCart(this)">🥛 우유</div>
-            <div class="market-item" data-answer="yes" onclick="addToCart(this)">🐟 멸치</div>
-            <div class="market-item" data-answer="yes" onclick="addToCart(this)">🥦 브로콜리</div>
-            <div class="market-item" data-answer="no" onclick="addToCart(this)">🍭 사탕</div>
-            <div class="market-item" data-answer="no" onclick="addToCart(this)">🍔 햄버거</div>
-            <div class="market-item" data-answer="no" onclick="addToCart(this)">🥤 탄산음료</div>
+            <div class="market-item" data-answer="yes" onclick="addToCart(this)">🥛 우유 (칼슘)</div>
+            <div class="market-item" data-answer="yes" onclick="addToCart(this)">🐟 뱅어포 (칼슘)</div>
+            <div class="market-item" data-answer="yes" onclick="addToCart(this)">🍄 표고버섯 (비타민 D)</div>
+            <div class="market-item" data-answer="no" onclick="addToCart(this)">🥬 시금치 (함정)</div>
+            <div class="market-item" data-answer="no" onclick="addToCart(this)">☕ 커피 (함정)</div>
+            <div class="market-item" data-answer="no" onclick="addToCart(this)">🥤 콜라 (함정)</div>
         </div>
         <div class="cart-area" id="r5-cart">
             <div class="cart-label">🛒 장바구니 (3개를 담으세요)</div>
@@ -556,28 +562,28 @@
     </div>
 
     <div class="quiz-stage hidden" id="r5-q3">
-        <div class="quiz-label">🔎 문제 3 / 4 — 표 오류 찾기!</div>
-        <div class="quiz-question">저리의 책상에서 <strong>무기질 정리표</strong>를 발견했습니다! 단 하나의 행이 틀렸어요. 잘못된 행을 <strong>클릭</strong>하세요!</div>
+        <div class="quiz-label">🔎 문제 3 / 4 — 교묘한 표 오류 찾기!</div>
+        <div class="quiz-question">다음 무기질 정리표에서 <b>단 하나의 행</b>에 다른 영양소의 설명이 교묘하게 섞여 있습니다. 잘못된 행을 클릭하세요!</div>
         <div class="error-table-wrap">
             <table class="error-table">
-                <thead><tr><th>무기질</th><th>주요 역할</th><th>결핍 시 증상</th></tr></thead>
+                <thead><tr><th>무기질</th><th>주요 역할</th><th>결핍 / 과다 증상</th></tr></thead>
                 <tbody>
                     <tr class="table-row" onclick="selectTableRow(this, 5, false)">
-                        <td>칼슘 (Ca)</td><td>뼈와 이를 구성</td><td>결핍 시 뼈 약화 (구루병, 골다공증)</td>
-                    </tr>
-                    <tr class="table-row" onclick="selectTableRow(this, 5, false)">
-                        <td>철분 (Fe)</td><td>헤모글로빈 구성 (산소 이동)</td><td>빈혈, 피로</td>
+                        <td>칼슘 (Ca)</td><td>뼈와 치아를 구성</td><td>결핍 시 골다공증, 구루병 유발</td>
                     </tr>
                     <tr class="table-row" onclick="selectTableRow(this, 5, true)">
-                        <td>나트륨 (Na)</td><td>⚠️ 칼슘 흡수 촉진</td><td>뼈 성장 장애</td>
+                        <td>철분 (Fe)</td><td>체내 수분 평형 및 삼투압 조절</td><td>결핍 시 빈혈, 피로감</td>
                     </tr>
                     <tr class="table-row" onclick="selectTableRow(this, 5, false)">
-                        <td>아연(Zn)·마그네슘(Mg)</td><td>성장과 발육을 돕는 여러 기능</td><td>성장 지연, 경련 등</td>
+                        <td>나트륨 (Na)</td><td>신경 자극 전달, 세포 외액 조절</td><td>과다 시 고혈압, 칼슘 배출 촉진</td>
+                    </tr>
+                    <tr class="table-row" onclick="selectTableRow(this, 5, false)">
+                        <td>아연 (Zn)</td><td>면역 기능 강화, 세포 성장과 발달</td><td>결핍 시 성장 지연, 미각 이상</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="lie-explain hidden" id="lie-explain-5">💡 나트륨(Na)의 역할은 <strong>세포의 삼투압 조절(수분 평형)</strong>이에요! 칼슘 흡수 촉진은 <strong>비타민 D, C, 젖당</strong>입니다.</div>
+        <div class="lie-explain hidden" id="lie-explain-5">💡 <b>수분 평형 및 삼투압 조절</b>은 나트륨(Na)의 역할이에요! 철분(Fe)은 산소를 운반하는 헤모글로빈을 만듭니다.</div>
         <button class="hint-btn" id="hint-5-3" onclick="showHint('5-3', this)">💡 힌트 (1회용)</button>
     </div>
 

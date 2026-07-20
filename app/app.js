@@ -1,7 +1,7 @@
 // ===========================
 // 상태 관리
 // ===========================
-let clearedRooms = [1, 2, 3];
+let clearedRooms = [];
 let currentRoom = 0;
 let roomQuizState = {};
 
@@ -331,8 +331,8 @@ function selectTableRow(el, roomNum, isCorrect) {
         el.classList.add('row-correct');
         const explain = document.getElementById(`lie-explain-${roomNum}`);
         if (explain) explain.classList.remove('hidden');
-        showModal('🎉 오류를 찾았습니다! 철분(Fe)은 헤모글로빈 구성이 역할이에요!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1800);
+        showModal('🎉 오류를 찾았습니다! "체내 수분 평형"은 나트륨의 역할이에요!', true);
+        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 2500);
     } else {
         el.classList.add('row-wrong-flash');
         showModal('그 행은 올바른 정보예요! 다시 살펴보세요.', false);
@@ -696,13 +696,13 @@ function addToCart(el) {
 }
 function checkCartQ(roomNum) {
     if (r5CartItems.length < 3) { showModal(`3개를 담아야 해요! 현재 ${r5CartItems.length}개입니다.`, false); return; }
-    const correctItems = ['🥛 우유', '🐟 멸치', '🥦 브로콜리'];
+    const correctItems = ['🥛 우유 (칼슘)', '🐟 뱅어포 (칼슘)', '🍄 표고버섯 (비타민 D)'];
     const allCorrect = r5CartItems.every(item => correctItems.includes(item));
     if (allCorrect) {
-        showModal('🎉 완벽한 장보기! 칼슘이 풍부한 식품들이에요!', true);
+        showModal('🎉 완벽한 장보기! 뼈가 아주 튼튼해지겠어요!', true);
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
     } else {
-        showModal('잘못된 식품이 있어요! 칼슘이 풍부한 식품을 골라보세요.', false);
+        showModal('앗, 잘못된 식품이 있어요! (힌트: 옥살산이나 카페인, 인산이 든 식품은 피하세요!)', false);
         r5CartItems = [];
         document.querySelectorAll('.market-item').forEach(i => i.classList.remove('in-cart'));
         const cartEl = document.getElementById('r5-cart');
@@ -743,6 +743,7 @@ function startBoneGame() {
     boneGameInterval = setInterval(updateBoneGame, 30);
 }
 
+let lastMouseX = 0;
 function handleBoneMove(e) {
     if (!boneGameActive) return;
     const container = document.getElementById('bone-game-container');
@@ -754,6 +755,19 @@ function handleBoneMove(e) {
     if (x > rect.width - 30) x = rect.width - 30;
     
     player.style.left = `${x}px`;
+    
+    // Tilt effect
+    let tilt = 0;
+    if (x > lastMouseX + 5) tilt = 15;
+    else if (x < lastMouseX - 5) tilt = -15;
+    player.style.transform = `translateX(-50%) rotate(${tilt}deg)`;
+    
+    lastMouseX = x;
+    setTimeout(() => {
+        if (lastMouseX === x && boneGameActive) {
+            player.style.transform = `translateX(-50%) rotate(0deg)`;
+        }
+    }, 150);
 }
 
 function spawnBoneItem() {
@@ -772,13 +786,16 @@ function spawnBoneItem() {
     el.style.left = `${startX}px`;
     el.style.top = `-40px`;
     
+    // 회전 애니메이션
+    el.classList.add('item-spin');
+    
     container.appendChild(el);
     
     boneItems.push({
         el: el,
         x: startX,
         y: -40,
-        speed: 3 + Math.random() * 3,
+        vy: 2 + Math.random() * 2, // 초기 속도
         isGood: isGood,
         name: itemData.name
     });
@@ -798,7 +815,8 @@ function updateBoneGame() {
     
     for (let i = boneItems.length - 1; i >= 0; i--) {
         const item = boneItems[i];
-        item.y += item.speed;
+        item.vy += 0.15; // 중력 가속도
+        item.y += item.vy;
         item.el.style.top = `${item.y}px`;
         
         const dx = item.x - px;
@@ -820,10 +838,25 @@ function updateBoneGame() {
 }
 
 function handleBoneCollision(item) {
+    const container = document.getElementById('bone-game-container');
     if (item.isGood) {
         boneScore++;
         boneHealth = Math.min(100, boneHealth + 10);
         updateBoneUI();
+        
+        // 플로팅 텍스트
+        const floatText = document.createElement('div');
+        floatText.className = 'floating-text';
+        floatText.textContent = '+10 뼈 튼튼!';
+        floatText.style.left = `${item.x}px`;
+        floatText.style.top = `${item.y - 20}px`;
+        container.appendChild(floatText);
+        setTimeout(() => floatText.remove(), 1000);
+        
+        // 채워지는 시각 효과 (구멍 메우기)
+        const player = document.getElementById('bone-player');
+        const holes = player.querySelectorAll('.bone-hole');
+        if (holes.length > 0) holes[0].remove();
         
         if (boneScore >= 5) {
             endBoneGame(true);
@@ -831,6 +864,10 @@ function handleBoneCollision(item) {
     } else {
         boneHealth -= 30;
         updateBoneUI();
+        
+        // 화면 흔들림 및 붉은 섬광 효과
+        container.classList.add('shake', 'flash-red');
+        setTimeout(() => container.classList.remove('shake', 'flash-red'), 500);
         
         const player = document.getElementById('bone-player');
         const hole = document.createElement('div');
