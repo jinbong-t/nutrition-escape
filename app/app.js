@@ -620,6 +620,46 @@ function checkMatchingQ(roomNum) {
 }
 
 // ===========================
+// 방4: 비타민 병원 (Q2)
+// ===========================
+function checkR4Q2(roomNum) {
+    const bins = ['A', 'C', 'D', 'B1'];
+    let allCorrect = true;
+    let anyEmpty = false;
+
+    bins.forEach(binType => {
+        const binEl = document.getElementById(`r4-bin-${binType}`);
+        const contentEl = binEl.querySelector('.bin-content');
+        if (contentEl.children.length === 0) {
+            anyEmpty = true;
+            allCorrect = false;
+        } else {
+            const cardCategory = contentEl.children[0].getAttribute('data-category');
+            if (cardCategory !== binType) {
+                allCorrect = false;
+            }
+        }
+    });
+
+    if (anyEmpty) {
+        showModal('아직 알약을 받지 못한 환자가 있어요!', false);
+        return;
+    }
+
+    if (allCorrect) {
+        showModal('🎉 완벽해요! 아픈 환자들이 모두 건강해졌어요!', true);
+        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
+    } else {
+        showModal('😅 아직 낫지 않은 환자가 있어요! 증상에 맞는 비타민을 다시 확인해 보세요.', false);
+        // 원위치로 되돌리기
+        const sourceEl = document.getElementById('r4-source');
+        document.querySelectorAll('#room-screen-4 .bin-content .drag-card').forEach(card => {
+            sourceEl.appendChild(card);
+        });
+    }
+}
+
+// ===========================
 // 방4: 비타민 분류 (Q3)
 // ===========================
 function selectVit(el) {
