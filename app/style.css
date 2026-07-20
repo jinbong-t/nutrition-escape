@@ -2374,3 +2374,6 @@ h2 {
 #bone-health-bar-container { box-shadow: 0 0 15px rgba(16,185,129,0.8); border: 1px solid #10b981; }
 #bone-health-bar { transition: width 0.2s ease, background-color 0.2s ease; }
 
+
+#bone-score { color: #fff !important; font-size: 1.5rem !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important; z-index: 30 !important; }
+
