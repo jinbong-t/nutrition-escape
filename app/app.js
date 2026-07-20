@@ -678,7 +678,6 @@ function checkSafeCode(roomNum) {
 // ===========================
 // 방5: 장바구니 미션 (기존 복구)
 // ===========================
-let r5CartItems = [];
 function addToCart(el) {
     if (el.classList.contains('in-cart')) {
         el.classList.remove('in-cart');
