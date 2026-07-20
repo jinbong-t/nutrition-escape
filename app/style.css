@@ -2272,3 +2272,20 @@ h2 {
     font-size: 1.8rem; font-weight: bold; margin: 5px 0; border: 2px solid #374151;
 }
 
+
+/* 마녀 퀴즈 지그재그 애니메이션 */
+@keyframes zigzagMove {
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(15px); }
+    50% { transform: translateX(0px); }
+    75% { transform: translateX(-15px); }
+    100% { transform: translateX(0px); }
+}
+.zigzag-btn {
+    animation: zigzagMove 3s infinite ease-in-out;
+}
+.zigzag-btn:nth-child(even) {
+    animation-delay: -1.5s;
+    animation-duration: 4s;
+}
+

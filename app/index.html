@@ -435,18 +435,16 @@
         <div id="dark-room" class="dark-room-container">
             <div class="dark-overlay" id="dark-overlay"></div>
             <div class="dark-room-content" style="display: flex; align-items: center; justify-content: center; background: #2d3748;">
-                <!-- 하나의 씬(데스크) 구성 -->
-                <div style="position: relative; width: 380px; height: 160px; background: #744210; border-radius: 8px; border: 4px solid #4a2e15; box-shadow: 0 20px 25px rgba(0,0,0,0.6); display: flex; align-items: flex-end; padding-bottom: 20px; justify-content: space-around;">
-                    <!-- 의자 -->
-                    <div style="position: absolute; bottom: -30px; left: -60px; font-size: 5rem; transform: scaleX(-1); filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">🪑</div>
-                    
-                    <!-- 책상 위 물건들 -->
-                    <div style="font-size: 4rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">💻</div>
-                    <div style="font-size: 3rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">📚</div>
-                    <div style="font-size: 2.5rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5)); margin-bottom: 10px;">☕</div>
+                <!-- 하나의 씬(식탁 위 식재료들) 구성 -->
+                <div style="position: relative; width: 420px; height: 180px; background: #e2e8f0; border-radius: 8px; border: 4px solid #cbd5e1; box-shadow: 0 20px 25px rgba(0,0,0,0.6); display: flex; align-items: flex-end; padding-bottom: 20px; justify-content: space-around;">
+                    <!-- 식탁 위 큼직한 식재료들 -->
+                    <div style="font-size: 6rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">🥦</div>
+                    <div style="font-size: 6.5rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">🥩</div>
+                    <div style="font-size: 5rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">🍋</div>
+                    <div style="font-size: 4.5rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5)); margin-bottom: 10px;">🥛</div>
                     
                     <!-- 숨겨진 당근 -->
-                    <div id="hidden-carrot" style="position: absolute; bottom: 15px; right: -25px; font-size: 3.5rem; cursor: pointer; transition: transform 0.2s;" onclick="foundCarrot(this)">🥕</div>
+                    <div id="hidden-carrot" style="position: absolute; bottom: 10px; right: -40px; font-size: 6.5rem; cursor: pointer; transition: transform 0.2s;" onclick="foundCarrot(this)">🥕</div>
                 </div>
             </div>
         </div>
@@ -501,10 +499,10 @@
             <div class="quiz-question spooky-text" style="margin-top: 10px;">금고 문이 열리자 그 안에서 마녀가 튀어나왔다!<br><br>"히히히! 영양소는 혼자서 일하지 않아! 철분과 칼슘의 흡수를 돕는 <b>비타민 짝꿍</b>을 모르면 소용없지!<br><br>다음 중 영양소 흡수가 제대로 되지 않는 <b>최악의 식습관(마녀가 칭찬할 행동)</b>을 골라봐라!"</div>
         </div>
         <div class="quiz-options">
-            <button class="option-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">① 빈혈을 막기 위해 <b>소고기(철분)</b>를 먹고, 후식으로 <b>오렌지(비타민 C)</b>를 먹는다.</button>
-            <button class="option-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">② 뼈를 튼튼하게 하려고 <b>우유(칼슘)</b>를 마시고, 밖에 나가 <b>햇빛(비타민 D 합성)</b>을 쬐며 뛰어논다.</button>
-            <button class="option-btn" onclick="checkOption(4,3,this,'correct')" style="text-align: left; padding: 15px;">③ 뼈가 자라길 바라며 어두컴컴한 방에 틀어박혀 <b>멸치(칼슘)</b>만 계속 씹어 먹는다.</button>
-            <button class="option-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">④ 철분이 풍부한 <b>고기</b>를 먹을 때 비타민 C가 가득한 <b>싱싱한 야채 쌈</b>을 크게 싸서 먹는다.</button>
+            <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">① 빈혈을 막기 위해 <b>소고기(철분)</b>를 먹고, 후식으로 <b>오렌지(비타민 C)</b>를 먹는다.</button>
+            <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">② 뼈를 튼튼하게 하려고 <b>우유(칼슘)</b>를 마시고, 밖에 나가 <b>햇빛(비타민 D 합성)</b>을 쬐며 뛰어논다.</button>
+            <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'correct')" style="text-align: left; padding: 15px;">③ 뼈가 자라길 바라며 어두컴컴한 방에 틀어박혀 <b>멸치(칼슘)</b>만 계속 씹어 먹는다.</button>
+            <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">④ 철분이 풍부한 <b>고기</b>를 먹을 때 비타민 C가 가득한 <b>싱싱한 야채 쌈</b>을 크게 싸서 먹는다.</button>
         </div>
         <button class="hint-btn" id="hint-4-3" onclick="showHint('4-3', this)">💡 힌트 (1회용)</button>
     </div>
