@@ -57,6 +57,7 @@ const hintData = {
     '4-1': '잇몸에서 피가 나는 괴혈병은 비타민 C 부족 때문이에요!',
     '4-2': '비타민 A→야맹증, C→괴혈병, D→구루병, B1→각기병이에요.',
     '4-3': '지용성: A·D·E·K (기름에 녹아요), 수용성: B·C (물에 녹아요)',
+    '4-4': '칼슘이 뼈에 흡수되려면 햇빛을 받아 생기는 비타민 D가 꼭 필요해요!',
     '5-1': '우유·멸치에 풍부하게 들어있는 무기질이 뼈를 만들어요!',
     '5-2': '칼슘이 풍부한 식품: 우유 🥛 멸치 🐟 브로콜리 🥦',
     '5-3': '나트륨(Na)은 세포의 삼투압 조절(수분평형)! 칼슘 흡수 촉진은 비타민 D, C, 젖당!',
@@ -238,14 +239,16 @@ function showQuizStage(roomNum, stageNum) {
     document.querySelectorAll(`#room-screen-${roomNum} .quiz-stage`).forEach(s => s.classList.add('hidden'));
     const clearEl = document.getElementById(`r${roomNum}-clear`);
     if (clearEl) clearEl.classList.add('hidden');
-    if (stageNum <= 3) {
+    let maxQ = roomNum === 4 ? 4 : 3;
+    if (stageNum <= maxQ) {
         const el = document.getElementById(`r${roomNum}-q${stageNum}`);
         if (el) el.classList.remove('hidden');
     }
 }
 
 function nextQuizStage(roomNum, currentQ) {
-    if (currentQ < 3) { 
+    let maxQ = roomNum === 4 ? 4 : 3;
+    if (currentQ < maxQ) { 
         roomQuizState[roomNum] = currentQ + 1; 
         showQuizStage(roomNum, currentQ + 1); 
     }
