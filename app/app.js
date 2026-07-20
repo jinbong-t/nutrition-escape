@@ -239,7 +239,7 @@ function showQuizStage(roomNum, stageNum) {
     document.querySelectorAll(`#room-screen-${roomNum} .quiz-stage`).forEach(s => s.classList.add('hidden'));
     const clearEl = document.getElementById(`r${roomNum}-clear`);
     if (clearEl) clearEl.classList.add('hidden');
-    let maxQ = roomNum === 4 ? 4 : 3;
+    let maxQ = 3;
     if (stageNum <= maxQ) {
         const el = document.getElementById(`r${roomNum}-q${stageNum}`);
         if (el) el.classList.remove('hidden');
@@ -247,7 +247,7 @@ function showQuizStage(roomNum, stageNum) {
 }
 
 function nextQuizStage(roomNum, currentQ) {
-    let maxQ = roomNum === 4 ? 4 : 3;
+    let maxQ = 3;
     if (currentQ < maxQ) { 
         roomQuizState[roomNum] = currentQ + 1; 
         showQuizStage(roomNum, currentQ + 1); 
@@ -620,93 +620,60 @@ function checkMatchingQ(roomNum) {
 }
 
 // ===========================
-// 방4: 비타민 병원 (Q2)
+// 방4: 방탈출 퍼즐 로직
 // ===========================
-function checkR4Q2(roomNum) {
-    const bins = ['A', 'C', 'D', 'B1'];
-    let allCorrect = true;
-    let anyEmpty = false;
-
-    bins.forEach(binType => {
-        const binEl = document.getElementById(`r4-bin-${binType}`);
-        const contentEl = binEl.querySelector('.bin-content');
-        if (contentEl.children.length === 0) {
-            anyEmpty = true;
-            allCorrect = false;
-        } else {
-            const cardCategory = contentEl.children[0].getAttribute('data-category');
-            if (cardCategory !== binType) {
-                allCorrect = false;
+// 1단계: 손전등 효과
+document.addEventListener('DOMContentLoaded', () => {
+    const darkRoom = document.getElementById('dark-room');
+    if (darkRoom) {
+        darkRoom.addEventListener('mousemove', (e) => {
+            const rect = darkRoom.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const overlay = document.getElementById('dark-overlay');
+            if (overlay) {
+                // radial gradient 중심을 마우스 위치로 업데이트
+                overlay.style.background = `radial-gradient(circle 80px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.95) 100%)`;
             }
-        }
-    });
-
-    if (anyEmpty) {
-        showModal('아직 알약을 받지 못한 환자가 있어요!', false);
-        return;
-    }
-
-    if (allCorrect) {
-        showModal('🎉 완벽해요! 아픈 환자들이 모두 건강해졌어요!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
-    } else {
-        showModal('😅 아직 낫지 않은 환자가 있어요! 증상에 맞는 비타민을 다시 확인해 보세요.', false);
-        // 원위치로 되돌리기
-        const sourceEl = document.getElementById('r4-source');
-        document.querySelectorAll('#room-screen-4 .bin-content .drag-card').forEach(card => {
-            sourceEl.appendChild(card);
         });
     }
+});
+
+function foundCarrot(el) {
+    const container = document.getElementById('dark-room');
+    container.classList.add('lights-on');
+    el.style.transform = 'scale(1.5)';
+    showModal('🎉 비타민 A(당근)를 찾았습니다! 야맹증이 치료되어 시야가 밝아집니다!', true);
+    setTimeout(() => { 
+        closeModal(); 
+        nextQuizStage(4, 1); 
+    }, 2500);
 }
 
-// ===========================
-// 방4: 비타민 분류 (Q3)
-// ===========================
-function selectVit(el) {
-    document.querySelectorAll('.vit-card').forEach(c => c.classList.remove('vit-selected'));
-    el.classList.add('vit-selected');
-    r4SelectedVit = el;
+// 2단계: 금고 다이어리
+const safeState = ['A', 'A', 'A', 'A'];
+function changeDial(index, dir) {
+    let charCode = safeState[index].charCodeAt(0);
+    charCode += dir;
+    if (charCode > 90) charCode = 65; // Z -> A
+    if (charCode < 65) charCode = 90; // A -> Z
+    safeState[index] = String.fromCharCode(charCode);
+    document.getElementById(`dial-${index}`).textContent = safeState[index];
 }
-function classifyVit(type) {
-    if (!r4SelectedVit) { showModal('먼저 비타민 카드를 선택해 주세요!'); return; }
-    const vitKey = r4SelectedVit.dataset.vit;
-    r4VitClassified[vitKey] = type;
-    r4SelectedVit.dataset.classified = type;
-    r4SelectedVit.classList.remove('vit-selected');
-    r4SelectedVit.classList.add(type === '지용성' ? 'vit-fat' : 'vit-water');
 
-    const binContentId = type === '지용성' ? 'r4-fat-content' : 'r4-water-content';
-    const binContent = document.getElementById(binContentId);
-    const tag = document.createElement('span');
-    tag.className = 'vit-bin-tag';
-    tag.textContent = `비타민 ${vitKey}`;
-    binContent.appendChild(tag);
-
-    r4SelectedVit = null;
-}
-function checkVitClassifyQ(roomNum) {
-    const correctMap = { A: '지용성', B: '수용성', C: '수용성', D: '지용성', E: '지용성', K: '지용성' };
-    const vits = ['A','B','C','D','E','K'];
-    if (Object.keys(r4VitClassified).length < vits.length) {
-        showModal(`아직 ${vits.length - Object.keys(r4VitClassified).length}개 비타민이 남았어요!`, false); return;
-    }
-    const allCorrect = vits.every(v => r4VitClassified[v] === correctMap[v]);
-    if (allCorrect) {
-        showModal('🎉 완벽한 분류입니다! 지용성/수용성 마스터!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1800);
+function checkSafeCode(roomNum) {
+    const code = safeState.join('');
+    if (code === 'CDKB') {
+        showModal('🔓 찰칵! 금고 문이 열렸습니다!', true);
+        setTimeout(() => { 
+            closeModal(); 
+            nextQuizStage(roomNum, 2); 
+        }, 1500);
     } else {
-        showModal('틀린 분류가 있어요! 지용성: A·D·E·K, 수용성: B·C를 기억하세요!', false);
-        
-        // 틀렸을 때 힌트 버튼 표시
-        const hintBtn = document.getElementById('hint-4-3');
-        if (hintBtn) hintBtn.classList.add('show-hint');
-
-        r4VitClassified = {};
-        document.querySelectorAll('.vit-card').forEach(c => { c.classList.remove('vit-fat','vit-water','vit-selected'); delete c.dataset.classified; });
-        document.getElementById('r4-fat-content').innerHTML = '';
-        document.getElementById('r4-water-content').innerHTML = '';
+        showModal('😅 비밀번호가 틀렸습니다. 결핍증 증상을 다시 잘 읽어보세요!', false);
     }
 }
+
 
 // ===========================
 // 방5: 장바구니

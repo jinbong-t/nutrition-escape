@@ -2202,3 +2202,73 @@ h2 {
     animation: floatWitch 3s infinite ease-in-out;
 }
 
+
+/* 방탈출 1단계: 암흑 방 손전등 효과 */
+.dark-room-container {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    background: #111;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 3px solid #333;
+    margin-top: 15px;
+    cursor: crosshair;
+}
+.dark-room-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #333; /* 방 벽지 색상 */
+}
+.dark-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle 60px at center, transparent 0%, rgba(0,0,0,0.95) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+.dark-room-container.lights-on .dark-overlay {
+    background: transparent;
+    transition: background 1s ease;
+}
+.dark-room-container.lights-on .dark-room-content {
+    background: #fdf6e3;
+    transition: background 1s ease;
+}
+/* 방탈출 2단계: 다이어리와 금고 */
+.diary-container {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;
+}
+.diary-page {
+    width: 220px; padding: 15px;
+    background: #fef9c3; border: 1px solid #d97706;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem; line-height: 1.4; color: #451a03;
+    transform: rotate(-2deg);
+}
+.diary-page:nth-child(even) { transform: rotate(3deg); }
+.safe-container {
+    margin-top: 30px; padding: 20px;
+    background: #374151; border: 4px solid #1f2937; border-radius: 10px;
+    text-align: center;
+}
+.safe-box {
+    display: flex; gap: 15px; justify-content: center;
+}
+.safe-dial {
+    display: flex; flex-direction: column; align-items: center;
+    background: #9ca3af; padding: 5px; border-radius: 5px;
+}
+.dial-btn {
+    background: #4b5563; color: white; border: none; cursor: pointer;
+    width: 40px; height: 30px; font-size: 1rem;
+}
+.dial-btn:hover { background: #374151; }
+.dial-value {
+    width: 40px; height: 50px; background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: bold; margin: 5px 0; border: 2px solid #374151;
+}
+

@@ -428,112 +428,78 @@
     </div>
 
     <div class="quiz-stage" id="r4-q1">
-        <div class="quiz-label">📝 문제 1 / 4 — 객관식</div>
-        <div class="quiz-question">피부에 반점이 생기고, 잇몸에서 피가 나는 증상과 관련된 비타민은?</div>
-        <div class="quiz-options">
-            <button class="option-btn" onclick="checkOption(4,1,this,'wrong')">① 비타민 A — 야맹증</button>
-            <button class="option-btn" onclick="checkOption(4,1,this,'correct')">② 비타민 C — 괴혈병</button>
-            <button class="option-btn" onclick="checkOption(4,1,this,'wrong')">③ 비타민 D — 구루병</button>
-            <button class="option-btn" onclick="checkOption(4,1,this,'wrong')">④ 비타민 K — 혈액응고 문제</button>
+        <div class="quiz-label">🕵️‍♂️ 방탈출 1단계 — 암흑 속의 비타민 A</div>
+        <div class="quiz-question" style="position: relative; z-index: 10;">어두운 곳에서 눈이 안 보여요! (야맹증)<br>방을 비추며 시력을 회복할 <b>비타민 A(당근)</b>를 찾아 방의 불을 켜세요!</div>
+        
+        <!-- 암흑 방 영역 -->
+        <div id="dark-room" class="dark-room-container">
+            <div class="dark-overlay" id="dark-overlay"></div>
+            <div class="dark-room-content">
+                <div style="position: absolute; top: 10%; left: 10%; font-size: 4rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">🛏️</div>
+                <div style="position: absolute; bottom: 20%; left: 30%; font-size: 3rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">🪑</div>
+                <div style="position: absolute; top: 30%; right: 20%; font-size: 5rem; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">📚</div>
+                
+                <!-- 숨겨진 당근 -->
+                <div id="hidden-carrot" style="position: absolute; top: 70%; right: 15%; font-size: 3rem; cursor: pointer; transition: transform 0.2s;" onclick="foundCarrot(this)">🥕</div>
+            </div>
         </div>
         <button class="hint-btn" id="hint-4-1" onclick="showHint('4-1', this)">💡 힌트 (1회용)</button>
     </div>
 
     <div class="quiz-stage hidden" id="r4-q2">
-        <div class="quiz-label">🩺 문제 2 / 4 — 비타민 병원</div>
-        <div class="quiz-question">비타민 의사선생님! 아픈 환자들에게 꼭 맞는 <b>비타민 알약</b>을 처방해 주세요! (알약을 환자에게 드래그)</div>
+        <div class="quiz-label">🔐 방탈출 2단계 — 결핍증 다이어리와 알파벳 금고</div>
+        <div class="quiz-question">불이 켜졌습니다! 벽에 붙은 찢어진 일기장 단서들을 읽고, 금고의 4자리 알파벳 암호를 맞춰주세요!</div>
         
-        <div class="classify-source" id="r4-source" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; min-height: 60px;">
-            <div class="drag-card pill-card" draggable="true" data-category="A" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 A</div>
-            <div class="drag-card pill-card" draggable="true" data-category="C" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 C</div>
-            <div class="drag-card pill-card" draggable="true" data-category="D" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 D</div>
-            <div class="drag-card pill-card" draggable="true" data-category="B1" style="font-size: 1.2rem; padding: 10px 20px; border-radius: 50px; background: #fef08a; border: 3px solid #eab308; box-shadow: 0 4px 0 #ca8a04;">💊 비타민 B1</div>
+        <div class="diary-container">
+            <div class="diary-page">1. "선원들이 잇몸에서 피를 흘리며 쓰러졌다... 새콤한 귤을 먹여야 해!"<br>(비타민 <b>_</b> )</div>
+            <div class="diary-page">2. "햇빛을 오랫동안 못 봐서 뼈가 휘어지고 있어..."<br>(비타민 <b>_</b> )</div>
+            <div class="diary-page">3. "상처가 났는데 피가 멈추지 않는다!"<br>(비타민 <b>_</b> )</div>
+            <div class="diary-page">4. "기운이 없고 다리가 붓는다... (각기병)"<br>(비타민 <b>_</b> )</div>
         </div>
         
-        <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">👀 "밤눈이 어두워요 (야맹증)"</div>
-                <div class="classify-bin mouth-bin" id="r4-bin-A">
-                    <div class="bin-content"></div>
-                    <div class="mouth-bg"></div>
+        <div class="safe-container">
+            <div class="safe-box">
+                <div class="safe-dial">
+                    <button class="dial-btn" onclick="changeDial(0, 1)">▲</button>
+                    <div class="dial-value" id="dial-0">A</div>
+                    <button class="dial-btn" onclick="changeDial(0, -1)">▼</button>
+                </div>
+                <div class="safe-dial">
+                    <button class="dial-btn" onclick="changeDial(1, 1)">▲</button>
+                    <div class="dial-value" id="dial-1">A</div>
+                    <button class="dial-btn" onclick="changeDial(1, -1)">▼</button>
+                </div>
+                <div class="safe-dial">
+                    <button class="dial-btn" onclick="changeDial(2, 1)">▲</button>
+                    <div class="dial-value" id="dial-2">A</div>
+                    <button class="dial-btn" onclick="changeDial(2, -1)">▼</button>
+                </div>
+                <div class="safe-dial">
+                    <button class="dial-btn" onclick="changeDial(3, 1)">▲</button>
+                    <div class="dial-value" id="dial-3">A</div>
+                    <button class="dial-btn" onclick="changeDial(3, -1)">▼</button>
                 </div>
             </div>
-            
-            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">🩸 "잇몸에서 피가 나요 (괴혈병)"</div>
-                <div class="classify-bin mouth-bin" id="r4-bin-C">
-                    <div class="bin-content"></div>
-                    <div class="mouth-bg"></div>
-                </div>
-            </div>
-
-            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">🦴 "뼈가 휘어졌어요 (구루병)"</div>
-                <div class="classify-bin mouth-bin" id="r4-bin-D">
-                    <div class="bin-content"></div>
-                    <div class="mouth-bg"></div>
-                </div>
-            </div>
-
-            <div class="patient-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div style="font-size: 1.1rem; font-weight: bold; color: #4b5563;">😫 "기운이 없어요 (각기병)"</div>
-                <div class="classify-bin mouth-bin" id="r4-bin-B1">
-                    <div class="bin-content"></div>
-                    <div class="mouth-bg"></div>
-                </div>
-            </div>
+            <button class="btn" style="margin-top: 20px;" onclick="checkSafeCode(4)">🔑 금고 열쇠 돌리기</button>
         </div>
-        
-        <button class="btn" style="margin-top: 30px;" onclick="checkR4Q2(4)">확인하기</button>
         <button class="hint-btn" id="hint-4-2" onclick="showHint('4-2', this)">💡 힌트 (1회용)</button>
     </div>
 
     <div class="quiz-stage hidden" id="r4-q3">
-        <div class="quiz-label">🗂️ 문제 3 / 4 — 비타민 분류 미션!</div>
-        <div class="quiz-question">흐림이의 방 책상에서 비타민 카드들이 쏟아졌습니다! <strong>지용성</strong>과 <strong>수용성</strong>으로 올바르게 분류해 주세요!</div>
-        <div class="vit-classify-area">
-            <div class="vit-source" id="r4-vit-source">
-                <div class="vit-card" data-vit="A" data-correct="지용성" onclick="selectVit(this)">🥕 비타민 A</div>
-                <div class="vit-card" data-vit="B" data-correct="수용성" onclick="selectVit(this)">🌾 비타민 B</div>
-                <div class="vit-card" data-vit="C" data-correct="수용성" onclick="selectVit(this)">🍋 비타민 C</div>
-                <div class="vit-card" data-vit="D" data-correct="지용성" onclick="selectVit(this)">🍄 비타민 D</div>
-                <div class="vit-card" data-vit="E" data-correct="지용성" onclick="selectVit(this)">🥑 비타민 E</div>
-                <div class="vit-card" data-vit="K" data-correct="지용성" onclick="selectVit(this)">🥦 비타민 K</div>
-            </div>
-            <div class="vit-action-row">
-                <button class="vit-classify-btn fat-btn" onclick="classifyVit('지용성')">🫒 지용성으로 분류</button>
-                <button class="vit-classify-btn water-btn" onclick="classifyVit('수용성')">💧 수용성으로 분류</button>
-            </div>
-            <div class="vit-bins">
-                <div class="vit-bin" id="r4-fat-bin">
-                    <div class="vit-bin-label">🫒 지용성 <small>(A·D·E·K)</small></div>
-                    <div class="vit-bin-content" id="r4-fat-content"></div>
-                </div>
-                <div class="vit-bin" id="r4-water-bin">
-                    <div class="vit-bin-label">💧 수용성 <small>(B·C)</small></div>
-                    <div class="vit-bin-content" id="r4-water-content"></div>
-                </div>
-            </div>
-        </div>
-        <button class="btn" onclick="checkVitClassifyQ(4)">분류 확인하기</button>
-        <button class="hint-btn" id="hint-4-3" onclick="showHint('4-3', this)">💡 힌트 (1회용)</button>
-    </div>
-
-    <div class="quiz-stage hidden" id="r4-q4">
         <div class="spooky-witch-box">
             <div class="spooky-witch-emoji">
                 <img src="../마녀.png" alt="마녀" style="width: 140px; height: auto; border-radius: 50%; border: 4px solid #9333ea; background: black;">
             </div>
-            <div class="quiz-label spooky-text" style="color: #d8b4fe !important; margin-left: 110px;">🔮 문제 4 / 4 — 마녀의 깜짝 퀴즈! (실생활 추론)</div>
-            <div class="quiz-question spooky-text" style="margin-top: 10px;">(스르륵...) 마녀의 바구니 🧺 안에서 귀신처럼 문제가 튀어나왔다!<br><br>"히히히! 비타민 분류를 다 맞혔다고? 영양소는 혼자서 일하지 않아! 철분과 칼슘의 흡수를 돕는 <b>비타민 짝꿍</b>을 모르면 소용없지!<br><br>다음 중 영양소 흡수가 제대로 되지 않는 <b>최악의 식습관(마녀가 칭찬할 행동)</b>을 골라봐라!"</div>
+            <div class="quiz-label spooky-text" style="color: #d8b4fe !important; margin-left: 110px;">🔮 방탈출 3단계 — 마녀의 깜짝 퀴즈! (실생활 추론)</div>
+            <div class="quiz-question spooky-text" style="margin-top: 10px;">금고 문이 열리자 그 안에서 마녀가 튀어나왔다!<br><br>"히히히! 영양소는 혼자서 일하지 않아! 철분과 칼슘의 흡수를 돕는 <b>비타민 짝꿍</b>을 모르면 소용없지!<br><br>다음 중 영양소 흡수가 제대로 되지 않는 <b>최악의 식습관(마녀가 칭찬할 행동)</b>을 골라봐라!"</div>
         </div>
         <div class="quiz-options">
-            <button class="option-btn" onclick="checkOption(4,4,this,'wrong')" style="text-align: left; padding: 15px;">① 빈혈을 막기 위해 <b>소고기(철분)</b>를 먹고, 후식으로 <b>오렌지(비타민 C)</b>를 먹는다.</button>
-            <button class="option-btn" onclick="checkOption(4,4,this,'wrong')" style="text-align: left; padding: 15px;">② 뼈를 튼튼하게 하려고 <b>우유(칼슘)</b>를 마시고, 밖에 나가 <b>햇빛(비타민 D 합성)</b>을 쬐며 뛰어논다.</button>
-            <button class="option-btn" onclick="checkOption(4,4,this,'correct')" style="text-align: left; padding: 15px;">③ 뼈가 자라길 바라며 어두컴컴한 방에 틀어박혀 <b>멸치(칼슘)</b>만 계속 씹어 먹는다.</button>
-            <button class="option-btn" onclick="checkOption(4,4,this,'wrong')" style="text-align: left; padding: 15px;">④ 철분이 풍부한 <b>고기</b>를 먹을 때 비타민 C가 가득한 <b>싱싱한 야채 쌈</b>을 크게 싸서 먹는다.</button>
+            <button class="option-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">① 빈혈을 막기 위해 <b>소고기(철분)</b>를 먹고, 후식으로 <b>오렌지(비타민 C)</b>를 먹는다.</button>
+            <button class="option-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">② 뼈를 튼튼하게 하려고 <b>우유(칼슘)</b>를 마시고, 밖에 나가 <b>햇빛(비타민 D 합성)</b>을 쬐며 뛰어논다.</button>
+            <button class="option-btn" onclick="checkOption(4,3,this,'correct')" style="text-align: left; padding: 15px;">③ 뼈가 자라길 바라며 어두컴컴한 방에 틀어박혀 <b>멸치(칼슘)</b>만 계속 씹어 먹는다.</button>
+            <button class="option-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">④ 철분이 풍부한 <b>고기</b>를 먹을 때 비타민 C가 가득한 <b>싱싱한 야채 쌈</b>을 크게 싸서 먹는다.</button>
         </div>
-        <button class="hint-btn" id="hint-4-4" onclick="showHint('4-4', this)">💡 힌트 (1회용)</button>
+        <button class="hint-btn" id="hint-4-3" onclick="showHint('4-3', this)">💡 힌트 (1회용)</button>
     </div>
 
     <div class="room-clear hidden" id="r4-clear">
