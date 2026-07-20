@@ -676,37 +676,174 @@ function checkSafeCode(roomNum) {
 
 
 // ===========================
-// 방5: 장바구니
+// 방5: 뼈 튼튼 캐치 게임
 // ===========================
-function addToCart(el) {
-    if (el.classList.contains('in-cart')) {
-        el.classList.remove('in-cart');
-        r5CartItems = r5CartItems.filter(i => i !== el.textContent);
-        const cartEl = document.getElementById('r5-cart');
-        const cartItem = cartEl.querySelector(`[data-ref="${el.textContent}"]`);
-        if (cartItem) cartItem.remove();
-    } else {
-        if (r5CartItems.length >= 3) { showModal('장바구니는 3개까지만 담을 수 있어요!'); return; }
-        el.classList.add('in-cart');
-        r5CartItems.push(el.textContent);
-        const item = document.createElement('div');
-        item.className = 'cart-item'; item.dataset.ref = el.textContent; item.textContent = el.textContent;
-        document.getElementById('r5-cart').appendChild(item);
+let boneGameActive = false;
+let boneScore = 0;
+let boneHealth = 100;
+let boneItems = [];
+let boneGameInterval = null;
+let boneSpawnInterval = null;
+
+const goodItems = [{emoji: '🍊', name: '비타민 C'}, {emoji: '☀️', name: '비타민 D'}, {emoji: '🥛', name: '젖당'}];
+const badItems = [{emoji: '☕', name: '카페인'}, {emoji: '🧂', name: '나트륨'}, {emoji: '🥤', name: '인산'}];
+
+function startBoneGame() {
+    const startBtn = document.getElementById('start-bone-btn');
+    if (startBtn) startBtn.style.display = 'none';
+    
+    boneScore = 0;
+    boneHealth = 100;
+    boneItems.forEach(item => item.el.remove());
+    boneItems = [];
+    document.querySelectorAll('.bone-hole').forEach(h => h.remove());
+    updateBoneUI();
+    
+    boneGameActive = true;
+    
+    const container = document.getElementById('bone-game-container');
+    container.addEventListener('mousemove', handleBoneMove);
+    
+    boneSpawnInterval = setInterval(spawnBoneItem, 1000);
+    boneGameInterval = setInterval(updateBoneGame, 30);
+}
+
+function handleBoneMove(e) {
+    if (!boneGameActive) return;
+    const container = document.getElementById('bone-game-container');
+    const player = document.getElementById('bone-player');
+    const rect = container.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    
+    if (x < 30) x = 30;
+    if (x > rect.width - 30) x = rect.width - 30;
+    
+    player.style.left = `${x}px`;
+}
+
+function spawnBoneItem() {
+    if (!boneGameActive) return;
+    const container = document.getElementById('bone-game-container');
+    const rect = container.getBoundingClientRect();
+    
+    const isGood = Math.random() > 0.4;
+    const itemData = isGood ? goodItems[Math.floor(Math.random() * goodItems.length)] : badItems[Math.floor(Math.random() * badItems.length)];
+    
+    const el = document.createElement('div');
+    el.className = 'bone-item';
+    el.textContent = itemData.emoji;
+    
+    const startX = 30 + Math.random() * (rect.width - 60);
+    el.style.left = `${startX}px`;
+    el.style.top = `-40px`;
+    
+    container.appendChild(el);
+    
+    boneItems.push({
+        el: el,
+        x: startX,
+        y: -40,
+        speed: 3 + Math.random() * 3,
+        isGood: isGood,
+        name: itemData.name
+    });
+}
+
+function updateBoneGame() {
+    if (!boneGameActive) return;
+    const container = document.getElementById('bone-game-container');
+    const player = document.getElementById('bone-player');
+    const containerHeight = container.offsetHeight;
+    
+    const playerRect = player.getBoundingClientRect();
+    const contRect = container.getBoundingClientRect();
+    const px = playerRect.left - contRect.left + playerRect.width/2;
+    const py = playerRect.top - contRect.top + playerRect.height/2;
+    const hitRadius = 35;
+    
+    for (let i = boneItems.length - 1; i >= 0; i--) {
+        const item = boneItems[i];
+        item.y += item.speed;
+        item.el.style.top = `${item.y}px`;
+        
+        const dx = item.x - px;
+        const dy = item.y - py;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        
+        if (dist < hitRadius) {
+            handleBoneCollision(item);
+            item.el.remove();
+            boneItems.splice(i, 1);
+            continue;
+        }
+        
+        if (item.y > containerHeight) {
+            item.el.remove();
+            boneItems.splice(i, 1);
+        }
     }
 }
-function checkCartQ(roomNum) {
-    if (r5CartItems.length < 3) { showModal(`3개를 담아야 해요! 현재 ${r5CartItems.length}개입니다.`, false); return; }
-    const correctItems = ['🥛 우유', '🐟 멸치', '🥦 브로콜리'];
-    const allCorrect = r5CartItems.every(item => correctItems.includes(item));
-    if (allCorrect) {
-        showModal('🎉 완벽한 장보기! 칼슘이 풍부한 식품들이에요!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
+
+function handleBoneCollision(item) {
+    if (item.isGood) {
+        boneScore++;
+        boneHealth = Math.min(100, boneHealth + 10);
+        updateBoneUI();
+        
+        if (boneScore >= 5) {
+            endBoneGame(true);
+        }
     } else {
-        showModal('잘못된 식품이 있어요! 칼슘이 풍부한 식품을 골라보세요.', false);
-        r5CartItems = [];
-        document.querySelectorAll('.market-item').forEach(i => i.classList.remove('in-cart'));
-        const cartEl = document.getElementById('r5-cart');
-        cartEl.innerHTML = '<div class="cart-label">🛒 장바구니 (3개를 담으세요)</div>';
+        boneHealth -= 30;
+        updateBoneUI();
+        
+        const player = document.getElementById('bone-player');
+        const hole = document.createElement('div');
+        hole.className = 'bone-hole';
+        hole.style.left = `${20 + Math.random() * 30}px`;
+        hole.style.top = `${20 + Math.random() * 20}px`;
+        player.appendChild(hole);
+        
+        if (boneHealth <= 0) {
+            endBoneGame(false, item.name);
+        } else {
+            showModal(`으악! ${item.name}은(는) 칼슘 흡수를 방해해서 뼈에 구멍이 뚫려요! 💀`, false);
+        }
+    }
+}
+
+function updateBoneUI() {
+    const healthBar = document.getElementById('bone-health-bar');
+    const scoreText = document.getElementById('bone-score');
+    
+    if (healthBar) {
+        healthBar.style.width = `${boneHealth}%`;
+        if (boneHealth > 60) healthBar.style.background = '#10b981';
+        else if (boneHealth > 30) healthBar.style.background = '#f59e0b';
+        else healthBar.style.background = '#ef4444';
+    }
+    
+    if (scoreText) {
+        scoreText.textContent = `점수: ${boneScore} / 5`;
+    }
+}
+
+function endBoneGame(isWin, badName = '') {
+    boneGameActive = false;
+    clearInterval(boneGameInterval);
+    clearInterval(boneSpawnInterval);
+    
+    if (isWin) {
+        showModal('🎉 완벽해요! 촉진자들을 먹고 뼈가 아주 튼튼해졌어요!', true);
+        setTimeout(() => {
+            closeModal();
+            document.querySelectorAll('#room-screen-5 .quiz-stage').forEach(s => s.classList.add('hidden'));
+            document.getElementById('r5-clear').classList.remove('hidden');
+        }, 2000);
+    } else {
+        showModal(`☠️ 게임 오버! ${badName} 때문에 뼈가 다 부서졌어요... 다시 도전하세요!`, false);
+        const startBtn = document.getElementById('start-bone-btn');
+        if (startBtn) startBtn.style.display = 'block';
     }
 }
 
