@@ -239,7 +239,7 @@ function showQuizStage(roomNum, stageNum) {
     document.querySelectorAll(`#room-screen-${roomNum} .quiz-stage`).forEach(s => s.classList.add('hidden'));
     const clearEl = document.getElementById(`r${roomNum}-clear`);
     if (clearEl) clearEl.classList.add('hidden');
-    let maxQ = 3;
+    let maxQ = roomNum === 5 ? 4 : 3;
     if (stageNum <= maxQ) {
         const el = document.getElementById(`r${roomNum}-q${stageNum}`);
         if (el) el.classList.remove('hidden');
@@ -247,7 +247,7 @@ function showQuizStage(roomNum, stageNum) {
 }
 
 function nextQuizStage(roomNum, currentQ) {
-    let maxQ = 3;
+    let maxQ = roomNum === 5 ? 4 : 3;
     if (currentQ < maxQ) { 
         roomQuizState[roomNum] = currentQ + 1; 
         showQuizStage(roomNum, currentQ + 1); 
@@ -674,6 +674,42 @@ function checkSafeCode(roomNum) {
     }
 }
 
+
+// ===========================
+// 방5: 장바구니 미션 (기존 복구)
+// ===========================
+let r5CartItems = [];
+function addToCart(el) {
+    if (el.classList.contains('in-cart')) {
+        el.classList.remove('in-cart');
+        r5CartItems = r5CartItems.filter(i => i !== el.textContent);
+        const cartEl = document.getElementById('r5-cart');
+        const cartItem = cartEl.querySelector(`[data-ref="${el.textContent}"]`);
+        if (cartItem) cartItem.remove();
+    } else {
+        if (r5CartItems.length >= 3) { showModal('장바구니는 3개까지만 담을 수 있어요!'); return; }
+        el.classList.add('in-cart');
+        r5CartItems.push(el.textContent);
+        const item = document.createElement('div');
+        item.className = 'cart-item'; item.dataset.ref = el.textContent; item.textContent = el.textContent;
+        document.getElementById('r5-cart').appendChild(item);
+    }
+}
+function checkCartQ(roomNum) {
+    if (r5CartItems.length < 3) { showModal(`3개를 담아야 해요! 현재 ${r5CartItems.length}개입니다.`, false); return; }
+    const correctItems = ['🥛 우유', '🐟 멸치', '🥦 브로콜리'];
+    const allCorrect = r5CartItems.every(item => correctItems.includes(item));
+    if (allCorrect) {
+        showModal('🎉 완벽한 장보기! 칼슘이 풍부한 식품들이에요!', true);
+        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
+    } else {
+        showModal('잘못된 식품이 있어요! 칼슘이 풍부한 식품을 골라보세요.', false);
+        r5CartItems = [];
+        document.querySelectorAll('.market-item').forEach(i => i.classList.remove('in-cart'));
+        const cartEl = document.getElementById('r5-cart');
+        cartEl.innerHTML = '<div class="cart-label">🛒 장바구니 (3개를 담으세요)</div>';
+    }
+}
 
 // ===========================
 // 방5: 뼈 튼튼 캐치 게임
