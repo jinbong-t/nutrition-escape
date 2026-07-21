@@ -627,11 +627,28 @@
     <div class="quiz-stage" id="r6-q1">
         <div class="quiz-label" style="background: #0284c7;">🥤 문제 1 / 2 — 유혹의 자판기</div>
         <div class="quiz-question">바싹 마른 바싹이 앞에 자판기가 나타났습니다!<br>진정한 수분을 보충해 줄 음료를 선택하세요!</div>
-        <div class="vending-machine-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px;">
-            <button class="btn vending-btn" style="background: #1f2937; color: white;" onclick="checkDrinkChoice('콜라')">🥤 달콤한 콜라</button>
-            <button class="btn vending-btn" style="background: #78350f; color: white;" onclick="checkDrinkChoice('아메리카노')">☕ 아이스 아메리카노</button>
-            <button class="btn vending-btn" style="background: #f59e0b; color: white;" onclick="checkDrinkChoice('주스')">🧃 달달한 과일주스</button>
-            <button class="btn vending-btn" style="background: #3b82f6; color: white;" onclick="checkDrinkChoice('생수')">💧 맑고 깨끗한 생수</button>
+        <div class="vending-machine" id="r6-vending">
+            <div class="vending-glass">
+                <div class="vending-item">
+                    <button class="vending-btn-real" style="background: #1f2937; color: white;" onclick="checkDrinkChoice('콜라')">🥤 달콤 콜라</button>
+                    <div class="vending-price">₩1,200</div>
+                </div>
+                <div class="vending-item">
+                    <button class="vending-btn-real" style="background: #78350f; color: white;" onclick="checkDrinkChoice('아메리카노')">☕ 시원 커피</button>
+                    <div class="vending-price">₩2,500</div>
+                </div>
+                <div class="vending-item">
+                    <button class="vending-btn-real" style="background: #f59e0b; color: white;" onclick="checkDrinkChoice('주스')">🧃 과일 주스</button>
+                    <div class="vending-price">₩1,500</div>
+                </div>
+                <div class="vending-item">
+                    <button class="vending-btn-real" style="background: #3b82f6; color: white;" onclick="checkDrinkChoice('생수')">💧 맑은 생수</button>
+                    <div class="vending-price">₩800</div>
+                </div>
+            </div>
+            <div class="vending-slot">
+                <div class="vending-slot-flap"></div>
+            </div>
         </div>
     </div>
 
@@ -654,6 +671,19 @@
         <p>바싹이가 규칙적으로 물을 마시기 시작했어요!<br>약병에 생수 물약이 채워집니다 💊</p>
         <button class="btn" onclick="clearRoom(6)">코드 완성하기 🏠</button>
     </div>
+</section>
+
+<!-- ===================== 마녀 보스전 ===================== -->
+<section id="witch-battle-screen" class="hidden">
+    <h2 style="font-size:2.5rem; color:#ef4444; margin-bottom: 10px;">🚨 경고! 마녀의 습격 🚨</h2>
+    <p style="font-size:1.2rem; margin-bottom: 20px;">마녀가 마지막 코드를 훔쳐갔어요!<br>마우스를 마구 클릭해서 영양소 빛의 빔을 쏘세요!</p>
+    
+    <div class="witch-boss" id="witch-boss" onclick="hitWitch()">🧙‍♀️</div>
+    
+    <div class="boss-hp-bar-container">
+        <div class="boss-hp-bar" id="witch-hp-bar"></div>
+    </div>
+    <div class="boss-timer" id="witch-timer">남은 시간: 10.0초</div>
 </section>
 
 <!-- ===================== 엔딩 ===================== -->

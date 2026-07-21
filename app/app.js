@@ -1044,7 +1044,7 @@ function clearRoom(roomNum) {
     showScreen('hub');
     updateHubRooms();
     if (clearedRooms.length === 6) {
-        setTimeout(() => { showScreen('ending'); typeEnding(); }, 1200);
+        setTimeout(() => { startWitchBattle(); }, 1200);
     }
 }
 
