@@ -716,9 +716,13 @@ function checkCartQ(roomNum) {
 let boneGameActive = false;
 let boneScore = 0;
 let boneHealth = 100;
+let boneCombo = 0;
+let boneItemsCaught = 0;
 let boneItems = [];
 let boneGameInterval = null;
 let boneSpawnInterval = null;
+let boneKeys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
+let bonePlayerX = 0;
 
 const goodItems = [{emoji: '🍊', name: '비타민 C'}, {emoji: '☀️', name: '비타민 D'}, {emoji: '🥛', name: '젖당'}];
 const badItems = [{emoji: '☕', name: '카페인'}, {emoji: '🧂', name: '나트륨'}, {emoji: '🥤', name: '인산'}];
@@ -729,54 +733,57 @@ function startBoneGame() {
     
     boneScore = 0;
     boneHealth = 100;
+    boneCombo = 0;
+    boneItemsCaught = 0;
+    boneKeys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
+    
     boneItems.forEach(item => item.el.remove());
     boneItems = [];
     document.querySelectorAll('.bone-hole').forEach(h => h.remove());
+    
+    const container = document.getElementById('bone-game-container');
+    const player = document.getElementById('bone-player');
+    bonePlayerX = container.offsetWidth / 2;
+    player.style.left = `${bonePlayerX}px`;
+    
     updateBoneUI();
     
     boneGameActive = true;
     
-    const container = document.getElementById('bone-game-container');
     container.addEventListener('mousemove', handleBoneMove);
+    document.addEventListener('keydown', handleBoneKeyDown);
+    document.addEventListener('keyup', handleBoneKeyUp);
     
     // 재귀적 setTimeout을 통해 동적 스폰 주기 적용
     scheduleNextSpawn();
-    boneGameInterval = setInterval(updateBoneGame, 30);
+    boneGameInterval = setInterval(updateBoneGame, 20); // 프레임 향상 (30ms -> 20ms)
+}
+
+function handleBoneKeyDown(e) {
+    if (boneKeys.hasOwnProperty(e.key)) boneKeys[e.key] = true;
+}
+function handleBoneKeyUp(e) {
+    if (boneKeys.hasOwnProperty(e.key)) boneKeys[e.key] = false;
 }
 
 function scheduleNextSpawn() {
     if (!boneGameActive) return;
     spawnBoneItem();
-    // 점수가 오를수록 스폰 주기가 짧아짐 (긴박감 UP!)
-    let spawnDelay = Math.max(300, 1000 - (boneScore * 120));
+    // 잡은 개수가 오를수록 스폰 주기가 짧아짐 (긴박감 UP!)
+    let spawnDelay = Math.max(250, 1000 - (boneItemsCaught * 80));
     boneSpawnInterval = setTimeout(scheduleNextSpawn, spawnDelay);
 }
 
 let lastMouseX = 0;
 function handleBoneMove(e) {
     if (!boneGameActive) return;
-    const container = document.getElementById('bone-game-container');
     const player = document.getElementById('bone-player');
     const rect = container.getBoundingClientRect();
     let x = e.clientX - rect.left;
     
     if (x < 30) x = 30;
     if (x > rect.width - 30) x = rect.width - 30;
-    
-    player.style.left = `${x}px`;
-    
-    // Tilt effect
-    let tilt = 0;
-    if (x > lastMouseX + 5) tilt = 15;
-    else if (x < lastMouseX - 5) tilt = -15;
-    player.style.transform = `translateX(-50%) rotate(${tilt}deg)`;
-    
-    lastMouseX = x;
-    setTimeout(() => {
-        if (lastMouseX === x && boneGameActive) {
-            player.style.transform = `translateX(-50%) rotate(0deg)`;
-        }
-    }, 150);
+    bonePlayerX = x; // 마우스 좌표로 갱신
 }
 
 function spawnBoneItem() {
@@ -800,14 +807,14 @@ function spawnBoneItem() {
     
     container.appendChild(el);
     
-    // 점수에 따라 초기 속도와 가속도가 증가
-    let diffMult = 1 + (boneScore * 0.25);
+    // 잡은 개수에 따라 초기 속도와 가속도가 증가
+    let diffMult = 1 + (boneItemsCaught * 0.15);
     
     boneItems.push({
         el: el,
         x: startX,
         y: -40,
-        vy: (2 + Math.random() * 3) * diffMult, // 난이도에 따른 초기 속도
+        vy: (3 + Math.random() * 4) * diffMult, // 난이도에 따른 초기 속도 (조금 더 빠르게)
         isGood: isGood,
         name: itemData.name
     });
@@ -818,6 +825,23 @@ function updateBoneGame() {
     const container = document.getElementById('bone-game-container');
     const player = document.getElementById('bone-player');
     const containerHeight = container.offsetHeight;
+    const containerWidth = container.offsetWidth;
+    
+    // 키보드 이동 로직 추가
+    let speed = 12;
+    if (boneKeys.ArrowLeft || boneKeys.a) bonePlayerX -= speed;
+    if (boneKeys.ArrowRight || boneKeys.d) bonePlayerX += speed;
+    if (bonePlayerX < 30) bonePlayerX = 30;
+    if (bonePlayerX > containerWidth - 30) bonePlayerX = containerWidth - 30;
+    
+    player.style.left = `${bonePlayerX}px`;
+    
+    // 틸트 효과 (이동 방향에 따라 기울기)
+    let tilt = 0;
+    if (bonePlayerX > lastMouseX + 3) tilt = 20;
+    else if (bonePlayerX < lastMouseX - 3) tilt = -20;
+    player.style.transform = `translateX(-50%) rotate(${tilt}deg)`;
+    lastMouseX = bonePlayerX;
     
     const playerRect = player.getBoundingClientRect();
     const contRect = container.getBoundingClientRect();
@@ -827,8 +851,8 @@ function updateBoneGame() {
     
     for (let i = boneItems.length - 1; i >= 0; i--) {
         const item = boneItems[i];
-        let diffMult = 1 + (boneScore * 0.1);
-        item.vy += (0.15 * diffMult); // 중력 가속도도 점수에 비례
+        let diffMult = 1 + (boneItemsCaught * 0.05);
+        item.vy += (0.15 * diffMult); // 중력 가속도도 난이도 비례
         item.y += item.vy;
         item.el.style.top = `${item.y}px`;
         
@@ -844,6 +868,11 @@ function updateBoneGame() {
         }
         
         if (item.y > containerHeight) {
+            // 좋은 아이템을 놓치면 콤보 초기화
+            if (item.isGood) {
+                boneCombo = 0;
+                updateBoneUI();
+            }
             item.el.remove();
             boneItems.splice(i, 1);
         }
@@ -853,16 +882,20 @@ function updateBoneGame() {
 function handleBoneCollision(item) {
     const container = document.getElementById('bone-game-container');
     if (item.isGood) {
-        boneScore++;
-        boneHealth = Math.min(100, boneHealth + 10);
+        boneCombo++;
+        boneItemsCaught++;
+        const points = 10 * boneCombo;
+        boneScore += points;
+        boneHealth = Math.min(100, boneHealth + (5 * boneCombo)); // 콤보 시 체력도 더 많이 회복
         updateBoneUI();
         
-        // 플로팅 텍스트
+        // 플로팅 텍스트 (콤보 표시)
         const floatText = document.createElement('div');
         floatText.className = 'floating-text';
-        floatText.textContent = '+10 뼈 튼튼!';
+        floatText.innerHTML = `+${points}<br><span style="font-size:0.7em; color:#fcd34d;">${boneCombo} COMBO!</span>`;
         floatText.style.left = `${item.x}px`;
-        floatText.style.top = `${item.y - 20}px`;
+        floatText.style.top = `${item.y - 30}px`;
+        if(boneCombo > 3) floatText.style.transform = 'scale(1.5)';
         container.appendChild(floatText);
         setTimeout(() => floatText.remove(), 1000);
         
@@ -871,16 +904,26 @@ function handleBoneCollision(item) {
         const holes = player.querySelectorAll('.bone-hole');
         if (holes.length > 0) holes[0].remove();
         
-        if (boneScore >= 5) {
+        if (boneScore >= 300) { // 목표 점수를 300점으로 증가 (콤보로 금방 채움)
             endBoneGame(true);
         }
     } else {
+        boneCombo = 0; // 나쁜 거 먹으면 콤보 리셋
         boneHealth -= 30;
         updateBoneUI();
         
         // 화면 흔들림 및 붉은 섬광 효과
         container.classList.add('shake', 'flash-red');
         setTimeout(() => container.classList.remove('shake', 'flash-red'), 500);
+        
+        const floatText = document.createElement('div');
+        floatText.className = 'floating-text';
+        floatText.innerHTML = `OUCH!<br><span style="font-size:0.7em;">콤보 초기화!</span>`;
+        floatText.style.color = '#ef4444';
+        floatText.style.left = `${item.x}px`;
+        floatText.style.top = `${item.y - 20}px`;
+        container.appendChild(floatText);
+        setTimeout(() => floatText.remove(), 1000);
         
         const player = document.getElementById('bone-player');
         const hole = document.createElement('div');
@@ -913,10 +956,12 @@ function updateBoneUI() {
     }
 }
 
-function endBoneGame(isWin, badName = '') {
+function endBoneGame(isWin, failReason = '') {
     boneGameActive = false;
     clearInterval(boneGameInterval);
-    clearInterval(boneSpawnInterval);
+    clearTimeout(boneSpawnInterval);
+    document.removeEventListener('keydown', handleBoneKeyDown);
+    document.removeEventListener('keyup', handleBoneKeyUp);
     
     if (isWin) {
         showModal('🎉 완벽해요! 촉진자들을 먹고 뼈가 아주 튼튼해졌어요!', true);
