@@ -1245,9 +1245,9 @@ function startWitchBattle() {
     junkFoods = [];
     
     // 게임 루프 시작
-    witchGameLoop = setInterval(updateWitchGame, 50);
-    witchMoveInterval = setInterval(moveWitchRandomly, 1500);
-    junkSpawnInterval = setInterval(spawnJunkFood, 800);
+    witchGameLoop = setInterval(updateWitchGame, 30); // 프레임 증가
+    witchMoveInterval = setInterval(moveWitchRandomly, 1000); // 더 빠르게 이동
+    junkSpawnInterval = setInterval(spawnJunkFood, 100); // 엄청나게 쏟아짐 (100ms)
 }
 
 function moveWitchRandomly() {
@@ -1279,9 +1279,9 @@ function spawnJunkFood() {
     const bossRect = boss.getBoundingClientRect();
     const areaRect = area.getBoundingClientRect();
     
-    // area 기준의 상대 좌표로 계산
-    const startX = bossRect.left - areaRect.left + (bossRect.width / 2) - 25;
-    let yPos = bossRect.bottom - areaRect.top - 20;
+    // 마녀의 중앙 아래쪽(입/손)에서 시작되도록 계산
+    const startX = bossRect.left - areaRect.left + (bossRect.width / 2) - 20;
+    let yPos = bossRect.bottom - areaRect.top - 40;
     
     junk.style.left = `${startX}px`;
     junk.style.top = `${yPos}px`;
@@ -1297,8 +1297,11 @@ function spawnJunkFood() {
     };
     
     area.appendChild(junk);
-    // 장애물 객체 저장 (프레임당 속도 랜덤 지정)
-    junkFoods.push({ el: junk, y: yPos, speed: 2.5 + Math.random() * 3.5 }); 
+    // x축(좌우 퍼짐)과 y축(중력 낙하) 속도를 랜덤 지정하여 영화처럼 마구 뿌려지게 함
+    const speedX = (Math.random() - 0.5) * 20; // 좌우로 강하게 퍼짐
+    const speedY = 2 + Math.random() * 5; // 떨어지는 속도 다양화
+    
+    junkFoods.push({ el: junk, x: startX, y: yPos, speedX: speedX, speedY: speedY }); 
 }
 
 function updateWitchGame() {
@@ -1321,7 +1324,9 @@ function updateWitchGame() {
     
     for (let i = junkFoods.length - 1; i >= 0; i--) {
         const item = junkFoods[i];
-        item.y += item.speed;
+        item.x += item.speedX;
+        item.y += item.speedY;
+        item.el.style.left = `${item.x}px`;
         item.el.style.top = `${item.y}px`;
         
         // 바닥에 닿으면
@@ -1329,8 +1334,8 @@ function updateWitchGame() {
             item.el.remove();
             junkFoods.splice(i, 1);
             
-            // 마을 데미지 (하나 떨어질 때마다 20%)
-            villageHp -= 20;
+            // 마을 데미지 (마구 쏟아지므로 데미지를 1%로 줄여서 오래 버틸 수 있게 함)
+            villageHp -= 1;
             if (villageHp < 0) villageHp = 0;
             document.getElementById('village-hp-bar').style.width = `${villageHp}%`;
             

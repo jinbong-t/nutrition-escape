@@ -2586,10 +2586,16 @@ h2 {
 
 /* 마녀 보스전 (미니게임) 스타일 */
 #witch-battle-screen { 
-    background: radial-gradient(circle, #4c0519, #000000); 
+    background: url('../boss_bg.png') center/cover, radial-gradient(circle, #4c0519, #000000); 
+    background-blend-mode: overlay;
     color: white; text-align: center; 
     display: flex; flex-direction: column; 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; 
+    animation: battleFlash 0.5s infinite alternate;
+}
+@keyframes battleFlash {
+    0% { box-shadow: inset 0 0 100px rgba(239, 68, 68, 0.5); }
+    100% { box-shadow: inset 0 0 200px rgba(239, 68, 68, 0.9); }
 }
 #witch-ui-layer {
     position: relative; z-index: 100;
@@ -2604,14 +2610,16 @@ h2 {
     overflow: hidden;
 }
 .witch-boss { 
-    font-size: 7rem; 
+    width: 200px; height: auto; object-fit: contain;
     position: absolute; 
     top: 50px; left: 50%; transform: translateX(-50%);
-    cursor: pointer; user-select: none; 
-    transition: left 1s ease-in-out, top 1s ease-in-out; 
+    cursor: crosshair; user-select: none; 
+    transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     z-index: 50;
-    text-shadow: 0 0 20px #ef4444;
+    filter: drop-shadow(0 0 30px #ef4444) brightness(1.2);
+    animation: witchHover 2s infinite alternate;
 }
+@keyframes witchHover { 0% { top: 30px; } 100% { top: 60px; } }
 .witch-boss:active { filter: brightness(1.5) drop-shadow(0 0 10px white); }
 
 .junk-food {
@@ -2691,14 +2699,17 @@ h2 {
 /* 마녀 컷씬 스타일 */
 #witch-cutscene-screen {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000; z-index: 1000;
+    background: url('../boss_bg.png') center/cover, #000; 
+    background-blend-mode: multiply;
+    z-index: 1000;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .cutscene-witch {
-    font-size: 8rem; margin-bottom: 30px;
-    filter: drop-shadow(0 0 20px #ef4444);
-    animation: floatWitchCutscene 2s infinite ease-in-out;
+    width: 250px; height: auto; margin-bottom: 30px;
+    filter: drop-shadow(0 0 30px #ef4444);
+    animation: floatWitchCutscene 2s infinite ease-in-out, shakeWitch 0.2s infinite alternate;
 }
+@keyframes shakeWitch { 0% { transform: translateX(-5px) rotate(-2deg); } 100% { transform: translateX(5px) rotate(2deg); } }
 @keyframes floatWitchCutscene {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-20px) scale(1.1); }
