@@ -1112,9 +1112,97 @@ function updateHubRooms() {
 }
 
 // ===========================
+// 마녀 보스전 (마지막)
+// ===========================
+let witchHp = 100;
+let witchTime = 10.0;
+let witchInterval = null;
+let isWitchDead = false;
+
+function startWitchBattle() {
+    // 모든 스크린 숨기기
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    
+    // 마녀 보스전 화면 표시
+    const battleScreen = document.getElementById('witch-battle-screen');
+    battleScreen.classList.remove('hidden');
+    // CSS에서 애니메이션을 위해 display block 등으로 처리해야 할 수도 있음
+    battleScreen.style.display = 'flex';
+    battleScreen.style.flexDirection = 'column';
+    battleScreen.style.alignItems = 'center';
+    battleScreen.style.justifyContent = 'center';
+    
+    // 상태 초기화
+    witchHp = 100;
+    witchTime = 10.0;
+    isWitchDead = false;
+    document.getElementById('witch-hp-bar').style.width = '100%';
+    document.getElementById('witch-timer').textContent = `남은 시간: ${witchTime.toFixed(1)}초`;
+    
+    // 타이머 시작
+    witchInterval = setInterval(() => {
+        witchTime -= 0.1;
+        if (witchTime <= 0) {
+            witchTime = 0;
+            clearInterval(witchInterval);
+            document.getElementById('witch-timer').textContent = `남은 시간: 0.0초`;
+            
+            if (!isWitchDead) {
+                showModal('마녀가 코드를 들고 도망갔어요! 😱 다시 광선 빔을 쏴보세요!', false);
+                setTimeout(() => {
+                    closeModal();
+                    startWitchBattle(); // 재도전
+                }, 2000);
+            }
+        } else {
+            document.getElementById('witch-timer').textContent = `남은 시간: ${witchTime.toFixed(1)}초`;
+        }
+    }, 100);
+}
+
+function hitWitch() {
+    if (witchTime <= 0 || isWitchDead) return;
+    
+    witchHp -= 5; // 20번 클릭 시 처치
+    
+    // 이모지 흔들기 효과
+    const bossEl = document.getElementById('witch-boss');
+    bossEl.style.transform = `scale(0.9) rotate(${(Math.random()-0.5)*20}deg)`;
+    setTimeout(() => { bossEl.style.transform = ''; }, 50);
+
+    if (witchHp <= 0) {
+        witchHp = 0;
+        isWitchDead = true;
+        clearInterval(witchInterval);
+        document.getElementById('witch-hp-bar').style.width = '0%';
+        
+        showModal('🎉 마녀를 물리쳤습니다! 잃어버린 마지막 코드를 되찾았어요!', true);
+        setTimeout(() => {
+            closeModal();
+            showEnding();
+        }, 2000);
+    } else {
+        document.getElementById('witch-hp-bar').style.width = `${witchHp}%`;
+    }
+}
+
+function showEnding() {
+    const battleScreen = document.getElementById('witch-battle-screen');
+    battleScreen.classList.add('hidden');
+    battleScreen.style.display = 'none';
+    
+    showScreen('ending');
+    
+    // 엔딩 텍스트 초기화 후 타이핑 시작
+    document.getElementById('ending-text').innerHTML = '';
+    endingIdx = 0;
+    setTimeout(typeEnding, 1000);
+}
+
+// ===========================
 // 엔딩
 // ===========================
-const endingText = `여섯 방을 모두 돌아다닌 백설공주.\n영양전도사 코드가 완성되었습니다!\n\n완성된 영양 처방전을 난쟁이들에게 나누어 주자...\n\n시들시들했던 잠보, 여림이, 부풍이, 흐림이, 저리, 갈증이\n하나씩 건강하고 튼튼하게 변신했습니다! 💪\n\n"공주님 덕분에 살았어요!"\n\n"우리도 이제 영양 전도사가 되어\n 올바른 식습관을 전파할게요! 🌟"\n\n"균형 잡힌 6대 영양소로\n 우리 모두 건강하게 살아요! 💊"\n\n━━━━━━━━━━━━━━━━━━\n🍚 탄수화물 · 🥩 단백질 · 🫒 지방\n🍊 비타민 · 🥛 무기질 · 💧 물\n━━━━━━━━━━━━━━━━━━\n\n— 행복하게 오래오래 살았답니다 —`;
+const endingText = `여섯 방을 모두 돌아다닌 백설공주.\n영양전도사 코드가 완성되었습니다!\n\n완성된 영양 처방전을 난쟁이들에게 나누어 주자...\n\n시들시들했던 잠보, 여림이, 부풍이, 흐림이, 저리, 바싹이가\n모두 건강하고 튼튼하게 변신했습니다! 💪\n\n"공주님 덕분에 살았어요!"\n\n"우리도 이제 영양 전도사가 되어\n 올바른 식습관을 전파할게요! 🌟"\n\n"균형 잡힌 6대 영양소로\n 우리 모두 건강하게 살아요! 💊"\n\n━━━━━━━━━━━━━━━━━━\n🍚 탄수화물 · 🥩 단백질 · 🫒 지방\n🍊 비타민 · 🥛 무기질 · 💧 물\n━━━━━━━━━━━━━━━━━━\n\n— 행복하게 오래오래 살았답니다 —`;
 let endingIdx = 0;
 
 function typeEnding() {
