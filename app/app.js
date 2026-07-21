@@ -32,7 +32,7 @@ let r4VitClassified = {}; // { 'A': '지용성', 'B': '수용성', ... }
 let r5CartItems = [];
 
 // 방6 탈수 판단
-let r6DehyAnswers = {};
+
 
 // 방2 빈칸
 let r2BlankFills = { 1: null, 2: null, 3: null };
@@ -977,46 +977,60 @@ function endBoneGame(isWin, failReason = '') {
 }
 
 // ===========================
-// 방6: 탈수 진단
+// 방6: 진짜 물을 찾아라!
 // ===========================
-function selectDehyd(el) {
-    const userAnswer = el.dataset.userAnswer;
-    if (userAnswer) {
-        el.classList.remove('dehyd-red','dehyd-blue');
-        delete el.dataset.userAnswer;
-        delete r6DehyAnswers[el.textContent];
-    } else {
-        el.classList.add(el.dataset.answer === '탈수' ? 'dehyd-red' : 'dehyd-blue');
-        el.dataset.userAnswer = el.dataset.answer === '탈수' ? '탈수' : '정상';
-        r6DehyAnswers[el.textContent] = el.dataset.userAnswer;
-    }
-}
-function checkDehydQ(roomNum) {
-    const cards = document.querySelectorAll('.dehyd-card');
-    const answered = document.querySelectorAll('.dehyd-card[data-user-answer]').length;
-    if (answered < cards.length) { showModal(`아직 ${cards.length - answered}개 항목이 남았어요!`, false); return; }
-    let allCorrect = true;
-    cards.forEach(c => { if (c.dataset.userAnswer !== c.dataset.answer) allCorrect = false; });
-    if (allCorrect) {
-        showModal('🎉 정확합니다! 탈수 증상을 모두 구별했어요!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 2); }, 1500);
-    } else {
-        showModal('틀린 항목이 있어요! 다시 살펴보세요.', false);
-        cards.forEach(c => { c.classList.remove('dehyd-red','dehyd-blue'); delete c.dataset.userAnswer; });
-        r6DehyAnswers = {};
+
+function checkDrinkChoice(drink) {
+    if (drink === '콜라') {
+        showModal('❌ 콜라에는 설탕이 너무 많아!\n순간적으로 시원하지만 오히려 갈증이 더 심해져요.', false);
+    } else if (drink === '아메리카노') {
+        showModal('❌ 커피의 카페인은 이뇨 작용을 일으켜요!\n마신 수분보다 더 많은 물이 몸 밖으로 빠져나갑니다.', false);
+    } else if (drink === '주스') {
+        showModal('❌ 과일주스도 액상과당이 많아서\n진정한 수분 보충으로는 부족해요.', false);
+    } else if (drink === '생수') {
+        showModal('🎉 완벽해요! 시원한 생수가 바싹이의 몸을 촉촉하게 채워주었어요!', true);
+        setTimeout(() => {
+            closeModal();
+            nextQuizStage(6, 1);
+            r6OXIndex = 0; // 초기화
+            loadR6OX();
+        }, 2000);
     }
 }
 
-// 방6: 비밀번호 (Q3)
-function checkWaterPasswordQ(roomNum) {
-    const p1 = document.getElementById('r6-pw-1').value;
-    const p2 = document.getElementById('r6-pw-2').value;
-    const p3 = document.getElementById('r6-pw-3').value;
-    if (p1 === '2' && p2 === '4' && p3 === '2') {
-        showModal('🎉 찰칵! 자물쇠가 열렸습니다! 완벽해요!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1800);
+const r6OXQuestions = [
+    { q: "물 대신 커피나 녹차를 마시면 완벽하게 수분을 보충할 수 있다?", a: "X", desc: "카페인의 이뇨작용으로 수분이 배출됩니다." },
+    { q: "물은 우리 몸의 노폐물을 밖으로 내보내는 청소부 역할을 한다?", a: "O", desc: "물은 노폐물 배출과 체온 조절에 필수적입니다." },
+    { q: "갈증이 나기 전에 미리미리 물을 마셔주는 것이 좋다?", a: "O", desc: "갈증을 느낄 때는 이미 탈수가 시작된 상태입니다." }
+];
+let r6OXIndex = 0;
+
+function loadR6OX() {
+    if (r6OXIndex >= r6OXQuestions.length) {
+        showModal('🎉 완벽해요! 진짜 물의 중요성을 모두 알게 되었습니다!', true);
+        setTimeout(() => {
+            closeModal();
+            document.querySelectorAll('#room-screen-6 .quiz-stage').forEach(s => s.classList.add('hidden'));
+            document.getElementById('r6-clear').classList.remove('hidden');
+        }, 2000);
+        return;
+    }
+    const q = r6OXQuestions[r6OXIndex];
+    document.getElementById('r6-ox-question').innerHTML = `Q${r6OXIndex + 1}. ${q.q}`;
+    document.getElementById('r6-ox-progress').textContent = `${r6OXIndex + 1} / ${r6OXQuestions.length}`;
+}
+
+function checkR6OX(answer) {
+    const q = r6OXQuestions[r6OXIndex];
+    if (answer === q.a) {
+        showModal(`🎉 정답!\n${q.desc}`, true);
+        r6OXIndex++;
+        setTimeout(() => {
+            closeModal();
+            loadR6OX();
+        }, 2000);
     } else {
-        showModal('❌ 삐빅! 비밀번호가 틀렸습니다. 다시 생각해 보세요!', false);
+        showModal(`❌ 오답!\n다시 생각해 보세요.`, false);
     }
 }
 
