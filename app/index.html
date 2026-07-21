@@ -681,7 +681,16 @@
 
 <!-- ===================== 마녀 보스전 (미니게임) ===================== -->
 <section id="witch-battle-screen" class="hidden">
-    <!-- UI 레이어: 상단에 고정 -->
+    <!-- 게임 플레이 영역 (마녀가 하늘에 위치) -->
+    <div id="witch-game-area">
+        <!-- 마녀 캐릭터 -->
+        <img src="../마녀.png" alt="마녀" class="witch-boss" id="witch-boss" onclick="hitWitch()">
+        
+        <!-- 바닥(마을) -->
+        <div id="village-ground"></div>
+    </div>
+    
+    <!-- UI 레이어 (하단 대시보드로 이동) -->
     <div id="witch-ui-layer">
         <h2 style="font-size:2.2rem; color:#ef4444; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">🚨 마녀의 습격! 마을을 지켜라! 🚨</h2>
         <p style="font-size:1.1rem; margin-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
@@ -700,15 +709,6 @@
         <div style="font-size:0.9rem; margin-bottom:5px;">마을 방어력</div>
 
         <div class="boss-timer" id="witch-timer">남은 시간: 20.0초</div>
-    </div>
-
-    <!-- 게임 플레이 영역 -->
-    <div id="witch-game-area">
-        <!-- 마녀 캐릭터 -->
-        <img src="../마녀.png" alt="마녀" class="witch-boss" id="witch-boss" onclick="hitWitch()">
-        
-        <!-- 바닥(마을) -->
-        <div id="village-ground"></div>
     </div>
 </section>
 

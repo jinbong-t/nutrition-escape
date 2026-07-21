@@ -2601,7 +2601,7 @@ h2 {
     position: relative; z-index: 100;
     padding: 20px;
     background: rgba(0,0,0,0.5);
-    border-bottom: 2px solid #ef4444;
+    border-top: 2px solid #ef4444;
 }
 #witch-game-area {
     flex: 1;
