@@ -777,6 +777,7 @@ function scheduleNextSpawn() {
 let lastMouseX = 0;
 function handleBoneMove(e) {
     if (!boneGameActive) return;
+    const container = document.getElementById('bone-game-container');
     const player = document.getElementById('bone-player');
     const rect = container.getBoundingClientRect();
     let x = e.clientX - rect.left;
