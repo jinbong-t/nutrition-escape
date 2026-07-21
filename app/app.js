@@ -981,21 +981,52 @@ function endBoneGame(isWin, failReason = '') {
 // ===========================
 
 function checkDrinkChoice(drink) {
-    if (drink === '콜라') {
-        showModal('❌ 콜라에는 설탕이 너무 많아!\n순간적으로 시원하지만 오히려 갈증이 더 심해져요.', false);
-    } else if (drink === '아메리카노') {
-        showModal('❌ 커피의 카페인은 이뇨 작용을 일으켜요!\n마신 수분보다 더 많은 물이 몸 밖으로 빠져나갑니다.', false);
-    } else if (drink === '주스') {
-        showModal('❌ 과일주스도 액상과당이 많아서\n진정한 수분 보충으로는 부족해요.', false);
-    } else if (drink === '생수') {
-        showModal('🎉 완벽해요! 시원한 생수가 바싹이의 몸을 촉촉하게 채워주었어요!', true);
-        setTimeout(() => {
-            closeModal();
-            nextQuizStage(6, 1);
-            r6OXIndex = 0; // 초기화
-            loadR6OX();
-        }, 2000);
-    }
+    const slot = document.querySelector('.vending-slot');
+    const flap = document.querySelector('.vending-slot-flap');
+    
+    // 덜컹거리는 자판기 애니메이션
+    const vending = document.getElementById('r6-vending');
+    vending.classList.add('shake-vending');
+    setTimeout(() => vending.classList.remove('shake-vending'), 400);
+
+    // 자판기 출구 플랩 열기
+    flap.style.transform = 'rotateX(75deg)';
+    flap.style.transition = 'transform 0.3s';
+    
+    // 아이템 생성 (떨어지는 애니메이션)
+    const item = document.createElement('div');
+    item.className = 'dropped-item';
+    if (drink === '콜라') item.textContent = '🥤';
+    else if (drink === '아메리카노') item.textContent = '☕';
+    else if (drink === '주스') item.textContent = '🧃';
+    else if (drink === '생수') item.textContent = '💧';
+    
+    // 기존에 떨어진 아이템이 있다면 제거
+    const oldItem = slot.querySelector('.dropped-item');
+    if (oldItem) oldItem.remove();
+    
+    slot.appendChild(item);
+
+    // 떨어지는 연출을 잠시 보여준 뒤 모달 띄우기
+    setTimeout(() => {
+        flap.style.transform = ''; // 출구 닫기
+        
+        if (drink === '콜라') {
+            showModal('❌ 콜라에는 설탕이 너무 많아!\n순간적으로 시원하지만 오히려 갈증이 더 심해져요.', false);
+        } else if (drink === '아메리카노') {
+            showModal('❌ 커피의 카페인은 이뇨 작용을 일으켜요!\n마신 수분보다 더 많은 물이 몸 밖으로 빠져나갑니다.', false);
+        } else if (drink === '주스') {
+            showModal('❌ 과일주스도 액상과당이 많아서\n진정한 수분 보충으로는 부족해요.', false);
+        } else if (drink === '생수') {
+            showModal('🎉 완벽해요! 시원한 생수가 바싹이의 몸을 촉촉하게 채워주었어요!', true);
+            setTimeout(() => {
+                closeModal();
+                nextQuizStage(6, 1);
+                r6OXIndex = 0; // 초기화
+                loadR6OX();
+            }, 2000);
+        }
+    }, 800);
 }
 
 const r6OXQuestions = [
@@ -1016,20 +1047,39 @@ function loadR6OX() {
         return;
     }
     const q = r6OXQuestions[r6OXIndex];
+    const container = document.getElementById('r6-ox-container');
+    
+    // 문제 등장 시 통통 튀는 애니메이션
+    container.classList.remove('ox-animate-in');
+    void container.offsetWidth; // reflow 강제 발생시켜 애니메이션 재시작
+    container.classList.add('ox-animate-in');
+
     document.getElementById('r6-ox-question').innerHTML = `Q${r6OXIndex + 1}. ${q.q}`;
     document.getElementById('r6-ox-progress').textContent = `${r6OXIndex + 1} / ${r6OXQuestions.length}`;
 }
 
 function checkR6OX(answer) {
     const q = r6OXQuestions[r6OXIndex];
+    const container = document.getElementById('r6-ox-container');
+    
     if (answer === q.a) {
+        // 정답일 때 스케일 업 이펙트
+        container.style.transform = 'scale(1.05)';
+        container.style.transition = 'transform 0.2s';
+        
         showModal(`🎉 정답!\n${q.desc}`, true);
         r6OXIndex++;
+        
         setTimeout(() => {
+            container.style.transform = ''; // 원상복구
             closeModal();
             loadR6OX();
         }, 2000);
     } else {
+        // 오답일 때 부르르 떨기
+        container.classList.add('ox-shake');
+        setTimeout(() => container.classList.remove('ox-shake'), 400);
+        
         showModal(`❌ 오답!\n다시 생각해 보세요.`, false);
     }
 }
