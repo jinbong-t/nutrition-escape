@@ -1094,7 +1094,7 @@ function clearRoom(roomNum) {
     showScreen('hub');
     updateHubRooms();
     if (clearedRooms.length === 6) {
-        setTimeout(() => { startWitchBattle(); }, 1200);
+        setTimeout(() => { startWitchCutscene(); }, 1200);
     }
 }
 
@@ -1158,6 +1158,49 @@ function updateHubRooms() {
             }
             if (lockOverlay) lockOverlay.remove();
         }
+    }
+}
+
+// ===========================
+// 마녀 등장 컷씬
+// ===========================
+const witchCutsceneText = "감히 너희가 6대 영양소를 제대로 먹겠다고? 어림도 없지! 이 숲을 정크푸드로 뒤덮을테다!!!";
+let cutsceneIdx = 0;
+
+function startWitchCutscene() {
+    // 모든 스크린 숨기기
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    
+    // 허브 화면에서 화면 흔들림 효과
+    document.body.classList.add('shake-heavy');
+    
+    setTimeout(() => {
+        document.body.classList.remove('shake-heavy');
+        document.getElementById('witch-cutscene-screen').classList.remove('hidden');
+        document.getElementById('cutscene-dialog-text').textContent = '';
+        cutsceneIdx = 0;
+        
+        const screen = document.getElementById('witch-cutscene-screen');
+        screen.style.boxShadow = 'inset 0 0 100px rgba(239,68,68,0.8)';
+        setTimeout(() => { screen.style.boxShadow = ''; }, 500);
+
+        setTimeout(typeWitchCutscene, 800);
+    }, 1500);
+}
+
+function typeWitchCutscene() {
+    const el = document.getElementById('cutscene-dialog-text');
+    if (!el) return;
+    if (cutsceneIdx < witchCutsceneText.length) {
+        el.textContent += witchCutsceneText.charAt(cutsceneIdx);
+        cutsceneIdx++;
+        setTimeout(typeWitchCutscene, 60); // 타이핑 속도
+    } else {
+        // 대사 출력 완료 후 잠시 대기 후 미니게임 시작
+        setTimeout(() => {
+            document.getElementById('witch-cutscene-screen').classList.add('hidden');
+            startWitchBattle();
+        }, 2000);
     }
 }
 

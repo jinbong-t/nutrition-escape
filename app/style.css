@@ -2687,3 +2687,28 @@ h2 {
 .boss-timer { font-size: 2rem; color: #fcd34d; font-weight: bold; margin-top: 10px; }
 .shake-heavy { animation: shakeHeavy 0.5s ease-in-out infinite; }
 @keyframes shakeHeavy { 0%, 100% { transform: translate(0,0) rotate(0deg); } 25% { transform: translate(-10px, 10px) rotate(-3deg); } 50% { transform: translate(10px, -10px) rotate(3deg); } 75% { transform: translate(-10px, -10px) rotate(-3deg); } }
+
+/* 마녀 컷씬 스타일 */
+#witch-cutscene-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 1000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.cutscene-witch {
+    font-size: 8rem; margin-bottom: 30px;
+    filter: drop-shadow(0 0 20px #ef4444);
+    animation: floatWitchCutscene 2s infinite ease-in-out;
+}
+@keyframes floatWitchCutscene {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.1); }
+}
+.cutscene-dialog {
+    width: 80%; max-width: 500px;
+    background: rgba(255,255,255,0.9);
+    border: 4px solid #ef4444; border-radius: 15px;
+    padding: 20px; color: #4c0519;
+    font-size: 1.2rem; font-weight: bold; line-height: 1.5;
+    box-shadow: 0 0 20px rgba(239,68,68,0.5);
+    min-height: 100px;
+}
