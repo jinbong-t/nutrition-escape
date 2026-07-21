@@ -2377,6 +2377,201 @@ h2 {
 
 #bone-score { color: #fff !important; font-size: 1.5rem !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important; z-index: 30 !important; }
 
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    z-index: -1;
+    opacity: 0.8;
+}
+.spooky-text {
+    color: #e9d5ff !important;
+    text-shadow: 0 0 5px rgba(233, 213, 255, 0.5);
+}
+.spooky-witch-emoji {
+    position: absolute;
+    top: -45px;
+    left: -15px;
+    font-size: 4rem;
+    filter: drop-shadow(0 0 15px #c084fc);
+    animation: floatWitch 3s infinite ease-in-out;
+}
+
+
+/* Ż 1ܰ:    ȿ */
+.dark-room-container {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    background: #111;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 3px solid #333;
+    margin-top: 15px;
+    cursor: crosshair;
+}
+.dark-room-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #333; /*    */
+}
+.dark-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle 60px at center, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.99) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+.dark-room-container.lights-on .dark-overlay {
+    background: transparent;
+    transition: background 1s ease;
+}
+.dark-room-container.lights-on .dark-room-content {
+    background: #fdf6e3;
+    transition: background 1s ease;
+}
+/* Ż 2ܰ: ̾ ݰ */
+.diary-container {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;
+}
+.diary-page {
+    width: 220px; padding: 15px;
+    background: #fef9c3; border: 1px solid #d97706;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem; line-height: 1.4; color: #451a03;
+    transform: rotate(-2deg);
+}
+.diary-page:nth-child(even) { transform: rotate(3deg); }
+.safe-container {
+    margin-top: 30px; padding: 20px;
+    background: #374151; border: 4px solid #1f2937; border-radius: 10px;
+    text-align: center;
+}
+.safe-box {
+    display: flex; gap: 15px; justify-content: center;
+}
+.safe-dial {
+    display: flex; flex-direction: column; align-items: center;
+    background: #9ca3af; padding: 5px; border-radius: 5px;
+}
+.dial-btn {
+    background: #4b5563; color: white; border: none; cursor: pointer;
+    width: 40px; height: 30px; font-size: 1rem;
+}
+.dial-btn:hover { background: #374151; }
+.dial-value {
+    width: 40px; height: 50px; background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: bold; margin: 5px 0; border: 2px solid #374151;
+}
+
+
+/* 마녀 퀴즈 지그재그 애니메이션 */
+@keyframes zigzagMove {
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(15px); }
+    50% { transform: translateX(0px); }
+    75% { transform: translateX(-15px); }
+    100% { transform: translateX(0px); }
+}
+.zigzag-btn {
+    animation: zigzagMove 3s infinite ease-in-out;
+}
+.zigzag-btn:nth-child(even) {
+    animation-delay: -1.5s;
+    animation-duration: 4s;
+}
+
+
+/* 방 5 뼈 미니게임 */
+#bone-game-container {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    border: 4px solid #94a3b8;
+    overflow: hidden;
+    margin-top: 15px;
+    cursor: none;
+}
+#bone-player {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 4rem;
+    filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.3));
+    z-index: 10;
+    pointer-events: none;
+}
+.bone-item {
+    position: absolute;
+    font-size: 2.5rem;
+    pointer-events: none;
+    z-index: 5;
+}
+#bone-health-bar-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 150px;
+    height: 15px;
+    background: #cbd5e1;
+    border-radius: 10px;
+    border: 2px solid #64748b;
+    overflow: hidden;
+    z-index: 20;
+}
+#bone-health-bar {
+    width: 100%;
+    height: 100%;
+    background: #10b981;
+    transition: width 0.3s, background 0.3s;
+}
+#bone-score {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1e293b;
+    z-index: 20;
+}
+.bone-hole {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: radial-gradient(circle, #000 0%, rgba(0,0,0,0.8) 50%, transparent 100%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 15;
+}
+
+
+/* 방 5 뼈 게임 고도화 효과 */
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake { 10%, 90% { transform: translate3d(-3px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
+.flash-red { animation: flashRed 0.5s ease-out; }
+@keyframes flashRed { 0% { box-shadow: inset 0 0 100px rgba(239,68,68,0.9); } 100% { box-shadow: none; } }
+.floating-text { position: absolute; font-weight: bold; font-size: 1.8rem; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 30; text-shadow: 1px 1px 2px #fff; }
+@keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-60px) scale(1.2); opacity: 0; } }
+.item-spin { animation: spin 2s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+
+/* 모바일 게임 느낌 고도화 */
+#bone-game-container { background: radial-gradient(circle at center, #1e293b, #0f172a) !important; border: 3px solid #3b82f6; box-shadow: 0 0 30px rgba(59,130,246,0.5); overflow: hidden; position: relative; }
+#bone-player { font-size: 5rem !important; z-index: 20; }
+.bone-item { font-size: 3.5rem !important; z-index: 10; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+#bone-health-bar-container { box-shadow: 0 0 15px rgba(16,185,129,0.8); border: 1px solid #10b981; }
+#bone-health-bar { transition: width 0.2s ease, background-color 0.2s ease; }
+
+
+#bone-score { color: #fff !important; font-size: 1.5rem !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important; z-index: 30 !important; }
+
 /* 자판기 스타일 */
 .vending-machine { background: #9ca3af; padding: 20px; border-radius: 15px; border: 4px solid #4b5563; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); width: 100%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 .vending-glass { background: #dbeafe; padding: 15px; border-radius: 10px; border: 2px solid #bfdbfe; box-shadow: inset 0 0 10px rgba(255,255,255,0.8); display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
@@ -2388,6 +2583,63 @@ h2 {
 .vending-slot-flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border-bottom: 2px solid rgba(0,0,0,0.5); transform-origin: top; transition: transform 0.3s; }
 .vending-machine.shake-vending { animation: shakeVending 0.4s ease-in-out; }
 @keyframes shakeVending { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px) rotate(-1deg); } 40% { transform: translateX(5px) rotate(1deg); } 60% { transform: translateX(-5px) rotate(-1deg); } 80% { transform: translateX(5px) rotate(1deg); } }
+
+/* 마녀 보스전 (미니게임) 스타일 */
+#witch-battle-screen { 
+    background: radial-gradient(circle, #4c0519, #000000); 
+    color: white; text-align: center; 
+    display: flex; flex-direction: column; 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; 
+}
+#witch-ui-layer {
+    position: relative; z-index: 100;
+    padding: 20px;
+    background: rgba(0,0,0,0.5);
+    border-bottom: 2px solid #ef4444;
+}
+#witch-game-area {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.witch-boss { 
+    font-size: 7rem; 
+    position: absolute; 
+    top: 50px; left: 50%; transform: translateX(-50%);
+    cursor: pointer; user-select: none; 
+    transition: left 1s ease-in-out, top 1s ease-in-out; 
+    z-index: 50;
+    text-shadow: 0 0 20px #ef4444;
+}
+.witch-boss:active { filter: brightness(1.5) drop-shadow(0 0 10px white); }
+
+.junk-food {
+    position: absolute;
+    font-size: 3rem;
+    cursor: pointer;
+    user-select: none;
+    z-index: 40;
+    transition: top linear; /* JS에서 top 변경을 부드럽게 하려면 사용, 아니면 js에서 setInterval로 처리 */
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
+}
+.junk-food:active {
+    transform: scale(1.5); opacity: 0.5;
+}
+
+#village-ground {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 20px;
+    background: linear-gradient(to top, #16a34a, #22c55e);
+    box-shadow: 0 -5px 15px rgba(34,197,94,0.5);
+    z-index: 60;
+}
+
+.boss-hp-bar-container { width: 80%; max-width: 400px; height: 20px; background: #333; border-radius: 10px; border: 2px solid #fff; overflow: hidden; margin: 0 auto; }
+.boss-hp-bar { width: 100%; height: 100%; background: #ef4444; transition: width 0.1s linear; }
+.boss-timer { font-size: 1.5rem; color: #fcd34d; font-weight: bold; margin-top: 5px; }
+.shake-heavy { animation: shakeHeavy 0.5s ease-in-out infinite; }
+@keyframes shakeHeavy { 0%, 100% { transform: translate(0,0) rotate(0deg); } 25% { transform: translate(-10px, 10px) rotate(-3deg); } 50% { transform: translate(10px, -10px) rotate(3deg); } 75% { transform: translate(-10px, -10px) rotate(-3deg); } }
 
 /* 애니메이션 추가: 떨어지는 아이템 */
 @keyframes dropItem {

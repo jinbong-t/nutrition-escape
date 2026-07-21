@@ -1162,12 +1162,16 @@ function updateHubRooms() {
 }
 
 // ===========================
-// 마녀 보스전 (마지막)
+// 마녀 보스전 (마지막 - 미니게임)
 // ===========================
 let witchHp = 100;
-let witchTime = 10.0;
-let witchInterval = null;
+let villageHp = 100;
+let witchTime = 20.0;
+let witchGameLoop = null;
+let witchMoveInterval = null;
+let junkSpawnInterval = null;
 let isWitchDead = false;
+let junkFoods = [];
 
 function startWitchBattle() {
     // 모든 스크린 숨기기
@@ -1176,38 +1180,127 @@ function startWitchBattle() {
     // 마녀 보스전 화면 표시
     const battleScreen = document.getElementById('witch-battle-screen');
     battleScreen.classList.remove('hidden');
-    // CSS에서 애니메이션을 위해 display block 등으로 처리해야 할 수도 있음
     battleScreen.style.display = 'flex';
-    battleScreen.style.flexDirection = 'column';
-    battleScreen.style.alignItems = 'center';
-    battleScreen.style.justifyContent = 'center';
     
     // 상태 초기화
     witchHp = 100;
-    witchTime = 10.0;
+    villageHp = 100;
+    witchTime = 20.0;
     isWitchDead = false;
+    
     document.getElementById('witch-hp-bar').style.width = '100%';
+    document.getElementById('village-hp-bar').style.width = '100%';
     document.getElementById('witch-timer').textContent = `남은 시간: ${witchTime.toFixed(1)}초`;
     
-    // 타이머 시작
-    witchInterval = setInterval(() => {
-        witchTime -= 0.1;
-        if (witchTime <= 0) {
-            witchTime = 0;
-            clearInterval(witchInterval);
-            document.getElementById('witch-timer').textContent = `남은 시간: 0.0초`;
+    // 마녀 위치 초기화
+    const boss = document.getElementById('witch-boss');
+    boss.style.left = '50%';
+    boss.style.top = '10%';
+    
+    // 이전 생성된 장애물들 클리어
+    document.querySelectorAll('.junk-food').forEach(j => j.remove());
+    junkFoods = [];
+    
+    // 게임 루프 시작
+    witchGameLoop = setInterval(updateWitchGame, 50);
+    witchMoveInterval = setInterval(moveWitchRandomly, 1500);
+    junkSpawnInterval = setInterval(spawnJunkFood, 800);
+}
+
+function moveWitchRandomly() {
+    if (isWitchDead) return;
+    const boss = document.getElementById('witch-boss');
+    
+    // 가로 10% ~ 90%
+    const newX = 10 + Math.random() * 80;
+    // 세로 10% ~ 40% (위쪽에 머물도록)
+    const newY = 10 + Math.random() * 30;
+    
+    boss.style.left = `${newX}%`;
+    boss.style.top = `${newY}%`;
+}
+
+function spawnJunkFood() {
+    if (isWitchDead) return;
+    const boss = document.getElementById('witch-boss');
+    const area = document.getElementById('witch-game-area');
+    
+    const junkEmojis = ['🍬', '🍪', '🍩', '🥐', '🍞', '🍕', '🍔'];
+    const emoji = junkEmojis[Math.floor(Math.random() * junkEmojis.length)];
+    
+    const junk = document.createElement('div');
+    junk.className = 'junk-food';
+    junk.textContent = emoji;
+    
+    // 마녀의 현재 위치 계산
+    const bossRect = boss.getBoundingClientRect();
+    const areaRect = area.getBoundingClientRect();
+    
+    // area 기준의 상대 좌표로 계산
+    const startX = bossRect.left - areaRect.left + (bossRect.width / 2) - 25;
+    let yPos = bossRect.bottom - areaRect.top - 20;
+    
+    junk.style.left = `${startX}px`;
+    junk.style.top = `${yPos}px`;
+    
+    // 클릭(또는 터치)해서 방어(파괴)
+    junk.onmousedown = (e) => {
+        e.stopPropagation();
+        if (isWitchDead) return;
+        junk.style.transform = 'scale(1.5)';
+        junk.style.opacity = '0';
+        junkFoods = junkFoods.filter(j => j.el !== junk);
+        setTimeout(() => junk.remove(), 200);
+    };
+    
+    area.appendChild(junk);
+    // 장애물 객체 저장 (프레임당 속도 랜덤 지정)
+    junkFoods.push({ el: junk, y: yPos, speed: 2.5 + Math.random() * 3.5 }); 
+}
+
+function updateWitchGame() {
+    if (isWitchDead) return;
+    
+    // 1. 타이머 처리
+    witchTime -= 0.05; // 50ms = 0.05초
+    if (witchTime <= 0) {
+        witchTime = 0;
+        document.getElementById('witch-timer').textContent = `남은 시간: 0.0초`;
+        endWitchBattle(false, '시간이 초과되어 마녀가 코드를 들고 도망갔어요! 😱');
+        return;
+    }
+    document.getElementById('witch-timer').textContent = `남은 시간: ${witchTime.toFixed(1)}초`;
+    
+    // 2. 장애물 낙하 처리
+    const area = document.getElementById('witch-game-area');
+    const areaRect = area.getBoundingClientRect();
+    const groundY = areaRect.height - 20; // 바닥 높이
+    
+    for (let i = junkFoods.length - 1; i >= 0; i--) {
+        const item = junkFoods[i];
+        item.y += item.speed;
+        item.el.style.top = `${item.y}px`;
+        
+        // 바닥에 닿으면
+        if (item.y + 40 >= groundY) { // 40은 대략적인 아이템 높이
+            item.el.remove();
+            junkFoods.splice(i, 1);
             
-            if (!isWitchDead) {
-                showModal('마녀가 코드를 들고 도망갔어요! 😱 다시 광선 빔을 쏴보세요!', false);
-                setTimeout(() => {
-                    closeModal();
-                    startWitchBattle(); // 재도전
-                }, 2000);
+            // 마을 데미지 (하나 떨어질 때마다 20%)
+            villageHp -= 20;
+            if (villageHp < 0) villageHp = 0;
+            document.getElementById('village-hp-bar').style.width = `${villageHp}%`;
+            
+            // 화면 붉게 깜빡임 효과 (타격감)
+            area.style.boxShadow = 'inset 0 0 50px rgba(239,68,68,0.9)';
+            setTimeout(() => { area.style.boxShadow = ''; }, 200);
+            
+            if (villageHp <= 0) {
+                endWitchBattle(false, '마을 방어력이 0이 되어 파괴되었습니다! 😭 다시 도전하세요!');
+                return;
             }
-        } else {
-            document.getElementById('witch-timer').textContent = `남은 시간: ${witchTime.toFixed(1)}초`;
         }
-    }, 100);
+    }
 }
 
 function hitWitch() {
@@ -1217,22 +1310,42 @@ function hitWitch() {
     
     // 이모지 흔들기 효과
     const bossEl = document.getElementById('witch-boss');
-    bossEl.style.transform = `scale(0.9) rotate(${(Math.random()-0.5)*20}deg)`;
-    setTimeout(() => { bossEl.style.transform = ''; }, 50);
+    bossEl.style.transform = `translateX(-50%) scale(0.9) rotate(${(Math.random()-0.5)*20}deg)`;
+    setTimeout(() => { bossEl.style.transform = 'translateX(-50%)'; }, 50);
 
     if (witchHp <= 0) {
         witchHp = 0;
-        isWitchDead = true;
-        clearInterval(witchInterval);
+        endWitchBattle(true, '🎉 마녀를 물리치고 마을을 지켜냈습니다!\n잃어버린 마지막 코드를 되찾았어요!');
+    }
+    document.getElementById('witch-hp-bar').style.width = `${witchHp}%`;
+}
+
+function endWitchBattle(isWin, msg) {
+    isWitchDead = true;
+    clearInterval(witchGameLoop);
+    clearInterval(witchMoveInterval);
+    clearInterval(junkSpawnInterval);
+    
+    if (isWin) {
         document.getElementById('witch-hp-bar').style.width = '0%';
+        // 필드에 남은 정크푸드 폭발 효과
+        document.querySelectorAll('.junk-food').forEach(j => {
+            j.style.transform = 'scale(2)';
+            j.style.opacity = '0';
+            setTimeout(() => j.remove(), 200);
+        });
         
-        showModal('🎉 마녀를 물리쳤습니다! 잃어버린 마지막 코드를 되찾았어요!', true);
+        showModal(msg, true);
         setTimeout(() => {
             closeModal();
             showEnding();
-        }, 2000);
+        }, 2500);
     } else {
-        document.getElementById('witch-hp-bar').style.width = `${witchHp}%`;
+        showModal(msg, false);
+        setTimeout(() => {
+            closeModal();
+            startWitchBattle(); // 재도전
+        }, 2500);
     }
 }
 

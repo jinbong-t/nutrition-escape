@@ -673,17 +673,37 @@
     </div>
 </section>
 
-<!-- ===================== 마녀 보스전 ===================== -->
+<!-- ===================== 마녀 보스전 (보글보글 스타일) ===================== -->
 <section id="witch-battle-screen" class="hidden">
-    <h2 style="font-size:2.5rem; color:#ef4444; margin-bottom: 10px;">🚨 경고! 마녀의 습격 🚨</h2>
-    <p style="font-size:1.2rem; margin-bottom: 20px;">마녀가 마지막 코드를 훔쳐갔어요!<br>마우스를 마구 클릭해서 영양소 빛의 빔을 쏘세요!</p>
-    
-    <div class="witch-boss" id="witch-boss" onclick="hitWitch()">🧙‍♀️</div>
-    
-    <div class="boss-hp-bar-container">
-        <div class="boss-hp-bar" id="witch-hp-bar"></div>
+    <!-- UI 레이어: 상단에 고정 -->
+    <div id="witch-ui-layer">
+        <h2 style="font-size:2.2rem; color:#ef4444; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">🚨 마녀의 습격! 마을을 지켜라! 🚨</h2>
+        <p style="font-size:1.1rem; margin-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
+            마녀가 나쁜 음식을 마구 뱉어내고 있어요!<br>
+            <strong>마녀를 클릭해 혼내주고, 떨어지는 나쁜 간식들을 터치해서 막으세요!</strong>
+        </p>
+        
+        <div class="boss-hp-bar-container" style="margin-top: 5px;">
+            <div class="boss-hp-bar" id="witch-hp-bar"></div>
+        </div>
+        <div style="font-size:0.9rem; margin-bottom:10px;">마녀 체력</div>
+        
+        <div class="boss-hp-bar-container" style="border-color: #3b82f6;">
+            <div class="boss-hp-bar" id="village-hp-bar" style="background: #3b82f6;"></div>
+        </div>
+        <div style="font-size:0.9rem; margin-bottom:5px;">마을 방어력</div>
+
+        <div class="boss-timer" id="witch-timer">남은 시간: 20.0초</div>
     </div>
-    <div class="boss-timer" id="witch-timer">남은 시간: 10.0초</div>
+
+    <!-- 게임 플레이 영역 -->
+    <div id="witch-game-area">
+        <!-- 마녀 캐릭터 -->
+        <div class="witch-boss" id="witch-boss" onclick="hitWitch()">🧙‍♀️</div>
+        
+        <!-- 바닥(마을) -->
+        <div id="village-ground"></div>
+    </div>
 </section>
 
 <!-- ===================== 엔딩 ===================== -->
