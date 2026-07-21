@@ -935,8 +935,6 @@ function handleBoneCollision(item) {
         
         if (boneHealth <= 0) {
             endBoneGame(false, item.name);
-        } else {
-            showModal(`으악! ${item.name}은(는) 칼슘 흡수를 방해해서 뼈에 구멍이 뚫려요! 💀`, false);
         }
     }
 }
@@ -953,7 +951,7 @@ function updateBoneUI() {
     }
     
     if (scoreText) {
-        scoreText.textContent = `점수: ${boneScore} / 5`;
+        scoreText.innerHTML = `점수: ${boneScore} / 300<br><span style="font-size:0.7em;color:#fcd34d">🔥 현재 콤보: ${boneCombo}</span>`;
     }
 }
 
