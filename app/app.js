@@ -1238,7 +1238,7 @@ function startWitchBattle() {
     // 마녀 위치 초기화
     const boss = document.getElementById('witch-boss');
     boss.style.left = '50%';
-    boss.style.top = '10%';
+    boss.style.top = '0%';
     
     // 이전 생성된 장애물들 클리어
     document.querySelectorAll('.junk-food').forEach(j => j.remove());
@@ -1256,8 +1256,8 @@ function moveWitchRandomly() {
     
     // 가로 10% ~ 90%
     const newX = 10 + Math.random() * 80;
-    // 세로 10% ~ 40% (위쪽에 머물도록)
-    const newY = 10 + Math.random() * 30;
+    // 맨 위에서만 머물도록 고정 (하늘)
+    const newY = 0;
     
     boss.style.left = `${newX}%`;
     boss.style.top = `${newY}%`;
