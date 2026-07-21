@@ -970,7 +970,7 @@ function endBoneGame(isWin, failReason = '') {
             document.getElementById('r5-clear').classList.remove('hidden');
         }, 2000);
     } else {
-        showModal(`☠️ 게임 오버! ${badName} 때문에 뼈가 다 부서졌어요... 다시 도전하세요!`, false);
+        showModal(`☠️ 게임 오버! ${failReason} 때문에 뼈가 다 부서졌어요... 다시 도전하세요!`, false);
         const startBtn = document.getElementById('start-bone-btn');
         if (startBtn) startBtn.style.display = 'block';
     }
