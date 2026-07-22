@@ -1896,33 +1896,11 @@ function checkR7Stage1() {
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage1').classList.add('hidden');
-            document.getElementById('r7-stage1_5').classList.remove('hidden');
-        }, 2000);
-    } else {
-        playWrong();
-        showModal('❌ 틀렸습니다. 탄수화물과 단백질은 1g당 4kcal, 지방은 9kcal임을 기억하세요!', false);
-    }
-}
-
-function checkR7Stage1_5() {
-    playClick();
-    const inputVal = document.getElementById('r7-calorie-input-2').value;
-    
-    if (!inputVal) {
-        showModal('값을 입력해주세요!', false);
-        return;
-    }
-    
-    if (parseInt(inputVal) === 330) {
-        showModal('🎉 오오! 믹서기 가동 완료! 🌪️ (330kcal)\\n건강 과일 주스로 파워 충전 완료! 다음 단계로 넘어가자!', true);
-        setTimeout(() => {
-            closeModal();
-            document.getElementById('r7-stage1_5').classList.add('hidden');
             document.getElementById('r7-stage2').classList.remove('hidden');
         }, 2000);
     } else {
         playWrong();
-        showModal('❌ 음... 계산이 틀렸습니다! (바나나, 단백질가루는 각 4kcal, 아보카도는 9kcal, 토마토는 0kcal로 계산하세요!)', false);
+        showModal('❌ 틀렸습니다. 탄수화물과 단백질은 1g당 4kcal, 지방은 9kcal임을 기억하세요!', false);
     }
 }
 
