@@ -608,8 +608,14 @@ h2 {
 
 @media (max-width: 480px) {
     [id^="room-screen-"] { padding: 12px 10px !important; gap: 10px !important; }
-    .stages-grid { gap: 8px; }
-    .stage-img-wrap { width: 50px; height: 50px; }
+    .stages-grid { gap: 4px !important; }
+    .stage-card { padding: 8px 4px 6px !important; border-width: 1px !important; border-radius: 12px !important; }
+    #room-7 { padding: 8px !important; }
+    #room-7 > div:last-child { width: 70px !important; height: 70px !important; }
+    .stage-img-wrap { width: 50px; height: 50px; border-width: 2px !important; }
+    .stage-name { font-size: 0.75rem !important; margin: 2px 0 !important; }
+    .stage-nutrient-badge { font-size: 0.55rem !important; padding: 2px 4px !important; margin-bottom: 4px !important; }
+    .stage-enter-btn { padding: 4px 6px !important; font-size: 0.7rem !important; border-radius: 4px !important; }
     .quiz-stage { padding: 14px 12px !important; }
     .weight-options { gap: 8px; }
     .weight-item { padding: 9px 10px; font-size: 0.85rem; min-width: 65px; }
