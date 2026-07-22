@@ -754,33 +754,73 @@ function checkMatchingQ(roomNum) {
 // ===========================
 // 방4: 방탈출 퍼즐 로직
 // ===========================
-// 1단계: 손전등 효과
+// 1단계: 손전등 효과 + 커스텀 손전등 커서
 document.addEventListener('DOMContentLoaded', () => {
     const darkRoom = document.getElementById('dark-room');
-    if (darkRoom) {
-        darkRoom.addEventListener('mousemove', (e) => {
-            const rect = darkRoom.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const overlay = document.getElementById('dark-overlay');
-            if (overlay) {
-                // radial gradient 중심을 마우스 위치로 업데이트 (시야 아주 좁게: 60px)
-                overlay.style.background = `radial-gradient(circle 60px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.99) 100%)`;
-            }
-        });
-    }
+    if (!darkRoom) return;
+
+    // 커스텀 손전등 커서 요소 생성
+    const cursor = document.createElement('div');
+    cursor.id = 'flashlight-cursor';
+    cursor.textContent = '🔦';
+    cursor.style.cssText = `
+        position: fixed;
+        pointer-events: none;
+        font-size: 2.2rem;
+        z-index: 99999;
+        transform: translate(-6px, -30px) rotate(-30deg);
+        transition: opacity 0.15s;
+        opacity: 0;
+        filter: drop-shadow(0 0 8px rgba(255,230,100,0.9));
+        line-height: 1;
+    `;
+    document.body.appendChild(cursor);
+
+    darkRoom.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1';
+        darkRoom.style.cursor = 'none'; // 기본 커서 숨김
+    });
+
+    darkRoom.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+        darkRoom.style.cursor = '';
+    });
+
+    darkRoom.addEventListener('mousemove', (e) => {
+        // 커스텀 커서 위치
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+
+        // 손전등 효과 (spotlight gradient)
+        const rect = darkRoom.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const overlay = document.getElementById('dark-overlay');
+        if (overlay) {
+            overlay.style.background = `radial-gradient(circle 65px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.99) 100%)`;
+        }
+    });
 });
 
+
 function foundCarrot(el) {
+    playCorrect();
     const container = document.getElementById('dark-room');
     container.classList.add('lights-on');
     el.style.transform = 'scale(1.5)';
+    
+    // 🔦 손전등 커서 제거 & 기본 커서 복구
+    container.style.cursor = '';
+    const cur = document.getElementById('flashlight-cursor');
+    if (cur) cur.style.opacity = '0';
+    
     showModal('🎉 비타민 A(당근)를 찾았습니다! 야맹증이 치료되어 시야가 밝아집니다!', true);
     setTimeout(() => { 
         closeModal(); 
         nextQuizStage(4, 1); 
     }, 2500);
 }
+
 
 // 2단계: 금고 다이어리
 const safeState = ['A', 'A', 'A', 'A'];

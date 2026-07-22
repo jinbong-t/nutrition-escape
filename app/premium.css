@@ -26,10 +26,13 @@ body {
     color: var(--text-bright) !important;
 }
 
-/* ===== 방 배경 공통 ===== */
+/* ===== 방 배경 - 개별 방 배경은 유지, 개야조 요소만 오버라이드 ===== */
 [id^="room-screen-"] {
-    background: linear-gradient(160deg, var(--bg-dark) 0%, #1a0d3b 100%) !important;
+    /* 배경 이미지는 style.css에서 설정됨 - 여기에서 오버라이드 하지 않음 */
+    background-color: rgba(10, 5, 30, 0.6);
+    background-blend-mode: overlay;
 }
+
 
 /* ===== 허브 배경 ===== */
 #hub {
