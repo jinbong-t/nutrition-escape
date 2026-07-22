@@ -1036,3 +1036,28 @@ button[onclick^="checkClassifyQ"] {
         padding: 5px 10px !important;
     }
 }
+/* ===== 피드백 반영 2차: 문제와 보기 글자 크기 밸런스 완전 재조정 ===== */
+.quiz-question {
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+    margin-bottom: 20px !important;
+    line-height: 1.4 !important;
+}
+
+.option-btn {
+    font-size: 0.95rem !important;
+    padding: 12px 14px !important;
+    font-weight: 500 !important;
+}
+
+@media (max-width: 600px) {
+    .quiz-question {
+        font-size: 1.15rem !important;
+        margin-bottom: 18px !important;
+    }
+    .option-btn {
+        font-size: 0.9rem !important;
+        padding: 10px 12px !important;
+    }
+}
