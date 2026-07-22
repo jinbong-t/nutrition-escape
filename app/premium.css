@@ -746,3 +746,85 @@ h2 {
     animation: bounceIn 0.3s;
 }
 
+/* ===== 모바일 최적화 (반응형) ===== */
+@media (max-width: 768px) {
+    /* 공통: 너무 큰 폰트들 조절 */
+    h1 { font-size: 2rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    
+    /* 인트로 책 컨테이너 세로 모드로 변경 */
+    .book-container {
+        width: 95vw !important;
+        height: 85vh !important;
+        transform: none !important; /* 모바일에서는 3D 효과 제거 */
+        margin-top: 20px;
+    }
+    
+    .book-container::before {
+        display: none; /* 뒤쪽 빛 효과 제거 */
+    }
+    
+    .book-inside {
+        flex-direction: column !important;
+        overflow-y: auto; /* 내용이 넘치면 스크롤 */
+        border: 3px solid #5c2c16;
+        padding-bottom: 30px; /* 여백 추가 */
+    }
+    
+    .book-inside::after {
+        display: none; /* 책 중앙 제본선 그림자 제거 */
+    }
+    
+    .page-left, .page-right {
+        width: 100% !important;
+        height: auto !important;
+        padding: 15px !important;
+    }
+    
+    /* 왼쪽 페이지 (삽화) */
+    .page-left {
+        flex: 0 0 auto;
+        padding-bottom: 5px !important;
+    }
+    
+    .page-left img {
+        max-height: 250px;
+        object-fit: contain; /* 이미지 짤림 방지 */
+    }
+    
+    /* 오른쪽 페이지 (텍스트) */
+    .page-right {
+        flex: 1 1 auto;
+        padding-top: 5px !important;
+        text-align: center;
+    }
+    
+    /* 책 표지 넘기는 효과 숨김 (모바일 세로형태에 안맞음) */
+    .book-cover {
+        display: none !important;
+    }
+    
+    /* 버튼 찌그러짐 방지 */
+    .btn, #start-btn {
+        width: auto !important;
+        min-width: 200px;
+        max-width: 90%;
+        margin: 15px auto !important;
+        white-space: nowrap; /* 글자 줄바꿈 방지 */
+    }
+    
+    /* 글자 크기 조정 */
+    #intro-text, .book-body {
+        font-size: 1.1rem !important;
+        min-height: unset !important; /* 고정 높이 해제 */
+    }
+    
+    /* 스킵, 효과음 버튼 상단 우측 위치 조정 */
+    button[onclick="skipIntro();"], button[onclick="toggleMute();"] {
+        top: 10px !important;
+        transform: scale(0.85); /* 크기 약간 줄이기 */
+    }
+    button[onclick="skipIntro();"] { right: 10px !important; }
+    button[onclick="toggleMute();"] { right: 80px !important; }
+}
+
