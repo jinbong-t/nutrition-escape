@@ -27,10 +27,10 @@ jobs:
       - name: GitHub Pages 설정
         uses: actions/configure-pages@v5
 
-      - name: app 폴더 업로드
+      - name: 전체 폴더 업로드
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './app'
+          path: '.'
 
       - name: 배포하기
         id: deployment
