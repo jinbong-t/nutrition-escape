@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Jua&family=Nanum+Pen+Script&family=Orbit&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=3">
-    <link rel="stylesheet" href="premium.css?v=7">
+    <link rel="stylesheet" href="premium.css?v=8">
 </head>
 <body>
 <div id="game-container">
@@ -209,51 +209,87 @@
         <button class="btn" style="background: #16a34a;" onclick="showScreen('hub'); resetRoom7();">로비로 돌아가기</button>
     </div>
 
-    <!-- 1스테이지: 영양 밸런스 저울 -->
+        <!-- 1스테이지: 열량 계산 -->
     <div class="quiz-stage hidden" id="r7-stage1">
-        <div class="quiz-label" style="background: #10b981;">⚖️ 1단계: 영양 밸런스 저울</div>
-        <div class="quiz-question">햄버거 세트는 탄수화물과 지방이 지나치게 많아요.<br>이 햄버거에 부족한 <b>두 가지 영양소</b>를 골라서 저울의 균형을 맞춰주세요!<br><span style="font-size:0.85em;opacity:0.8">✔ 정답: 비타민, 단백질, 물 중 어떤 조합이든 가능!</span></div>
-        
-        <div class="scale-container" id="r7-scale-container">
-            <div class="scale-arm" id="r7-scale-arm"></div>
-            <div class="scale-plate left-plate" id="r7-left-plate">
-                <div class="bad-food">🍔 햄버거 세트<br><span style="font-size:0.7em;">(탄/지/무기질↓)</span></div>
-            </div>
-            <div class="scale-plate right-plate" id="r7-right-plate">
-                <!-- 드롭존 -->
-            </div>
-            <div class="scale-base"></div>
+        <div class="quiz-label" style="background: #10b981;">📝 1단계: 정밀 칼로리 계산</div>
+        <div class="quiz-question">
+            다음 도시락의 총 열량(kcal)을 계산하여 입력하세요.<br>
+            <span style="font-size:0.9rem; color:#047857; margin-top: 10px; display:inline-block; padding: 10px; background: rgba(255,255,255,0.5); border-radius: 8px; width: 100%; text-align: left; box-sizing: border-box;">
+                🍱 <b>도시락 영양 성분표</b><br>
+                - 탄수화물: 60g<br>
+                - 단백질: 20g<br>
+                - 지방: 10g<br>
+                - 물, 무기질, 비타민: 약간 (열량 없음)
+            </span><br>
+            <span style="font-size:0.8rem; color:#64748b; margin-top:5px;">(힌트: 탄수화물과 단백질은 1g당 4kcal, 지방은 1g당 9kcal의 에너지를 냅니다)</span>
         </div>
         
-        <div class="weight-options" id="r7-weights">
-            <div class="weight-item" data-type="vitamin" onclick="selectWeight(this)">🍊 비타민</div>
-            <div class="weight-item" data-type="water" onclick="selectWeight(this)">💧 물</div>
-            <div class="weight-item" data-type="protein" onclick="selectWeight(this)">🥩 단백질</div>
-            <div class="weight-item" data-type="fat" onclick="selectWeight(this)">🧈 지방</div>
-            <div class="weight-item" data-type="mineral" onclick="selectWeight(this)">🦨 무기질</div>
+        <div style="margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 10px;">
+            <input type="number" id="r7-calorie-input" placeholder="숫자 입력" style="font-size: 1.2rem; padding: 10px; width: 120px; text-align: center; border: 3px solid #10b981; border-radius: 8px; outline: none;">
+            <span style="font-size: 1.2rem; font-weight: bold; color: #14532d;">kcal</span>
         </div>
-        <div id="scale-selected-info">영양소를 클릭해서 2개 선택하세요</div>
-        <button id="scale-add-btn" onclick="addSelectedToScale()">⚖️ 저울에 올리기</button>
+        
+        <button class="btn" style="background: #10b981; padding: 12px 30px; font-size: 1.1rem;" onclick="checkR7Stage1()">정답 확인</button>
     </div>
 
-    <!-- 2스테이지: 영양 폭탄 해체 -->
+    <!-- 2스테이지: 소화 산물 매칭 -->
     <div class="quiz-stage hidden" id="r7-stage2">
-        <div class="quiz-label" style="background: #ef4444;">💣 2단계: 영양 폭탄 해체</div>
-        <div class="quiz-question">마녀의 폭탄이 작동했습니다! 씩씩이의 외침을 듣고 10초 안에 알맞은 선을 자르세요!</div>
+        <div class="quiz-label" style="background: #3b82f6;">🔍 2단계: 소화 산물 연결</div>
+        <div class="quiz-question">3대 영양소가 소장에서 체내로 흡수되기 위해 최종적으로 분해된 형태를 바르게 짝지어주세요!</div>
         
-        <div class="bomb-container">
-            <div class="bomb-timer" id="r7-bomb-timer">00:10</div>
-            <div class="bomb-body">
-                <div class="bomb-wires" id="r7-bomb-wires">
-                    <!-- 와이어들이 동적으로 생성됨 -->
-                </div>
-                <div class="bomb-face">💣</div>
+        <div class="match-container" style="background: rgba(255,255,255,0.5); padding: 15px; border-radius: 10px; margin: 15px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="font-weight: bold; font-size: 1.1rem; color: #1e3a8a; width: 90px; text-align: left;">🍚 탄수화물</div>
+                <div style="color: #64748b; font-size: 1.2rem; margin: 0 10px;">➡️</div>
+                <select id="r7-match-carbs" style="flex: 1; padding: 8px; font-size: 0.9rem; border: 2px solid #3b82f6; border-radius: 6px;">
+                    <option value="">선택하세요</option>
+                    <option value="amino">아미노산</option>
+                    <option value="glucose">포도당</option>
+                    <option value="fatty">지방산과 모노글리세리드</option>
+                </select>
             </div>
-            <div class="ssikssiki-shout" id="r7-shout-text">"에너지를 내는 가장 중요한 영양소 선을 잘라!!"</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="font-weight: bold; font-size: 1.1rem; color: #1e3a8a; width: 90px; text-align: left;">🥩 단백질</div>
+                <div style="color: #64748b; font-size: 1.2rem; margin: 0 10px;">➡️</div>
+                <select id="r7-match-protein" style="flex: 1; padding: 8px; font-size: 0.9rem; border: 2px solid #3b82f6; border-radius: 6px;">
+                    <option value="">선택하세요</option>
+                    <option value="amino">아미노산</option>
+                    <option value="glucose">포도당</option>
+                    <option value="fatty">지방산과 모노글리세리드</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: bold; font-size: 1.1rem; color: #1e3a8a; width: 90px; text-align: left;">🧈 지방</div>
+                <div style="color: #64748b; font-size: 1.2rem; margin: 0 10px;">➡️</div>
+                <select id="r7-match-fat" style="flex: 1; padding: 8px; font-size: 0.9rem; border: 2px solid #3b82f6; border-radius: 6px;">
+                    <option value="">선택하세요</option>
+                    <option value="amino">아미노산</option>
+                    <option value="glucose">포도당</option>
+                    <option value="fatty">지방산과 모노글리세리드</option>
+                </select>
+            </div>
         </div>
+        
+        <button class="btn" style="background: #3b82f6; padding: 12px 30px; font-size: 1.1rem;" onclick="checkR7Stage2()">제출하기</button>
     </div>
 
-    <div class="room-clear hidden" id="r7-clear">
+    <!-- 3스테이지: 결핍증 환자 진단 -->
+    <div class="quiz-stage hidden" id="r7-stage3">
+        <div class="quiz-label" style="background: #f59e0b;">🏥 3단계: 영양 결핍 진단</div>
+        <div class="quiz-question">
+            환자가 <b>밤눈이 어둡고(야맹증)</b>, <b>잇몸에서 피가 납니다(괴혈병)</b>.<br>
+            이 환자에게 시급히 처방해야 할 <b>두 가지 비타민</b>을 선택하세요!
+        </div>
+        
+        <div class="market-items" id="r7-vitamin-options" style="justify-content: center; margin-top: 15px;">
+            <div class="market-item r7-vit-btn" data-val="A" onclick="toggleR7Vit(this)">비타민 A</div>
+            <div class="market-item r7-vit-btn" data-val="B1" onclick="toggleR7Vit(this)">비타민 B1</div>
+            <div class="market-item r7-vit-btn" data-val="C" onclick="toggleR7Vit(this)">비타민 C</div>
+            <div class="market-item r7-vit-btn" data-val="D" onclick="toggleR7Vit(this)">비타민 D</div>
+        </div>
+        
+        <button class="btn" style="background: #f59e0b; padding: 12px 30px; font-size: 1.1rem; margin-top: 15px;" onclick="checkR7Stage3()">처방전 확인</button>
+    </div>\n\n    <div class="room-clear hidden" id="r7-clear">
         <div class="clear-icon" style="font-size: 5rem;">🎉🏆🎉</div>
         <h2 style="color: #14532d; font-size: 2rem;">완벽해요! 종합 훈련 완료!</h2>
         <p style="font-size: 1.2rem; margin: 20px 0; color: #166534;">당신은 이제 6대 영양소 마스터입니다!</p>

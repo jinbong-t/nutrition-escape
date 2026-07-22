@@ -1656,199 +1656,119 @@ if (introSection && wrapper3D) {
 // 방 7: 씩씩이의 종합 훈련소 (최종 관문)
 // ===========================
 
-let scaleWeights = [];
-let bombTimerInterval = null;
-let bombTimeLeft = 10;
-let bombTargetType = '';
-
-let selectedWeights = [];
+let r7SelectedVits = [];
 
 function resetRoom7() {
-    scaleWeights = [];
-    selectedWeights = [];
-    clearInterval(bombTimerInterval);
+    r7SelectedVits = [];
     document.getElementById('r7-stage1').classList.remove('hidden');
     document.getElementById('r7-stage2').classList.add('hidden');
+    const stage3 = document.getElementById('r7-stage3');
+    if(stage3) stage3.classList.add('hidden');
     document.getElementById('r7-clear').classList.add('hidden');
     
-    // 저울 초기화
-    document.getElementById('r7-scale-arm').style.transform = 'translateX(-50%) rotate(15deg)';
-    document.getElementById('r7-left-plate').style.transform = 'translateY(50px)';
-    document.getElementById('r7-right-plate').style.transform = 'translateY(-50px)';
-    document.getElementById('r7-right-plate').innerHTML = '';
+    // Reset Stage 1
+    const calInput = document.getElementById('r7-calorie-input');
+    if(calInput) calInput.value = '';
     
-    // 무게추 선택 상태 초기화
-    document.querySelectorAll('#r7-weights .weight-item').forEach(el => {
-        el.classList.remove('selected', 'on-plate');
-    });
-    const infoEl = document.getElementById('scale-selected-info');
-    if (infoEl) infoEl.textContent = '영양소를 클릭해서 2개 선택하세요';
+    // Reset Stage 2
+    const mCarbs = document.getElementById('r7-match-carbs');
+    const mProtein = document.getElementById('r7-match-protein');
+    const mFat = document.getElementById('r7-match-fat');
+    if(mCarbs) mCarbs.value = '';
+    if(mProtein) mProtein.value = '';
+    if(mFat) mFat.value = '';
     
-    // 폭탄 초기화
-    document.getElementById('r7-bomb-timer').textContent = '00:10';
-    document.getElementById('r7-bomb-timer').classList.remove('urgent');
+    // Reset Stage 3
+    document.querySelectorAll('.r7-vit-btn').forEach(btn => btn.classList.remove('selected', 'in-cart'));
 }
 
-
-
-// 클릭 방식 저울 무게추 선택
-function selectWeight(el) {
+function checkR7Stage1() {
     playClick();
-    const type = el.getAttribute('data-type');
-    if (el.classList.contains('on-plate')) return;
+    const inputVal = document.getElementById('r7-calorie-input').value;
     
-    if (el.classList.contains('selected')) {
-        el.classList.remove('selected');
-        selectedWeights = selectedWeights.filter(t => t !== type);
-    } else {
-        if (selectedWeights.length >= 2) {
-            showModal('최대 2개를 선택할 수 있어요!', false); return;
-        }
-        el.classList.add('selected');
-        selectedWeights.push(type);
-    }
-    
-    const infoEl = document.getElementById('scale-selected-info');
-    if (infoEl) {
-        if (selectedWeights.length === 0) infoEl.textContent = '영양소를 클릭해서 2개 선택하세요';
-        else if (selectedWeights.length === 1) infoEl.textContent = '1개 선택 → 1개 더 선택하세요';
-        else infoEl.textContent = '2개 선택 완료! [저울에 올리기]를 누르세요';
-    }
-}
-
-function addSelectedToScale() {
-    if (selectedWeights.length < 2) {
-        playWrong();
-        showModal('영양소를 2개 선택해주세요!', false); return;
-    }
-    playClick();
-    scaleWeights = [...selectedWeights];
-    
-    const plate = document.getElementById('r7-right-plate');
-    plate.innerHTML = '';
-    selectedWeights.forEach(type => {
-        const srcEl = document.querySelector(`#r7-weights .weight-item[data-type="${type}"]`);
-        if (srcEl) { srcEl.classList.remove('selected'); srcEl.classList.add('on-plate'); }
-        const weightEl = document.createElement('div');
-        weightEl.className = 'weight-item';
-        weightEl.style.cursor = 'default';
-        weightEl.style.fontSize = '0.85rem';
-        weightEl.style.padding = '6px 10px';
-        weightEl.textContent = srcEl ? srcEl.textContent : type;
-        plate.appendChild(weightEl);
-    });
-    
-    checkScaleBalance();
-}
-
-
-
-function checkScaleBalance() {
-    if (scaleWeights.length < 2) {
-        document.getElementById('r7-scale-arm').style.transform = 'translateX(-50%) rotate(5deg)';
-        document.getElementById('r7-left-plate').style.transform = 'translateY(15px)';
-        document.getElementById('r7-right-plate').style.transform = 'translateY(-15px)';
+    if (!inputVal) {
+        showModal('값을 입력해주세요!', false);
         return;
     }
     
-    const valid = ['protein', 'vitamin', 'water'];
-    const isCorrect = scaleWeights.every(w => valid.includes(w));
-    
-    if (isCorrect) {
-        document.getElementById('r7-scale-arm').style.transform = 'translateX(-50%) rotate(0deg)';
-        document.getElementById('r7-left-plate').style.transform = 'translateY(0px)';
-        document.getElementById('r7-right-plate').style.transform = 'translateY(0px)';
-        
-        showModal('🎉 완벽해요! 햄버거의 불균형을 비타민과 단백질/물로 훌륭하게 맞췄습니다!', true);
+    // 탄 60g * 4 + 단 20g * 4 + 지 10g * 9 = 240 + 80 + 90 = 410
+    if (parseInt(inputVal) === 410) {
+        showModal('🎉 정답입니다! (탄수화물 240 + 단백질 80 + 지방 90 = 410kcal)', true);
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage1').classList.add('hidden');
-            startBombStage();
+            document.getElementById('r7-stage2').classList.remove('hidden');
         }, 2000);
     } else {
-        showModal('❌ 앗! 그 조합으로는 밸런스가 맞지 않아요. 햄버거 세트에 이미 탄수화물과 지방이 많아요!', false);
-        setTimeout(() => {
-            closeModal();
-            resetRoom7();
-        }, 2000);
+        playWrong();
+        showModal('❌ 틀렸습니다. 탄수화물과 단백질은 1g당 4kcal, 지방은 9kcal임을 기억하세요!', false);
     }
 }
 
-function startBombStage() {
-    document.getElementById('r7-stage2').classList.remove('hidden');
-    bombTimeLeft = 10;
+function checkR7Stage2() {
+    playClick();
+    const carbs = document.getElementById('r7-match-carbs').value;
+    const protein = document.getElementById('r7-match-protein').value;
+    const fat = document.getElementById('r7-match-fat').value;
     
-    const wiresContainer = document.getElementById('r7-bomb-wires');
-    wiresContainer.innerHTML = '';
-    
-    const wireTypes = [
-        { type: 'carbs', color: '#f59e0b', name: '탄수화물 (노랑)' },
-        { type: 'protein', color: '#ef4444', name: '단백질 (빨강)' },
-        { type: 'fat', color: '#3b82f6', name: '지방 (파랑)' },
-        { type: 'vitamin', color: '#10b981', name: '비타민 (초록)' }
-    ];
-    
-    const targetIdx = Math.floor(Math.random() * wireTypes.length);
-    const target = wireTypes[targetIdx];
-    bombTargetType = target.type;
-    
-    let shout = '';
-    if (target.type === 'carbs') shout = '"에너지를 내는 가장 중요한 영양소 선을 잘라!!"';
-    else if (target.type === 'protein') shout = '"몸의 근육을 만들고 상처를 회복하는 선을 잘라!!"';
-    else if (target.type === 'fat') shout = '"체온을 유지하고 에너지를 저장하는 선을 잘라!!"';
-    else if (target.type === 'vitamin') shout = '"몸의 기능을 조절하고 병을 예방하는 선을 잘라!!"';
-    
-    document.getElementById('r7-shout-text').textContent = shout;
-    
-    wireTypes.forEach(wire => {
-        const el = document.createElement('div');
-        el.className = 'wire';
-        el.style.background = wire.color;
-        el.onclick = () => cutWire(el, wire.type);
-        wiresContainer.appendChild(el);
-    });
-    
-    clearInterval(bombTimerInterval);
-    document.getElementById('r7-bomb-timer').classList.remove('urgent');
-    bombTimerInterval = setInterval(updateBombTimer, 1000);
-    updateBombTimer();
-}
-
-function updateBombTimer() {
-    document.getElementById('r7-bomb-timer').textContent = `00:${bombTimeLeft < 10 ? '0'+bombTimeLeft : bombTimeLeft}`;
-    
-    if (bombTimeLeft <= 3) {
-        document.getElementById('r7-bomb-timer').classList.add('urgent');
+    if (!carbs || !protein || !fat) {
+        showModal('모든 영양소의 소화 산물을 선택해주세요!', false);
+        return;
     }
     
-    if (bombTimeLeft <= 0) {
-        clearInterval(bombTimerInterval);
-        explodeBomb();
-    }
-    bombTimeLeft--;
-}
-
-function cutWire(wireEl, type) {
-    if (bombTimeLeft < 0 || wireEl.classList.contains('cut')) return;
-    
-    wireEl.classList.add('cut');
-    clearInterval(bombTimerInterval);
-    
-    if (type === bombTargetType) {
-        playBombSuccess();
-        showModal('🎉 휴! 정확한 영양소를 알고 계시네요! 폭탄 해체 성공!', true);
+    if (carbs === 'glucose' && protein === 'amino' && fat === 'fatty') {
+        showModal('🎉 완벽합니다! 3대 영양소의 최종 소화 산물을 정확히 알고 계시네요!', true);
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage2').classList.add('hidden');
-            // 폭탄을 해체하면 마녀가 화나서 등장!
-            startWitchCutscene();
+            document.getElementById('r7-stage3').classList.remove('hidden');
         }, 2000);
     } else {
-        explodeBomb();
+        playWrong();
+        showModal('❌ 틀렸습니다. 소화 산물이 올바르게 연결되지 않았습니다.', false);
     }
 }
 
-function explodeBomb() {
+function toggleR7Vit(el) {
+    playClick();
+    const val = el.getAttribute('data-val');
+    
+    if (el.classList.contains('in-cart')) {
+        el.classList.remove('in-cart');
+        r7SelectedVits = r7SelectedVits.filter(v => v !== val);
+    } else {
+        if (r7SelectedVits.length >= 2) {
+            showModal('최대 2가지만 선택할 수 있습니다.', false);
+            return;
+        }
+        el.classList.add('in-cart');
+        r7SelectedVits.push(val);
+    }
+}
+
+function checkR7Stage3() {
+    playClick();
+    if (r7SelectedVits.length !== 2) {
+        showModal('비타민 2가지를 선택해주세요!', false);
+        return;
+    }
+    
+    const hasA = r7SelectedVits.includes('A');
+    const hasC = r7SelectedVits.includes('C');
+    
+    if (hasA && hasC) {
+        showModal('🎉 대단해요! 야맹증엔 비타민 A, 괴혈병엔 비타민 C를 정확히 처방했습니다!', true);
+        setTimeout(() => {
+            closeModal();
+            document.getElementById('r7-stage3').classList.add('hidden');
+            // 마지막 방 클리어 시 마녀 등장!
+            startWitchCutscene();
+        }, 2500);
+    } else {
+        playWrong();
+        showModal('❌ 오진입니다! 야맹증과 괴혈병을 예방하는 비타민을 다시 확인해보세요.', false);
+    }
+}\n\nfunction explodeBomb() {
     playExplosion();
     showModal('💥 펑!!! 잘못된 선을 잘랐거나 시간이 초과되었습니다!', false);
     setTimeout(() => {
