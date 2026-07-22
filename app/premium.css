@@ -948,3 +948,63 @@ h2 {
     .hint-btn { padding: 4px 8px !important; font-size: 0.75rem !important; margin-top: 2px !important; }
 }
 
+
+.drag-card { touch-action: none !important; }
+
+/* ===== 비밀 일기장 컨셉 디자인 ===== */
+.secret-diary {
+    background: #fdf6e3 !important;
+    border: 2px solid #d4a373 !important;
+    border-radius: 8px !important;
+    box-shadow: inset 0 0 20px rgba(212,163,115,0.2), 0 8px 15px rgba(0,0,0,0.1) !important;
+    font-family: 'Gowun Dodum', serif !important;
+    padding: 20px 25px 25px 35px !important;
+    position: relative;
+    background-image: repeating-linear-gradient(transparent, transparent 31px, #e9ecef 31px, #e9ecef 32px) !important;
+    background-position: 0 45px !important;
+}
+.secret-diary::before {
+    content: '';
+    position: absolute;
+    left: 20px; top: 0; bottom: 0;
+    width: 2px;
+    background: #ff7b72;
+    opacity: 0.6;
+}
+.secret-diary .note-title {
+    font-family: 'Gamja Flower', cursive !important;
+    font-size: 1.5rem !important;
+    color: #5c4033 !important;
+    border-bottom: none !important;
+    text-align: center;
+    margin-bottom: 15px !important;
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+    position: relative;
+    z-index: 2;
+}
+.secret-diary .note-stmt {
+    font-size: 1.15rem !important;
+    color: #3e2723 !important;
+    line-height: 32px !important;
+    margin-bottom: 0 !important;
+    padding: 0 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s;
+    border-radius: 4px;
+    position: relative;
+    z-index: 2;
+}
+.secret-diary .note-stmt:hover {
+    background: rgba(255, 235, 133, 0.5) !important;
+    transform: translateX(5px);
+}
+.secret-diary .note-stmt.lie-wrong {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #b91c1c !important;
+    text-decoration: line-through;
+}
+.secret-diary .note-stmt.lie-correct {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #047857 !important;
+    font-weight: bold;
+}

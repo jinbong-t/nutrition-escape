@@ -352,20 +352,14 @@
     <div class="quiz-stage hidden" id="r1-q3">
         <div class="quiz-label">📜 문제 3 / 3 — 거짓말 찾기!</div>
         <div class="quiz-question">잠보의 방에서 <strong>비밀 일기장</strong>을 발견했습니다! 하지만 한 문장이 <span class="lie-highlight">거짓말</span>이에요. 찾아주세요!</div>
-        <div class="note-box">
+        <div class="note-box secret-diary">
             <div class="note-title">📔 잠보의 비밀 일기</div>
             <div class="note-statements">
-                <div class="note-stmt" data-num="1">① 탄수화물은 우리 몸의 주된 에너지원이다.</div>
-                <div class="note-stmt" data-num="2">② 밥, 빵, 감자에는 다당류(녹말)가 풍부하다.</div>
-                <div class="note-stmt" data-num="3">③ 단당류는 천천히 소화되어 에너지가 오래 지속된다.</div>
-                <div class="note-stmt" data-num="4">④ 탄수화물이 부족하면 기운이 없고 집중력이 떨어진다.</div>
+                <div class="note-stmt" onclick="checkLie(1, this, false)">탄수화물은 우리 몸의 주된 에너지원이다.</div>
+                <div class="note-stmt" onclick="checkLie(1, this, false)">밥, 빵, 감자에는 다당류(녹말)가 풍부하다.</div>
+                <div class="note-stmt" onclick="checkLie(1, this, true)">단당류는 천천히 소화되어 에너지가 오래 지속된다.</div>
+                <div class="note-stmt" onclick="checkLie(1, this, false)">탄수화물이 부족하면 기운이 없고 집중력이 떨어진다.</div>
             </div>
-        </div>
-        <div class="lie-choices">
-            <button class="lie-btn" onclick="checkLie(1, this, false)">① 번이 거짓말!</button>
-            <button class="lie-btn" onclick="checkLie(1, this, false)">② 번이 거짓말!</button>
-            <button class="lie-btn" onclick="checkLie(1, this, true)">③ 번이 거짓말!</button>
-            <button class="lie-btn" onclick="checkLie(1, this, false)">④ 번이 거짓말!</button>
         </div>
         <div class="lie-explain hidden" id="lie-explain-1">💡 단당류(포도당·과당)는 <strong>빠르게</strong> 흡수되어 혈당이 급등했다 급락합니다. 오래 지속되는 것은 <strong>다당류</strong>예요!</div>
         <button class="hint-btn" id="hint-1-3" onclick="showHint('1-3', this)">💡 힌트 (1회용)</button>

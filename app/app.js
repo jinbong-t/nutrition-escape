@@ -464,8 +464,12 @@ function checkOption(roomNum, qNum, btn, result) {
 // 거짓말 찾기 (방1)
 // ===========================
 function checkLie(roomNum, btn, isCorrect) {
-    const allBtns = btn.closest('.lie-choices').querySelectorAll('.lie-btn');
-    allBtns.forEach(b => b.disabled = true);
+    const container = btn.closest('.lie-choices') || btn.closest('.note-statements');
+    const allBtns = container.querySelectorAll('.lie-btn, .note-stmt');
+    allBtns.forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+    });
     if (isCorrect) {
         btn.classList.add('lie-correct');
         const explain = document.getElementById(`lie-explain-${roomNum}`);
@@ -480,7 +484,7 @@ function checkLie(roomNum, btn, isCorrect) {
         const hintBtn = btn.closest('.quiz-stage').querySelector('.hint-btn');
         if (hintBtn) hintBtn.classList.add('show-hint');
 
-        setTimeout(() => { closeModal(); allBtns.forEach(b => { b.disabled = false; b.classList.remove('lie-wrong'); }); }, 2000);
+        setTimeout(() => { closeModal(); allBtns.forEach(b => { b.disabled = false; b.style.pointerEvents = 'auto'; b.classList.remove('lie-wrong'); }); }, 2000);
     }
 }
 
