@@ -225,7 +225,7 @@
     #r6-ox-container button { width: 60px !important; height: 60px !important; font-size: 2.5rem !important; border-radius: 10px !important; border-width: 3px !important; }
 
     /* Boss Room & Witch Modal */
-    .witch-boss { font-size: 5rem !important; margin: 10px 0 !important; }
+    .witch-boss { font-size: 4.5rem !important; margin: 5px 0 !important; }
     .modal-content { padding: 20px !important; }
     .modal.witch .modal-content b { font-size: 1.4rem !important; word-break: keep-all !important; margin-bottom: 8px !important; }
     .modal.witch .modal-content span { font-size: 0.95rem !important; word-break: keep-all !important; }
@@ -239,6 +239,14 @@
     .quiz-question.spooky-text { font-size: 0.8rem !important; line-height: 1.4 !important; }
     
     /* Bone Game */
-    #bone-game-container { height: 220px !important; }
+    #bone-game-container { height: 260px !important; width: 100% !important; max-width: 450px !important; margin: 0 auto !important; }
     .bone-item { font-size: 2.5rem !important; }
+    #room-screen-5 { text-align: center; }
+    #room-screen-5 .btn { margin: 10px auto !important; display: block !important; }
+    
+    /* Ending Screen */
+    .ending-dwarfs { display: none !important; }
+    .fairytale-header { font-size: 1.2rem !important; margin-bottom: 10px !important; }
+    .final-code-desc { font-size: 0.95rem !important; }
+    #ending-text { font-size: 0.85rem !important; line-height: 1.4 !important; }
 }
