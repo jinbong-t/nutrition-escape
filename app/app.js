@@ -254,7 +254,12 @@ function typeWriter() {
 
 function nextIntroPage() {
     if (isTyping) return;
-    if (introPageIndex >= introPages.length - 1) return; // 마지막 페이지면 무시
+    if (introPageIndex >= introPages.length - 1) {
+        // 마지막 페이지에서 클릭하면 바로 게임 시작 (버튼 클릭 안 먹히는 현상 대비)
+        showScreen('hub'); 
+        updateHubRooms();
+        return;
+    }
     
     introControls.classList.add('hidden');
     introTextEl.innerHTML = ''; // clear text
