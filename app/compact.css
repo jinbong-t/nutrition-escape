@@ -1,0 +1,105 @@
+
+/* =========================================
+   MOBILE COMPACT OPTIMIZATION 
+   (Forced to fit on one screen)
+========================================= */
+@media (max-width: 768px) {
+    /* Reduce top HUD */
+    .hub-hud {
+        padding: 5px 10px !important;
+    }
+    .hud-char {
+        width: 35px !important; height: 35px !important;
+    }
+    .hud-title-area h2 {
+        font-size: 1rem !important; margin-bottom: 0px !important;
+    }
+    .hud-subtitle {
+        font-size: 0.65rem !important; margin-bottom: 0px !important;
+    }
+    .code-slots {
+        gap: 2px !important;
+    }
+    .code-slot {
+        width: 18px !important; height: 18px !important; font-size: 0.65rem !important;
+    }
+
+    /* Reduce Mission Banner */
+    .hub-mission-banner {
+        padding: 6px 8px !important; margin: 5px !important; gap: 5px !important;
+        flex-direction: row !important;
+        align-items: center !important;
+    }
+    .mission-banner-img {
+        width: 45px !important; height: 45px !important;
+    }
+    .mission-banner-text h3 {
+        font-size: 0.85rem !important; margin-bottom: 2px !important;
+    }
+    .mission-banner-text p {
+        font-size: 0.65rem !important;
+    }
+    .banner-deco {
+        font-size: 0.7rem !important; margin: 0 2px !important;
+    }
+
+    /* Reduce Stages Grid & Cards */
+    .stages-section-title {
+        font-size: 0.9rem !important;
+        margin: 5px 10px 2px !important;
+    }
+    .stages-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 4px !important;
+        padding: 0 5px 5px !important;
+    }
+    .stage-card {
+        padding: 5px 4px 4px !important;
+        border-radius: 8px !important;
+    }
+    .stage-num-badge {
+        width: 16px !important; height: 16px !important;
+        font-size: 0.6rem !important;
+        top: -6px !important; left: -6px !important;
+    }
+    .stage-img-wrap {
+        width: 40px !important; height: 40px !important;
+        margin: 0 auto 3px !important;
+        border-width: 2px !important;
+    }
+    .stage-name {
+        font-size: 0.75rem !important;
+        margin-bottom: 1px !important;
+    }
+    .stage-nutrient-badge {
+        padding: 1px 4px !important;
+        font-size: 0.55rem !important;
+        margin-bottom: 3px !important;
+        border-width: 1px !important;
+    }
+    .stage-enter-btn {
+        padding: 3px !important;
+        font-size: 0.65rem !important;
+        border-radius: 4px !important;
+        margin-top: 1px !important;
+    }
+
+    /* Room 7 Final Room Specific Size */
+    #room-7 {
+        grid-column: span 3 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 5px 10px !important;
+    }
+    #room-7 .stage-img-wrap {
+        width: 35px !important; height: 35px !important; margin: 0 !important;
+    }
+    #room-7 .stage-name {
+        font-size: 0.8rem !important; margin: 0 !important;
+    }
+    #room-7 .stage-enter-btn {
+        width: auto !important; padding: 4px 10px !important; margin: 0 !important;
+    }
+}
