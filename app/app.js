@@ -1928,7 +1928,7 @@ function checkR7Stage3() {
     const hasC = r7SelectedVits.includes('C');
     
     if (hasA && hasC) {
-        showModal('🎉 대단해요! 야맹증엔 비타민 A, 괴혈병엔 비타민 C를 정확히 처방했습니다!', true);
+        showModal('🎉 대성공! (비타민 A + 비타민 C)\n마법의 주스를 마시고 형들이 모두 건강해졌어요!', true);
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage3').classList.add('hidden');
@@ -1937,7 +1937,7 @@ function checkR7Stage3() {
         }, 2500);
     } else {
         playWrong();
-        showModal('❌ 오진입니다! 야맹증과 괴혈병을 예방하는 비타민을 다시 확인해보세요.', false);
+        showModal('❌ 맛이 이상해요! 야맹증과 괴혈병을 치료할 진짜 비타민을 다시 골라보세요.', false);
     }
 }
 
