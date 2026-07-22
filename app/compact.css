@@ -180,8 +180,10 @@
        COMPREHENSIVE MINI-GAME MOBILE FIXES
        ========================================= */
     /* Room 4: Dark Room & Carrot */
-    .dark-room-container { height: 160px !important; margin: 0 !important; }
-    #hidden-carrot { right: 10px !important; font-size: 2.2rem !important; bottom: 10px !important; }
+    .dark-room-container { height: 220px !important; margin: 0 auto !important; border-radius: 12px !important; overflow: hidden !important; }
+    .dark-room-content > div { width: 95% !important; height: 150px !important; }
+    .dark-room-content > div > div:not(#hidden-carrot) { font-size: 2.5rem !important; }
+    #hidden-carrot { right: 10px !important; font-size: 2rem !important; bottom: 10px !important; z-index: 20 !important; }
     
     /* Room 1 & 4: Diary Boxes */
     .diary-container { gap: 5px !important; padding: 10px !important; margin-top: 5px !important; }
