@@ -167,7 +167,7 @@
             </div>
 
             <!-- 스페셜: 씩씩이 -->
-            <div class="stage-card" id="room-7" style="grid-column: span 2; background: #f0fdf4; border-color: #22c55e; box-shadow: 0 4px 15px rgba(34,197,94,0.3); display: flex; flex-direction: row; align-items: center; padding: 15px; cursor: pointer;" onclick="clickSsikssiki()">
+            <div class="stage-card" id="room-7" style="grid-column: span 2; background: #f0fdf4; border-color: #22c55e; box-shadow: 0 4px 15px rgba(34,197,94,0.3); display: flex; flex-direction: row; align-items: center; padding: 15px; cursor: pointer;" onclick="enterRoom(7)">
                 <div style="flex: 1; text-align: left;">
                     <div class="stage-name" style="color: #14532d; font-size: 1.3rem; margin-top: 0;">씩씩이 (건강지킴이)</div>
                     <div style="font-size: 0.9rem; color: #166534; margin: 10px 0;">완벽한 영양 밸런스를 가진 난쟁이입니다.<br>씩씩이와 대화하며 응원을 받아보세요!</div>
@@ -195,6 +195,62 @@
         <div class="code-hint-text" id="code-hint-text-hub">6개 방 클리어 시 완성</div>
     </div>
 
+</section>
+
+<!-- ===================== 방 7: 씩씩이의 건강 상담소 (최종 관문) ===================== -->
+<section id="room-screen-7" class="screen hidden" style="background: linear-gradient(135deg, #dcfce7, #86efac);">
+    <div class="room-header">
+        <h2 style="color: #14532d;">방 7: 씩씩이의 종합 훈련소</h2>
+        <button class="btn" style="background: #16a34a;" onclick="showScreen('hub'); resetRoom7();">로비로 돌아가기</button>
+    </div>
+
+    <!-- 1스테이지: 영양 밸런스 저울 -->
+    <div class="quiz-stage hidden" id="r7-stage1">
+        <div class="quiz-label" style="background: #10b981;">⚖️ 1단계: 영양 밸런스 저울</div>
+        <div class="quiz-question">햄버거 세트(탄수화물, 지방, 나트륨 과다)의 불균형을 맞출 영양소 무게추 2개를 올려주세요!</div>
+        
+        <div class="scale-container" id="r7-scale-container">
+            <div class="scale-arm" id="r7-scale-arm"></div>
+            <div class="scale-plate left-plate" id="r7-left-plate">
+                <div class="bad-food">🍔 햄버거 세트<br><span style="font-size:0.7em;">(탄/지/무기질↓)</span></div>
+            </div>
+            <div class="scale-plate right-plate" id="r7-right-plate">
+                <!-- 드롭존 -->
+            </div>
+            <div class="scale-base"></div>
+        </div>
+        
+        <div class="weight-options" id="r7-weights">
+            <div class="weight-item" draggable="true" data-type="vitamin">🍊 비타민</div>
+            <div class="weight-item" draggable="true" data-type="water">💧 물</div>
+            <div class="weight-item" draggable="true" data-type="protein">🥩 단백질</div>
+            <div class="weight-item" draggable="true" data-type="fat">🧈 지방</div>
+        </div>
+    </div>
+
+    <!-- 2스테이지: 영양 폭탄 해체 -->
+    <div class="quiz-stage hidden" id="r7-stage2">
+        <div class="quiz-label" style="background: #ef4444;">💣 2단계: 영양 폭탄 해체</div>
+        <div class="quiz-question">마녀의 폭탄이 작동했습니다! 씩씩이의 외침을 듣고 10초 안에 알맞은 선을 자르세요!</div>
+        
+        <div class="bomb-container">
+            <div class="bomb-timer" id="r7-bomb-timer">00:10</div>
+            <div class="bomb-body">
+                <div class="bomb-wires" id="r7-bomb-wires">
+                    <!-- 와이어들이 동적으로 생성됨 -->
+                </div>
+                <div class="bomb-face">💣</div>
+            </div>
+            <div class="ssikssiki-shout" id="r7-shout-text">"에너지를 내는 가장 중요한 영양소 선을 잘라!!"</div>
+        </div>
+    </div>
+
+    <div class="room-clear hidden" id="r7-clear">
+        <div class="clear-icon" style="font-size: 5rem;">🎉🏆🎉</div>
+        <h2 style="color: #14532d; font-size: 2rem;">완벽해요! 종합 훈련 완료!</h2>
+        <p style="font-size: 1.2rem; margin: 20px 0; color: #166534;">당신은 이제 6대 영양소 마스터입니다!</p>
+        <button class="btn" style="background: #16a34a; font-size: 1.2rem; padding: 15px 30px;" onclick="showScreen('ending')">엔딩 보기</button>
+    </div>
 </section>
 
 <!-- ===================== 방 1: 잠보 (탄수화물) ===================== -->
@@ -768,21 +824,6 @@
         <div class="modal-icon">💡</div>
         <p id="hint-modal-text"></p>
         <button class="btn" onclick="closeHintModal()">닫기</button>
-    </div>
-</div>
-
-<!-- 씩씩이 전용 팝업 (입체감 및 말하는 애니메이션 적용) -->
-<div id="ssikssiki-modal" class="modal">
-    <div class="modal-content" style="background: white; border: 5px solid #16a34a; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; max-width: 450px; padding: 25px 20px 20px;">
-        
-        <div style="position: relative; width: 100%; display: flex; justify-content: center; margin-bottom: 10px;">
-            <img src="../씩씩이 본캐만.png" alt="씩씩이" class="talking-breath" style="height: 350px; width: auto; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transform-origin: bottom center;">
-        </div>
-        
-        <div style="background: #f0fdf4; border-radius: 15px; padding: 20px; text-align: center; width: 100%; border: 2px dashed #4ade80;">
-            <p id="ssikssiki-modal-text" style="font-size: 1.35rem; font-weight: 900; color: #14532d; margin-bottom: 20px; line-height: 1.4;"></p>
-            <button class="btn" style="background: #16a34a; width: 100%; font-size: 1.1rem; padding: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);" onclick="document.getElementById('ssikssiki-modal').classList.remove('active')">알겠어! 👍</button>
-        </div>
     </div>
 </div>
 

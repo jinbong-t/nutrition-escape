@@ -226,8 +226,14 @@ function enterRoom(roomNum) {
         return;
     }
     currentRoom = roomNum;
-    if (!roomQuizState[roomNum]) roomQuizState[roomNum] = 1;
     showScreen(`room-screen-${roomNum}`);
+    
+    if (roomNum === 7) {
+        resetRoom7();
+        return;
+    }
+    
+    if (!roomQuizState[roomNum]) roomQuizState[roomNum] = 1;
     showQuizStage(roomNum, roomQuizState[roomNum]);
 }
 
@@ -1501,4 +1507,195 @@ if (introSection && wrapper3D) {
     });
     introSection.addEventListener('mouseleave', () => { wrapper3D.style.transition = 'transform 0.5s ease'; wrapper3D.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
     introSection.addEventListener('mouseenter', () => { wrapper3D.style.transition = 'none'; });
+}
+
+// ===========================
+// 방 7: 씩씩이의 종합 훈련소 (최종 관문)
+// ===========================
+
+let scaleWeights = [];
+let bombTimerInterval = null;
+let bombTimeLeft = 10;
+let bombTargetType = '';
+
+function resetRoom7() {
+    scaleWeights = [];
+    clearInterval(bombTimerInterval);
+    document.getElementById('r7-stage1').classList.remove('hidden');
+    document.getElementById('r7-stage2').classList.add('hidden');
+    document.getElementById('r7-clear').classList.add('hidden');
+    
+    // 저울 초기화
+    document.getElementById('r7-scale-arm').style.transform = 'translateX(-50%) rotate(15deg)';
+    document.getElementById('r7-left-plate').style.transform = 'translateY(50px)';
+    document.getElementById('r7-right-plate').style.transform = 'translateY(-50px)';
+    document.getElementById('r7-right-plate').innerHTML = '';
+    
+    // 폭탄 초기화
+    document.getElementById('r7-bomb-timer').textContent = '00:10';
+    document.getElementById('r7-bomb-timer').classList.remove('urgent');
+    
+    // 몸에 붙어있는 이벤트 리스너가 중복되지 않도록 먼저 클론
+    const dropzone = document.getElementById('r7-right-plate');
+    const newDropzone = dropzone.cloneNode(false);
+    dropzone.parentNode.replaceChild(newDropzone, dropzone);
+    
+    initScaleDragDrop();
+}
+
+function initScaleDragDrop() {
+    const items = document.querySelectorAll('#r7-weights .weight-item');
+    const dropzone = document.getElementById('r7-right-plate');
+    
+    items.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('type', item.getAttribute('data-type'));
+            e.dataTransfer.setData('text', item.textContent);
+        });
+    });
+    
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.style.background = 'rgba(255,255,255,0.2)';
+    });
+    
+    dropzone.addEventListener('dragleave', (e) => {
+        dropzone.style.background = 'transparent';
+    });
+    
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.style.background = 'transparent';
+        
+        if (scaleWeights.length >= 2) return;
+        
+        const type = e.dataTransfer.getData('type');
+        const text = e.dataTransfer.getData('text');
+        if (!type) return;
+        
+        if (scaleWeights.includes(type)) {
+            showModal('이미 올린 영양소입니다!', false);
+            return;
+        }
+        
+        scaleWeights.push(type);
+        const weightEl = document.createElement('div');
+        weightEl.className = 'weight-item';
+        weightEl.style.cursor = 'default';
+        weightEl.textContent = text;
+        dropzone.appendChild(weightEl);
+        
+        checkScaleBalance();
+    });
+}
+
+function checkScaleBalance() {
+    if (scaleWeights.length < 2) {
+        document.getElementById('r7-scale-arm').style.transform = 'translateX(-50%) rotate(5deg)';
+        document.getElementById('r7-left-plate').style.transform = 'translateY(15px)';
+        document.getElementById('r7-right-plate').style.transform = 'translateY(-15px)';
+        return;
+    }
+    
+    const valid = ['protein', 'vitamin', 'water'];
+    const isCorrect = scaleWeights.every(w => valid.includes(w));
+    
+    if (isCorrect) {
+        document.getElementById('r7-scale-arm').style.transform = 'translateX(-50%) rotate(0deg)';
+        document.getElementById('r7-left-plate').style.transform = 'translateY(0px)';
+        document.getElementById('r7-right-plate').style.transform = 'translateY(0px)';
+        
+        showModal('🎉 완벽해요! 햄버거의 불균형을 비타민과 단백질/물로 훌륭하게 맞췄습니다!', true);
+        setTimeout(() => {
+            closeModal();
+            document.getElementById('r7-stage1').classList.add('hidden');
+            startBombStage();
+        }, 2000);
+    } else {
+        showModal('❌ 앗! 그 조합으로는 밸런스가 맞지 않아요. 햄버거 세트에 이미 탄수화물과 지방이 많아요!', false);
+        setTimeout(() => {
+            closeModal();
+            resetRoom7();
+        }, 2000);
+    }
+}
+
+function startBombStage() {
+    document.getElementById('r7-stage2').classList.remove('hidden');
+    bombTimeLeft = 10;
+    
+    const wiresContainer = document.getElementById('r7-bomb-wires');
+    wiresContainer.innerHTML = '';
+    
+    const wireTypes = [
+        { type: 'carbs', color: '#f59e0b', name: '탄수화물 (노랑)' },
+        { type: 'protein', color: '#ef4444', name: '단백질 (빨강)' },
+        { type: 'fat', color: '#3b82f6', name: '지방 (파랑)' },
+        { type: 'vitamin', color: '#10b981', name: '비타민 (초록)' }
+    ];
+    
+    const targetIdx = Math.floor(Math.random() * wireTypes.length);
+    const target = wireTypes[targetIdx];
+    bombTargetType = target.type;
+    
+    let shout = '';
+    if (target.type === 'carbs') shout = '"에너지를 내는 가장 중요한 영양소 선을 잘라!!"';
+    else if (target.type === 'protein') shout = '"몸의 근육을 만들고 상처를 회복하는 선을 잘라!!"';
+    else if (target.type === 'fat') shout = '"체온을 유지하고 에너지를 저장하는 선을 잘라!!"';
+    else if (target.type === 'vitamin') shout = '"몸의 기능을 조절하고 병을 예방하는 선을 잘라!!"';
+    
+    document.getElementById('r7-shout-text').textContent = shout;
+    
+    wireTypes.forEach(wire => {
+        const el = document.createElement('div');
+        el.className = 'wire';
+        el.style.background = wire.color;
+        el.onclick = () => cutWire(el, wire.type);
+        wiresContainer.appendChild(el);
+    });
+    
+    clearInterval(bombTimerInterval);
+    document.getElementById('r7-bomb-timer').classList.remove('urgent');
+    bombTimerInterval = setInterval(updateBombTimer, 1000);
+    updateBombTimer();
+}
+
+function updateBombTimer() {
+    document.getElementById('r7-bomb-timer').textContent = `00:${bombTimeLeft < 10 ? '0'+bombTimeLeft : bombTimeLeft}`;
+    
+    if (bombTimeLeft <= 3) {
+        document.getElementById('r7-bomb-timer').classList.add('urgent');
+    }
+    
+    if (bombTimeLeft <= 0) {
+        clearInterval(bombTimerInterval);
+        explodeBomb();
+    }
+    bombTimeLeft--;
+}
+
+function cutWire(wireEl, type) {
+    if (bombTimeLeft < 0 || wireEl.classList.contains('cut')) return;
+    
+    wireEl.classList.add('cut');
+    clearInterval(bombTimerInterval);
+    
+    if (type === bombTargetType) {
+        showModal('🎉 휴! 정확한 영양소를 알고 계시네요! 폭탄 해체 성공!', true);
+        setTimeout(() => {
+            closeModal();
+            document.getElementById('r7-stage2').classList.add('hidden');
+            document.getElementById('r7-clear').classList.remove('hidden');
+        }, 2000);
+    } else {
+        explodeBomb();
+    }
+}
+
+function explodeBomb() {
+    showModal('💥 펑!!! 잘못된 선을 잘랐거나 시간이 초과되었습니다!', false);
+    setTimeout(() => {
+        closeModal();
+        startBombStage(); 
+    }, 2000);
 }
