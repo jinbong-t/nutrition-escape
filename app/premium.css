@@ -885,3 +885,66 @@ h2 {
 .word-wrap { display: inline-block; white-space: nowrap; }
 #intro-text, .book-body { word-break: keep-all !important; overflow-wrap: break-word !important; }
 
+/* ===== 초강력 모바일 전체 최적화 (사용자 요청 사항) ===== */
+@media (max-width: 600px) {
+    /* 모달 팝업 */
+    .modal-content {
+        padding: 15px !important;
+        border-radius: 12px !important;
+        width: 92% !important;
+        max-width: 92% !important;
+    }
+    #modal-icon { font-size: 2rem !important; margin-bottom: 5px !important; }
+    #modal-text { font-size: 0.9rem !important; margin-bottom: 10px !important; line-height: 1.4 !important; }
+    
+    /* 퀴즈 박스 및 컨테이너 */
+    .quiz-stage {
+        padding: 10px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* 화면 여백 최소화 */
+    [id^="room-screen-"] {
+        padding: 5px 8px !important;
+        gap: 6px !important;
+        justify-content: flex-start !important;
+    }
+    
+    .room-header h2 { font-size: 1.1rem !important; }
+    .room-header { margin-bottom: 5px !important; }
+    
+    /* 드래그 카드 콤팩트화 */
+    .drag-card {
+        padding: 6px 8px !important;
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
+        border-width: 2px !important;
+        margin: 2px !important;
+    }
+    
+    /* 드래그 드롭 통 */
+    .classify-bins { gap: 6px !important; flex-direction: row !important; }
+    .classify-bin { padding: 6px !important; min-height: 80px !important; border-radius: 10px !important; border-width: 2px !important; }
+    .bin-label { font-size: 0.8rem !important; margin-bottom: 4px !important; }
+    
+    /* 버튼 공통 최적화 */
+    .btn, .option-btn {
+        padding: 8px 12px !important;
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    /* 질문 텍스트 및 대화 */
+    .quiz-question, .speech-bubble, .story-text {
+        font-size: 0.8rem !important;
+        line-height: 1.4 !important;
+        padding: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* 라벨, 힌트 */
+    .quiz-label { font-size: 0.8rem !important; padding: 4px 8px !important; margin-bottom: 6px !important; }
+    .hint-btn { padding: 4px 8px !important; font-size: 0.75rem !important; margin-top: 2px !important; }
+}
+

@@ -521,9 +521,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initDragAndDrop() {
     document.querySelectorAll('.drag-card').forEach(card => {
+        // --- 데스크탑 (HTML5 Drag & Drop) ---
         card.addEventListener('dragstart', e => { r1DraggedCard = card; card.classList.add('dragging'); });
         card.addEventListener('dragend', () => { card.classList.remove('dragging'); r1DraggedCard = null; });
+        
+        // --- 모바일 (Touch Events) ---
+        let currentX = 0, currentY = 0;
+        let initialX = 0, initialY = 0;
+        
+        card.addEventListener('touchstart', e => {
+            r1DraggedCard = card;
+            card.classList.add('dragging');
+            initialX = e.touches[0].clientX - currentX;
+            initialY = e.touches[0].clientY - currentY;
+            e.preventDefault(); // 스크롤 방지
+        }, { passive: false });
+        
+        card.addEventListener('touchmove', e => {
+            if (!r1DraggedCard) return;
+            currentX = e.touches[0].clientX - initialX;
+            currentY = e.touches[0].clientY - initialY;
+            card.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.1)`;
+            card.style.zIndex = 1000;
+            e.preventDefault();
+        }, { passive: false });
+        
+        card.addEventListener('touchend', e => {
+            if (!r1DraggedCard) return;
+            card.classList.remove('dragging');
+            
+            // 현재 터치 위치에 있는 요소 찾기 (자신을 잠깐 숨김)
+            card.style.visibility = 'hidden';
+            const touch = e.changedTouches[0];
+            const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+            card.style.visibility = 'visible';
+            
+            // 위치 리셋
+            currentX = 0; currentY = 0;
+            card.style.transform = '';
+            card.style.zIndex = '';
+            
+            // 드롭 가능한 영역인지 확인 (.classify-bin 또는 .classify-source)
+            const zone = dropTarget ? dropTarget.closest('.classify-bin, .classify-source') : null;
+            if (zone) {
+                if (zone.classList.contains('classify-bin')) {
+                    zone.querySelector('.bin-content').appendChild(r1DraggedCard);
+                } else {
+                    zone.appendChild(r1DraggedCard);
+                }
+            }
+            r1DraggedCard = null;
+        });
     });
+
+    // 영역 자체에 대한 HTML5 드래그 앤 드롭 이벤트
     document.querySelectorAll('.classify-bin, .classify-source').forEach(zone => {
         zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
         zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
@@ -533,6 +584,7 @@ function initDragAndDrop() {
             if (!r1DraggedCard) return;
             if (zone.classList.contains('classify-bin')) zone.querySelector('.bin-content').appendChild(r1DraggedCard);
             else zone.appendChild(r1DraggedCard);
+            r1DraggedCard = null; // 드롭 후 초기화 추가
         });
     });
 }
