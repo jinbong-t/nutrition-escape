@@ -211,6 +211,14 @@
     .bin-label { font-size: 0.85rem !important; padding: 4px !important; }
     .bin-content { min-height: 80px !important; padding: 5px !important; gap: 4px !important; }
     
+    /* Order Matching Game (Room 2) */
+    .order-area { gap: 8px !important; }
+    .order-source { gap: 6px !important; }
+    .order-card { padding: 8px 10px !important; font-size: 0.8rem !important; border-radius: 8px !important; border-width: 2px !important; }
+    .order-result { gap: 6px !important; }
+    .order-slot { padding: 6px 10px !important; min-width: 80px !important; font-size: 0.8rem !important; border-width: 2px !important; border-radius: 8px !important; }
+    .slot-num { font-size: 1.1rem !important; min-width: 18px !important; }
+    
     /* Room 6: OX Quiz */
     #r6-ox-container { padding: 10px !important; margin-top: 5px !important; }
     #r6-ox-question { font-size: 0.9rem !important; min-height: unset !important; margin-bottom: 10px !important; }
