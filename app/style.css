@@ -2554,12 +2554,14 @@ h2 {
 /* 방 5 뼈 게임 고도화 효과 */
 .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
 @keyframes shake { 10%, 90% { transform: translate3d(-3px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
-.shake-player { animation: shakePlayer 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-@keyframes shakePlayer { 
+.shake-player-hit { animation: shakePlayerHit 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shakePlayerHit { 
+    0% { filter: drop-shadow(0 0 30px red) brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(5); }
     10%, 90% { transform: translateX(calc(-50% - 3px)); } 
     20%, 80% { transform: translateX(calc(-50% + 4px)); } 
     30%, 50%, 70% { transform: translateX(calc(-50% - 6px)); } 
     40%, 60% { transform: translateX(calc(-50% + 6px)); } 
+    100% { filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.3)); transform: translateX(-50%); }
 }
 .flash-red { animation: flashRed 0.5s ease-out; }
 @keyframes flashRed { 0% { box-shadow: inset 0 0 100px rgba(239,68,68,0.9); } 100% { box-shadow: none; } }

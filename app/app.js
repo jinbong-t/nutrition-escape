@@ -954,12 +954,10 @@ function handleBoneCollision(item) {
         boneHealth -= 30;
         updateBoneUI();
         
-        // 뼈다귀 캐릭터 흔들림 및 컨테이너 붉은 섬광 효과
-        container.classList.add('flash-red');
-        player.classList.add('shake-player');
+        // 뼈다귀 캐릭터만 흔들림 및 붉은 섬광 효과
+        player.classList.add('shake-player-hit');
         setTimeout(() => {
-            container.classList.remove('flash-red');
-            player.classList.remove('shake-player');
+            player.classList.remove('shake-player-hit');
         }, 500);
         
         const floatText = document.createElement('div');
