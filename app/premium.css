@@ -1061,3 +1061,28 @@ button[onclick^="checkClassifyQ"] {
         padding: 10px 12px !important;
     }
 }
+/* ===== 피드백 반영 3차: 클리어 화면(Room Clear) 글자 및 아이콘 크기 축소 ===== */
+.revealed-letter {
+    width: 60px !important;
+    height: 60px !important;
+    font-size: 1.8rem !important;
+    line-height: 60px !important;
+    border-radius: 12px !important;
+    border-width: 2px !important;
+}
+
+.clear-text {
+    font-size: 1.3rem !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+}
+
+.room-clear p {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 15px !important;
+}
+
+.room-clear {
+    padding: 20px 10px !important;
+}
