@@ -8,12 +8,13 @@
 // ============================================
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyB9PwSC4uPumdiRCR7Kuflf38Rn9yVltho",
+  authDomain: "nutrition-escape.firebaseapp.com",
+  projectId: "nutrition-escape",
+  storageBucket: "nutrition-escape.firebasestorage.app",
+  messagingSenderId: "230313161821",
+  appId: "1:230313161821:web:5f0abb0f0eb6f217cac9b4",
+  measurementId: "G-72H697XLQP"
 };
 
 // Firebase 초기화 (설정값이 있을 때만)
