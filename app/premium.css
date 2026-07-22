@@ -1111,17 +1111,6 @@ button[onclick^="checkClassifyQ"] {
     width: 100% !important;
 }
 /* ===== 피드백 반영 8차: 손전등 문제 모바일 오류 수정 및 메모장(diary-page) 레이아웃 개선 ===== */
-/* 손전등 효과 완전 제거 및 항상 밝게 유지 */
-.dark-overlay {
-    display: none !important;
-}
-.dark-room-content, .dark-room-container {
-    background: #fdf6e3 !important;
-    height: auto !important;
-    min-height: 200px !important;
-    padding-bottom: 20px !important;
-}
-
 /* 메모장(비타민 문제) 레이아웃 겹침 방지 및 폰트 통일 */
 .diary-container {
     gap: 20px !important; /* 겹치지 않도록 간격 넓힘 */
@@ -1139,7 +1128,7 @@ button[onclick^="checkClassifyQ"] {
 
 /* ===== 피드백 반영 9차 ===== */
 .speech-bubble, .story-text { font-size: 1.15rem !important; padding: 15px 20px !important; line-height: 1.6 !important; margin-bottom: 15px !important; }
-#flashlight-cursor { display: none !important; }
+
 .cart-label { background: transparent !important; border: none !important; color: #fbbf24 !important; font-size: 1.1rem !important; }
 .error-table { background: #fffbeb !important; }
 .error-table td { color: #451a03 !important; font-weight: bold !important; text-shadow: none !important; }
