@@ -191,8 +191,9 @@
 
     /* Room 5 & 6: Vending Machine & Market */
     .vending-machine { width: 100% !important; max-width: 250px !important; padding: 10px !important; margin: 0 auto !important; }
-    .vending-glass { height: 120px !important; padding: 5px !important; }
-    .vending-btn-real, .vending-price { font-size: 0.7rem !important; padding: 4px !important; }
+    .vending-glass { height: auto !important; min-height: 120px !important; padding: 10px !important; gap: 10px !important; }
+    .vending-btn-real { font-size: 0.75rem !important; padding: 6px !important; }
+    .vending-price { font-size: 0.7rem !important; padding: 4px !important; margin-top: 5px !important; }
     .market-items { gap: 6px !important; }
     .market-item { padding: 6px 8px !important; font-size: 0.75rem !important; }
     
@@ -248,6 +249,18 @@
     .matching-game { gap: 10px !important; }
     .match-col { gap: 5px !important; }
     .match-item { padding: 6px 8px !important; font-size: 0.8rem !important; line-height: 1.2 !important; border-width: 1px !important; min-height: 40px !important; display: flex; align-items: center; justify-content: center; }
+    
+    /* Witch Boss Image */
+    .witch-boss { width: 130px !important; height: 160px !important; object-fit: cover !important; border-radius: 50% !important; box-shadow: 0 0 15px rgba(147,51,234,0.5); }
+    
+    /* Blender Animation */
+    @keyframes blender-spin {
+        0% { transform: scale(1) rotate(0deg); }
+        25% { transform: scale(0.9) rotate(5deg); }
+        50% { transform: scale(1.1) rotate(-5deg); }
+        75% { transform: scale(0.9) rotate(5deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
     
     /* Ending Screen */
     .ending-dwarfs { display: none !important; }
