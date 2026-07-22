@@ -1,4 +1,25 @@
 /* =========================================
+   MOBILE SCROLL FIX 📱
+   iOS/Android 터치 스크롤 수정
+========================================= */
+html, body {
+    /* 스크롤 허용 (모바일에서 fixed screen 내부 스크롤 때문) */
+    height: 100%;
+}
+
+/* 모든 스크린 - 터치 스크롤 강제 활성화 */
+.screen {
+    -webkit-overflow-scrolling: touch !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+}
+
+/* 이름 입력 오버레이 - 터치 스크롤 막기 (오버레이 자체는 스크롤 불필요) */
+#name-entry-overlay {
+    touch-action: none;
+}
+
+/* =========================================
    MOBILE COMPACT OPTIMIZATION 
    (Forced to fit on one screen)
 ========================================= */
