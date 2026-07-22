@@ -1,4 +1,87 @@
 // ===========================
+// 🔊 사운드 시스템 (Web Audio API)
+// ===========================
+let soundEnabled = true;
+let audioCtx = null;
+
+function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+}
+
+function playTone(frequency, type, duration, gain = 0.3, delay = 0) {
+    if (!soundEnabled) return;
+    try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        osc.type = type;
+        osc.frequency.setValueAtTime(frequency, ctx.currentTime + delay);
+        gainNode.gain.setValueAtTime(gain, ctx.currentTime + delay);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + duration);
+    } catch(e) {}
+}
+
+function playCorrect() {
+    playTone(523, 'sine', 0.15, 0.3, 0);
+    playTone(659, 'sine', 0.15, 0.3, 0.1);
+    playTone(784, 'sine', 0.25, 0.4, 0.2);
+}
+
+function playWrong() {
+    playTone(200, 'sawtooth', 0.15, 0.3, 0);
+    playTone(150, 'sawtooth', 0.25, 0.3, 0.1);
+}
+
+function playClick() {
+    playTone(880, 'sine', 0.06, 0.2, 0);
+}
+
+function playClear() {
+    [523, 659, 784, 1047].forEach((f, i) => playTone(f, 'sine', 0.3, 0.4, i * 0.12));
+}
+
+function playBombSuccess() {
+    playTone(400, 'sine', 0.1, 0.3, 0);
+    playTone(600, 'sine', 0.1, 0.3, 0.1);
+    playTone(800, 'sine', 0.2, 0.4, 0.2);
+    playTone(1000, 'sine', 0.4, 0.5, 0.3);
+}
+
+function playExplosion() {
+    if (!soundEnabled) return;
+    try {
+        const ctx = getAudioCtx();
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.6, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        src.connect(g); g.connect(ctx.destination);
+        src.start();
+    } catch(e) {}
+}
+
+function playTransition() {
+    playTone(440, 'sine', 0.15, 0.15, 0);
+    playTone(550, 'sine', 0.1, 0.1, 0.1);
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    const btn = document.getElementById('sound-toggle-btn');
+    if (btn) btn.textContent = soundEnabled ? '🔊' : '🔇';
+    if (soundEnabled) playClick();
+}
+
+// ===========================
 // 상태 관리
 // ===========================
 let clearedRooms = [1, 2, 3, 4];
@@ -326,14 +409,15 @@ function checkOption(roomNum, qNum, btn, result) {
     allBtns.forEach(b => b.disabled = true);
     if (result === 'correct') {
         btn.classList.add('correct');
+        playCorrect();
         showModal('🎉 정답입니다!', true);
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, qNum); }, 1500);
     } else {
         btn.classList.add('wrong');
+        playWrong();
         allBtns.forEach(b => { if (b.getAttribute('onclick').includes("'correct'")) b.classList.add('correct'); });
         showModal('😅 틀렸어요! 정답을 확인하고 다시 도전해 보세요.', false);
         
-        // 틀렸을 때 힌트 버튼 표시
         const hintBtn = btn.closest('.quiz-stage').querySelector('.hint-btn');
         if (hintBtn) hintBtn.classList.add('show-hint');
 
@@ -343,6 +427,7 @@ function checkOption(roomNum, qNum, btn, result) {
         }, 2500);
     }
 }
+
 
 // ===========================
 // 거짓말 찾기 (방1)
@@ -1520,8 +1605,11 @@ let bombTimerInterval = null;
 let bombTimeLeft = 10;
 let bombTargetType = '';
 
+let selectedWeights = [];
+
 function resetRoom7() {
     scaleWeights = [];
+    selectedWeights = [];
     clearInterval(bombTimerInterval);
     document.getElementById('r7-stage1').classList.remove('hidden');
     document.getElementById('r7-stage2').classList.add('hidden');
@@ -1533,63 +1621,71 @@ function resetRoom7() {
     document.getElementById('r7-right-plate').style.transform = 'translateY(-50px)';
     document.getElementById('r7-right-plate').innerHTML = '';
     
+    // 무게추 선택 상태 초기화
+    document.querySelectorAll('#r7-weights .weight-item').forEach(el => {
+        el.classList.remove('selected', 'on-plate');
+    });
+    const infoEl = document.getElementById('scale-selected-info');
+    if (infoEl) infoEl.textContent = '영양소를 클릭해서 2개 선택하세요';
+    
     // 폭탄 초기화
     document.getElementById('r7-bomb-timer').textContent = '00:10';
     document.getElementById('r7-bomb-timer').classList.remove('urgent');
-    
-    // 몸에 붙어있는 이벤트 리스너가 중복되지 않도록 먼저 클론
-    const dropzone = document.getElementById('r7-right-plate');
-    const newDropzone = dropzone.cloneNode(false);
-    dropzone.parentNode.replaceChild(newDropzone, dropzone);
-    
-    initScaleDragDrop();
 }
 
-function initScaleDragDrop() {
-    const items = document.querySelectorAll('#r7-weights .weight-item');
-    const dropzone = document.getElementById('r7-right-plate');
+
+
+// 클릭 방식 저울 무게추 선택
+function selectWeight(el) {
+    playClick();
+    const type = el.getAttribute('data-type');
+    if (el.classList.contains('on-plate')) return;
     
-    items.forEach(item => {
-        item.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('type', item.getAttribute('data-type'));
-            e.dataTransfer.setData('text', item.textContent);
-        });
-    });
-    
-    dropzone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropzone.style.background = 'rgba(255,255,255,0.2)';
-    });
-    
-    dropzone.addEventListener('dragleave', (e) => {
-        dropzone.style.background = 'transparent';
-    });
-    
-    dropzone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropzone.style.background = 'transparent';
-        
-        if (scaleWeights.length >= 2) return;
-        
-        const type = e.dataTransfer.getData('type');
-        const text = e.dataTransfer.getData('text');
-        if (!type) return;
-        
-        if (scaleWeights.includes(type)) {
-            showModal('이미 올린 영양소입니다!', false);
-            return;
+    if (el.classList.contains('selected')) {
+        el.classList.remove('selected');
+        selectedWeights = selectedWeights.filter(t => t !== type);
+    } else {
+        if (selectedWeights.length >= 2) {
+            showModal('최대 2개를 선택할 수 있어요!', false); return;
         }
-        
-        scaleWeights.push(type);
+        el.classList.add('selected');
+        selectedWeights.push(type);
+    }
+    
+    const infoEl = document.getElementById('scale-selected-info');
+    if (infoEl) {
+        if (selectedWeights.length === 0) infoEl.textContent = '영양소를 클릭해서 2개 선택하세요';
+        else if (selectedWeights.length === 1) infoEl.textContent = '1개 선택 → 1개 더 선택하세요';
+        else infoEl.textContent = '2개 선택 완료! [저울에 올리기]를 누르세요';
+    }
+}
+
+function addSelectedToScale() {
+    if (selectedWeights.length < 2) {
+        playWrong();
+        showModal('영양소를 2개 선택해주세요!', false); return;
+    }
+    playClick();
+    scaleWeights = [...selectedWeights];
+    
+    const plate = document.getElementById('r7-right-plate');
+    plate.innerHTML = '';
+    selectedWeights.forEach(type => {
+        const srcEl = document.querySelector(`#r7-weights .weight-item[data-type="${type}"]`);
+        if (srcEl) { srcEl.classList.remove('selected'); srcEl.classList.add('on-plate'); }
         const weightEl = document.createElement('div');
         weightEl.className = 'weight-item';
         weightEl.style.cursor = 'default';
-        weightEl.textContent = text;
-        dropzone.appendChild(weightEl);
-        
-        checkScaleBalance();
+        weightEl.style.fontSize = '0.85rem';
+        weightEl.style.padding = '6px 10px';
+        weightEl.textContent = srcEl ? srcEl.textContent : type;
+        plate.appendChild(weightEl);
     });
+    
+    checkScaleBalance();
 }
+
+
 
 function checkScaleBalance() {
     if (scaleWeights.length < 2) {
@@ -1683,6 +1779,7 @@ function cutWire(wireEl, type) {
     clearInterval(bombTimerInterval);
     
     if (type === bombTargetType) {
+        playBombSuccess();
         showModal('🎉 휴! 정확한 영양소를 알고 계시네요! 폭탄 해체 성공!', true);
         setTimeout(() => {
             closeModal();
@@ -1696,9 +1793,11 @@ function cutWire(wireEl, type) {
 }
 
 function explodeBomb() {
+    playExplosion();
     showModal('💥 펑!!! 잘못된 선을 잘랐거나 시간이 초과되었습니다!', false);
     setTimeout(() => {
         closeModal();
         startBombStage(); 
     }, 2000);
 }
+

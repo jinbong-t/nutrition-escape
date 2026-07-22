@@ -9,9 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Orbit&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="premium.css">
 </head>
 <body>
 <div id="game-container">
+
+<!-- 음향 토글 버튼 (항상 최상단 고정) -->
+<button id="sound-toggle-btn" onclick="toggleSound()" title="음향 on/off">🔊</button>
+
 
 <!-- ===================== 대문 ===================== -->
 <div id="door-screen" class="door-screen">
@@ -221,11 +226,13 @@
         </div>
         
         <div class="weight-options" id="r7-weights">
-            <div class="weight-item" draggable="true" data-type="vitamin">🍊 비타민</div>
-            <div class="weight-item" draggable="true" data-type="water">💧 물</div>
-            <div class="weight-item" draggable="true" data-type="protein">🥩 단백질</div>
-            <div class="weight-item" draggable="true" data-type="fat">🧈 지방</div>
+            <div class="weight-item" data-type="vitamin" onclick="selectWeight(this)">🍊 비타민</div>
+            <div class="weight-item" data-type="water" onclick="selectWeight(this)">💧 물</div>
+            <div class="weight-item" data-type="protein" onclick="selectWeight(this)">🥩 단백질</div>
+            <div class="weight-item" data-type="fat" onclick="selectWeight(this)">🧈 지방</div>
         </div>
+        <div id="scale-selected-info">영양소를 클릭해서 2개 선택하세요</div>
+        <button id="scale-add-btn" onclick="addSelectedToScale()">⚖️ 저울에 올리기</button>
     </div>
 
     <!-- 2스테이지: 영양 폭탄 해체 -->
