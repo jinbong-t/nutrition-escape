@@ -199,6 +199,11 @@ function showModal(msg, isCorrect = null) {
 }
 function closeModal() { 
     modal.classList.remove('active', 'success', 'error'); 
+    if (window.nextAction) {
+        const action = window.nextAction;
+        window.nextAction = null;
+        action();
+    }
 }
 
 // 힌트 모달
@@ -1447,19 +1452,30 @@ function checkR6OX(answer) {
         container.style.transform = 'scale(1.05)';
         container.style.transition = 'transform 0.2s';
         
-        showModal(`🎉 정답!\n${q.desc}`, true);
         r6OXIndex++;
         
-        setTimeout(() => {
+        const proceed = () => {
+            if (window.r6OXTimeout) clearTimeout(window.r6OXTimeout);
             container.style.transform = ''; // 원상복구
-            closeModal();
             loadR6OX();
+        };
+        
+        window.nextAction = proceed;
+        showModal(`🎉 정답!\n${q.desc}`, true);
+        
+        window.r6OXTimeout = setTimeout(() => {
+            if (window.nextAction === proceed) {
+                window.nextAction = null;
+                modal.classList.remove('active', 'success', 'error'); 
+                proceed();
+            }
         }, 2000);
     } else {
         // 오답일 때 부르르 떨기
         container.classList.add('ox-shake');
         setTimeout(() => container.classList.remove('ox-shake'), 400);
         
+        window.nextAction = null;
         showModal(`❌ 오답!\n다시 생각해 보세요.`, false);
     }
 }
