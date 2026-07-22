@@ -43,6 +43,17 @@ html, body {
 }
 
 /* =========================================
+   영양전도사 캡슐(알약) 크기 축소
+========================================= */
+.final-letter {
+    font-size: 2rem !important; /* 원래 3.5rem에서 대폭 축소 */
+}
+.final-code-desc {
+    font-size: 1.1rem !important; /* 안내 문구도 함께 축소 */
+    line-height: 1.4 !important;
+}
+
+/* =========================================
    MOBILE COMPACT OPTIMIZATION 
    (Forced to fit on one screen)
 ========================================= */
