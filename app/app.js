@@ -923,6 +923,7 @@ function updateBoneGame() {
 
 function handleBoneCollision(item) {
     const container = document.getElementById('bone-game-container');
+    const player = document.getElementById('bone-player');
     if (item.isGood) {
         boneCombo++;
         boneItemsCaught++;
@@ -942,7 +943,6 @@ function handleBoneCollision(item) {
         setTimeout(() => floatText.remove(), 1000);
         
         // 채워지는 시각 효과 (구멍 메우기)
-        const player = document.getElementById('bone-player');
         const holes = player.querySelectorAll('.bone-hole');
         if (holes.length > 0) holes[0].remove();
         
