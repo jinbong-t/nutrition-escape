@@ -1080,3 +1080,34 @@ button[onclick^="checkClassifyQ"] {
     display: inline-block !important;
     vertical-align: middle !important;
 }
+/* ===== 피드백 반영 7차: 분류하기(드래그) 영역 강제 축소 해제 및 여백 확보 ===== */
+@media (max-width: 600px) {
+    .classify-bins {
+        gap: 12px !important;
+    }
+    .classify-bin {
+        padding: 15px !important;
+        min-height: 150px !important;
+        border-width: 3px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .bin-label {
+        font-size: 1.1rem !important;
+        margin-bottom: 8px !important;
+    }
+    .drag-card {
+        padding: 8px 14px !important;
+        font-size: 0.95rem !important;
+        margin: 4px !important;
+    }
+}
+
+.bin-content {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    min-height: 80px !important;
+    align-content: flex-start !important;
+    width: 100% !important;
+}
