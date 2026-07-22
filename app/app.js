@@ -525,6 +525,18 @@ function initDragAndDrop() {
         card.addEventListener('dragstart', e => { r1DraggedCard = card; card.classList.add('dragging'); });
         card.addEventListener('dragend', () => { card.classList.remove('dragging'); r1DraggedCard = null; });
         
+        // --- 데스크탑 & 모바일 공용 (터치/클릭 폴백) ---
+        card.addEventListener('click', e => {
+            if (r1DraggedCard === card) {
+                card.classList.remove('dragging');
+                r1DraggedCard = null;
+            } else {
+                if (r1DraggedCard) r1DraggedCard.classList.remove('dragging');
+                r1DraggedCard = card;
+                card.classList.add('dragging');
+            }
+        });
+        
         // --- 모바일 (Touch Events) ---
         let currentX = 0, currentY = 0;
         let initialX = 0, initialY = 0;
@@ -551,10 +563,11 @@ function initDragAndDrop() {
             card.classList.remove('dragging');
             
             // 현재 터치 위치에 있는 요소 찾기 (자신을 잠깐 숨김)
-            card.style.visibility = 'hidden';
+            const oldDisplay = card.style.display;
+            card.style.display = 'none';
             const touch = e.changedTouches[0];
             const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-            card.style.visibility = 'visible';
+            card.style.display = oldDisplay;
             
             // 위치 리셋
             currentX = 0; currentY = 0;
@@ -569,12 +582,13 @@ function initDragAndDrop() {
                 } else {
                     zone.appendChild(r1DraggedCard);
                 }
+                playClick(); // 드롭 시 소리 재생 피드백
             }
             r1DraggedCard = null;
         });
     });
 
-    // 영역 자체에 대한 HTML5 드래그 앤 드롭 이벤트
+    // 영역 자체에 대한 HTML5 드래그 앤 드롭 이벤트 및 클릭(터치) 폴백
     document.querySelectorAll('.classify-bin, .classify-source').forEach(zone => {
         zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
         zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
@@ -585,6 +599,21 @@ function initDragAndDrop() {
             if (zone.classList.contains('classify-bin')) zone.querySelector('.bin-content').appendChild(r1DraggedCard);
             else zone.appendChild(r1DraggedCard);
             r1DraggedCard = null; // 드롭 후 초기화 추가
+        });
+        
+        // --- 모바일 및 PC 공용 클릭(터치) 폴백 ---
+        zone.addEventListener('click', e => {
+            if (!r1DraggedCard) return;
+            // 클릭된 곳이 자신이 아니면 이동
+            if (zone.classList.contains('classify-bin')) {
+                zone.querySelector('.bin-content').appendChild(r1DraggedCard);
+            } else {
+                zone.appendChild(r1DraggedCard);
+            }
+            r1DraggedCard.classList.remove('dragging');
+            r1DraggedCard.style.transform = '';
+            r1DraggedCard = null;
+            playClick(); // 이동 성공 피드백
         });
     });
 }
