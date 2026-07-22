@@ -1596,12 +1596,12 @@ function showEnding() {
     showScreen('ending');
     
     // 엔딩 텍스트 초기화 후 타이핑 시작
-    document.getElementById('ending-text').innerHTML = '';
+    document.getElementById('ending-text').textContent = '';
     const dwarfs = document.getElementById('ending-dwarfs');
     if (dwarfs) dwarfs.classList.add('hidden');
     
     endingIdx = 0;
-    setTimeout(typeEnding, 1000);
+    setTimeout(typeEnding, 200);
 }
 
 // ===========================
@@ -1613,10 +1613,13 @@ let endingIdx = 0;
 function typeEnding() {
     const el = document.getElementById('ending-text');
     if (!el) return;
-    if (endingIdx < endingText.length) {
-        const char = endingText.charAt(endingIdx);
-        if (char === '\n') el.appendChild(document.createElement('br'));
-        else el.innerHTML += char;
+    
+    // 이모지(서로게이트 페어)가 깨지지 않도록 배열로 처리
+    const chars = Array.from(endingText);
+    
+    if (endingIdx <= chars.length) {
+        // textContent를 사용하면 \n이 그대로 유지되며 (white-space: pre-line 덕분), innerHTML 버그를 방지함
+        el.textContent = chars.slice(0, endingIdx).join('');
         endingIdx++;
         setTimeout(typeEnding, 40);
     } else {
