@@ -3,7 +3,6 @@
    iOS/Android 터치 스크롤 수정
 ========================================= */
 html, body {
-    /* 스크롤 허용 (모바일에서 fixed screen 내부 스크롤 때문) */
     height: 100%;
 }
 
@@ -11,12 +10,24 @@ html, body {
 .screen {
     -webkit-overflow-scrolling: touch !important;
     overflow-y: auto !important;
-    overscroll-behavior: contain;
+    overflow-x: hidden !important;
+    touch-action: pan-y !important;
 }
 
-/* 이름 입력 오버레이 - 터치 스크롤 막기 (오버레이 자체는 스크롤 불필요) */
-#name-entry-overlay {
-    touch-action: none;
+/* 스크린 내부 요소들도 터치 허용 */
+.screen * {
+    touch-action: pan-y;
+}
+
+/* 버튼/클릭 요소는 모든 방향 터치 허용 */
+.screen button,
+.screen input,
+.screen select,
+.screen textarea,
+.screen [onclick],
+.screen .btn,
+.screen .stage-card {
+    touch-action: manipulation !important;
 }
 
 /* =========================================
