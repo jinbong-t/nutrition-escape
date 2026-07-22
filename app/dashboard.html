@@ -219,10 +219,13 @@
     <div class="header-right">
         <div class="live-badge"><div class="live-dot"></div>LIVE</div>
         <button class="save-btn" id="save-progress-btn" onclick="saveAsImage('tab-progress')">
-            📷 현황 저장
+            📷 현황 이미지
         </button>
         <button class="save-btn" onclick="saveAsImage('tab-ranking')" style="background:linear-gradient(135deg,#8b5cf6,#6366f1);">
-            🏆 순위 저장
+            🏆 순위 이미지
+        </button>
+        <button class="save-btn" onclick="exportToCSV()" style="background:linear-gradient(135deg,#10b981,#059669); color:white;">
+            📊 엑셀 다운로드
         </button>
     </div>
 </header>
@@ -565,6 +568,50 @@ async function saveAsImage(tabId) {
     } finally {
         overlay.classList.remove('active');
     }
+}
+
+// ===========================
+// 📊 엑셀(CSV) 저장
+// ===========================
+function exportToCSV() {
+    if (allStudents.length === 0) {
+        alert("아직 학생 데이터가 없습니다.");
+        return;
+    }
+
+    // CSV 헤더 (한글 깨짐 방지를 위해 BOM 포함)
+    const BOM = "\uFEFF";
+    let csvContent = BOM + "학생 이름,점수,클리어한 방 개수,완료 여부,별점,소감,접속시간,완료시간\n";
+
+    // 데이터 행 생성
+    allStudents.forEach(s => {
+        const _name = s.name || ''; 
+        const _score = s.score || 0;
+        const _rooms = (s.clearedRooms || []).length;
+        const _done = s.completed ? '완료' : '진행중';
+        const _rating = s.rating || '';
+        
+        // 소감에 콤마나 줄바꿈이 있으면 따옴표로 감싸기
+        let _feedback = s.feedback || '';
+        _feedback = _feedback.replace(/"/g, '""');
+        _feedback = `"${_feedback}"`;
+        
+        const _start = s.startedAt && s.startedAt.toDate ? s.startedAt.toDate().toLocaleString('ko-KR') : '';
+        const _end = s.completedAt && s.completedAt.toDate ? s.completedAt.toDate().toLocaleString('ko-KR') : '';
+
+        const row = `${_name},${_score},${_rooms},${_done},${_rating},${_feedback},"${_start}","${_end}"`;
+        csvContent += row + "\n";
+    });
+
+    // 다운로드 트리거
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const dateStr = new Date().toLocaleDateString('ko-KR').replace(/\./g, '').replace(/ /g, '_');
+    link.href = url;
+    link.download = `영양분석관_학생데이터_${dateStr}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
 }
 
 // ===========================
