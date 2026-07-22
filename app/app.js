@@ -1862,9 +1862,9 @@ function checkR7Stage1() {
         return;
     }
     
-    // 씩씩이 식단: 탄 60g * 4 + 단 10g * 4 + 지 5g * 9 = 240 + 40 + 45 = 325
-    if (parseInt(inputVal) === 325) {
-        showModal('🎉 정답입니다! (탄수화물 240 + 단백질 40 + 지방 45 = 325kcal)', true);
+    // 샌드위치 식단: 탄 40g * 4 + 단 20g * 4 + 지 10g * 9 = 160 + 80 + 90 = 330
+    if (parseInt(inputVal) === 330) {
+        showModal('🎉 딩동댕! (탄수화물 160 + 단백질 80 + 지방 90 = 330kcal)\\n씩씩이가 330kcal의 파워를 충전했습니다! 마녀 꼼짝 마!', true);
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage1').classList.add('hidden');
