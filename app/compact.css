@@ -140,14 +140,22 @@
         min-height: unset !important; 
     }
     .quiz-options {
-        gap: 10px !important;
+        gap: 8px !important;
     }
     .option-btn {
-        padding: 12px 14px !important;
-        font-size: 0.9rem !important;
+        padding: 10px 12px !important;
+        font-size: 0.85rem !important;
         border-width: 1.5px !important;
         border-radius: 10px !important;
-        line-height: 1.35 !important;
+        line-height: 1.3 !important;
+    }
+    .word-cards {
+        gap: 6px !important;
+    }
+    .word-card {
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
+        border-radius: 8px !important;
     }
 
     /* Room Header Layout Fix */
