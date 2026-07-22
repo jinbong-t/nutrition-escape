@@ -268,3 +268,5 @@
     .final-code-desc { font-size: 0.95rem !important; }
     #ending-text { font-size: 0.85rem !important; line-height: 1.4 !important; }
 }
+#ending-text { font-size: 0.85rem !important; letter-spacing: -0.5px !important; }
+
