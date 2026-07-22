@@ -65,7 +65,7 @@
 
     <!-- 상단 HUD -->
     <div class="hub-hud">
-        <img class="hud-char" src="../백설공주.png" alt="백설공주" onerror="this.src='assets/snow_white_user.jpg'">
+        <img class="hud-char" src="../백설공주.png" alt="백설공주" onerror="this.src='assets/snow_white_user.jpg'" onclick="hubSkipClick()">
         <div class="hud-info">
             <div class="hud-title">🍎 영양 탐험대</div>
             <div class="hud-progress-text" id="hud-progress-text">0 / 6 방 완료</div>
@@ -181,6 +181,12 @@
             <div class="code-letter" id="code-6"><span class="code-lock">🔒</span></div>
         </div>
         <div class="code-hint-text" id="code-hint-text-hub">6개 방 클리어 시 완성</div>
+    </div>
+
+    <!-- 씩씩이 가이드 -->
+    <div id="ssikssiki-guide" onclick="clickSsikssiki()">
+        <div id="ssikssiki-bubble" class="hidden">공주님, 힘내세요! 형들을 부탁해요!</div>
+        <img src="../씩씩이.png" alt="씩씩이" class="ssikssiki-img">
     </div>
 
 </section>
@@ -686,8 +692,10 @@
         <!-- 마녀 캐릭터 -->
         <img src="../마녀.png" alt="마녀" class="witch-boss" id="witch-boss" onclick="hitWitch()">
         
-        <!-- 바닥(마을) -->
-        <div id="village-ground"></div>
+        <!-- 바닥(마을) -> 씩씩이 보호 -->
+        <div id="village-ground">
+            <img src="../씩씩이.png" alt="씩씩이" class="ssikssiki-defender" id="ssikssiki-defender">
+        </div>
     </div>
     
     <!-- UI 레이어 (하단 콤팩트 대시보드) -->
@@ -705,9 +713,9 @@
             <!-- 타이머 -->
             <div class="boss-timer" id="witch-timer" style="margin: 0 15px; font-size: 1.6rem; min-width: 120px;">20.0초</div>
             
-            <!-- 마을 방어력 -->
+            <!-- 마을 방어력 -> 씩씩이 체력 -->
             <div style="flex: 1; text-align: center;">
-                <div style="font-size:0.9rem; margin-bottom:4px; color: #3b82f6; font-weight: bold;">마을 방어력</div>
+                <div style="font-size:0.9rem; margin-bottom:4px; color: #3b82f6; font-weight: bold;">씩씩이 체력</div>
                 <div class="boss-hp-bar-container" style="border-color: #3b82f6; width: 90%; height: 15px; margin: 0 auto;">
                     <div class="boss-hp-bar" id="village-hp-bar" style="background: #3b82f6;"></div>
                 </div>
@@ -733,6 +741,10 @@
             <p class="final-code-desc">🎉 <strong>영양전도사</strong> 코드 완성! 🎉<br>백설공주가 6대 영양소의 비밀을 모두 밝혀냈습니다!</p>
         </div>
         <div class="book-body" id="ending-text"></div>
+        <div class="ending-dwarfs hidden" id="ending-dwarfs">
+            <img src="../씩씩이.png" alt="씩씩이" class="ending-ssikssiki">
+            <img src="../건강 난쟁이들 단체사진(이걸로).png" alt="건강해진 형들" class="ending-bros">
+        </div>
     </div>
 </section>
 

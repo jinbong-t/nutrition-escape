@@ -235,6 +235,51 @@ function getRoomName(num) {
     return ['', '잠보(탄수화물)', '여림이(단백질)', '부풍이(지방)', '흐림이(비타민)', '저리(무기질)', '바싹이(물)'][num];
 }
 
+// ===========================
+// 씩씩이(막내) 가이드 기능
+// ===========================
+let ssikssikiQuotes = [
+    "공주님, 힘내세요! 형들을 부탁해요!",
+    "저는 매일 규칙적으로 밥을 먹어서 튼튼해요!",
+    "형들이 편식만 하더니 결국 병이 났어요...",
+    "비타민은 과일과 채소에 듬뿍 들어있어요!",
+    "우유를 마시면 뼈가 튼튼해져요!",
+    "물을 자주 마시는 것도 중요해요!"
+];
+
+function clickSsikssiki() {
+    const bubble = document.getElementById('ssikssiki-bubble');
+    if (!bubble) return;
+    
+    bubble.classList.remove('hidden');
+    bubble.textContent = ssikssikiQuotes[Math.floor(Math.random() * ssikssikiQuotes.length)];
+    
+    // 3초 후 말풍선 닫기
+    setTimeout(() => {
+        bubble.classList.add('hidden');
+    }, 3000);
+}
+
+// ===========================
+// 비밀 스킵 기능 (백설공주 클릭)
+// ===========================
+let hubClickCount = 0;
+let hubClickTimer = null;
+function hubSkipClick() {
+    hubClickCount++;
+    if (hubClickTimer) clearTimeout(hubClickTimer);
+    hubClickTimer = setTimeout(() => { hubClickCount = 0; }, 1000);
+    
+    if (hubClickCount >= 5) {
+        hubClickCount = 0;
+        showModal('비밀 스킵! 마녀전으로 즉시 이동합니다.', true);
+        setTimeout(() => {
+            closeModal();
+            startWitchCutscene();
+        }, 1500);
+    }
+}
+
 function showQuizStage(roomNum, stageNum) {
     document.querySelectorAll(`#room-screen-${roomNum} .quiz-stage`).forEach(s => s.classList.add('hidden'));
     const clearEl = document.getElementById(`r${roomNum}-clear`);
@@ -1334,17 +1379,24 @@ function updateWitchGame() {
             item.el.remove();
             junkFoods.splice(i, 1);
             
-            // 마을 데미지 (마구 쏟아지므로 데미지를 1%로 줄여서 오래 버틸 수 있게 함)
+            // 씩씩이(마을) 데미지 (마구 쏟아지므로 데미지를 1%로 줄여서 오래 버틸 수 있게 함)
             villageHp -= 1;
             if (villageHp < 0) villageHp = 0;
             document.getElementById('village-hp-bar').style.width = `${villageHp}%`;
+            
+            // 씩씩이 피격 이펙트 (빨갛게 번쩍임)
+            const defender = document.getElementById('ssikssiki-defender');
+            if (defender) {
+                defender.classList.add('ssikssiki-hit');
+                setTimeout(() => defender.classList.remove('ssikssiki-hit'), 200);
+            }
             
             // 화면 붉게 깜빡임 효과 (타격감)
             area.style.boxShadow = 'inset 0 0 50px rgba(239,68,68,0.9)';
             setTimeout(() => { area.style.boxShadow = ''; }, 200);
             
             if (villageHp <= 0) {
-                endWitchBattle(false, '마을 방어력이 0이 되어 파괴되었습니다! 😭 다시 도전하세요!');
+                endWitchBattle(false, '씩씩이의 체력이 0이 되어 쓰러졌습니다! 😭 다시 도전하세요!');
                 return;
             }
         }
@@ -1406,6 +1458,9 @@ function showEnding() {
     
     // 엔딩 텍스트 초기화 후 타이핑 시작
     document.getElementById('ending-text').innerHTML = '';
+    const dwarfs = document.getElementById('ending-dwarfs');
+    if (dwarfs) dwarfs.classList.add('hidden');
+    
     endingIdx = 0;
     setTimeout(typeEnding, 1000);
 }
@@ -1425,6 +1480,10 @@ function typeEnding() {
         else el.innerHTML += char;
         endingIdx++;
         setTimeout(typeEnding, 40);
+    } else {
+        // 타이핑이 끝나면 난쟁이들 이미지 표시
+        const dwarfs = document.getElementById('ending-dwarfs');
+        if (dwarfs) dwarfs.classList.remove('hidden');
     }
 }
 
