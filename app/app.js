@@ -84,7 +84,7 @@ function toggleSound() {
 // ===========================
 // 상태 관리
 // ===========================
-let clearedRooms = [1, 2, 3, 4];
+let clearedRooms = [];
 let currentRoom = 0;
 let roomQuizState = {};
 
