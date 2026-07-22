@@ -244,6 +244,11 @@
     #room-screen-5 { text-align: center; }
     #room-screen-5 .btn { margin: 10px auto !important; display: block !important; }
     
+    /* Matching Game (Room 3) */
+    .matching-game { gap: 10px !important; }
+    .match-col { gap: 5px !important; }
+    .match-item { padding: 6px 8px !important; font-size: 0.8rem !important; line-height: 1.2 !important; border-width: 1px !important; min-height: 40px !important; display: flex; align-items: center; justify-content: center; }
+    
     /* Ending Screen */
     .ending-dwarfs { display: none !important; }
     .fairytale-header { font-size: 1.2rem !important; margin-bottom: 10px !important; }
