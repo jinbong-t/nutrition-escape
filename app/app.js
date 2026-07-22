@@ -156,6 +156,18 @@ function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     window.scrollTo(0, 0);
+
+    if (id === 'ending') {
+        const endVid = document.getElementById('ending-video');
+        if (endVid) {
+            endVid.muted = false;
+            endVid.play().catch(e => {
+                console.log('Autoplay prevented, keeping muted', e);
+                endVid.muted = true;
+                endVid.play();
+            });
+        }
+    }
 }
 
 const modal = document.getElementById('modal');
