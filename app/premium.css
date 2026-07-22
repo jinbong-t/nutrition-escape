@@ -24,12 +24,11 @@
 body {
     background: var(--bg-dark) !important;
     color: var(--text-bright) !important;
-    font-family: 'Jua', 'Noto Sans KR', sans-serif !important;
+    font-family: 'Gamja Flower', 'Noto Sans KR', sans-serif !important;
 }
 
-/* 제목 & 강조 글시: 필기체 */
 h2, .quiz-question, .quiz-label, .stage-name, .mission-desc, .hud-title, .speech-bubble, .story-text {
-    font-family: 'Jua', 'Noto Sans KR', sans-serif !important;
+    font-family: 'Gamja Flower', 'Noto Sans KR', sans-serif !important;
     letter-spacing: -0.3px;
     line-height: 1.6 !important;
 }
