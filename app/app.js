@@ -221,7 +221,7 @@ function skipIntro() {
 // 허브 / 방 이동
 // ===========================
 function enterRoom(roomNum) {
-    if (roomNum > 1 && roomNum !== 7 && !clearedRooms.includes(roomNum - 1)) {
+    if (roomNum > 1 && !clearedRooms.includes(roomNum - 1)) {
         showModal(`먼저 ${getRoomName(roomNum - 1)} 방을 해결해야 해요!`);
         return;
     }
@@ -1153,7 +1153,9 @@ function clearRoom(roomNum) {
     showScreen('hub');
     updateHubRooms();
     if (clearedRooms.length === 6) {
-        setTimeout(() => { startWitchCutscene(); }, 1200);
+        setTimeout(() => { 
+            showModal('🎉 6대 영양소 코드를 모두 모았습니다!<br><br>이제 하단의 <b>씩씩이 방</b>에 들어가 최종 점검을 받으세요!', true); 
+        }, 1200);
     }
 }
 
@@ -1685,7 +1687,8 @@ function cutWire(wireEl, type) {
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage2').classList.add('hidden');
-            document.getElementById('r7-clear').classList.remove('hidden');
+            // 폭탄을 해체하면 마녀가 화나서 등장!
+            startWitchCutscene();
         }, 2000);
     } else {
         explodeBomb();
