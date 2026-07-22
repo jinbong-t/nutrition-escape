@@ -8,6 +8,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <!-- html2canvas (이미지 저장용) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&family=Gamja+Flower&family=Gowun+Dodum&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,332 +26,273 @@
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
             position: sticky; top: 0; z-index: 100;
+            gap: 12px; flex-wrap: wrap;
         }
-        .header-title {
-            font-family: 'Gamja Flower', cursive;
-            font-size: 1.4rem;
-            color: #ffd700;
-        }
-        .header-subtitle {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-            margin-top: 2px;
-        }
+        .header-title { font-family:'Gamja Flower',cursive; font-size:1.4rem; color:#ffd700; }
+        .header-subtitle { font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:2px; }
+        .header-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
         .live-badge {
-            display: flex; align-items: center; gap: 6px;
-            background: rgba(34,197,94,0.15);
-            border: 1px solid rgba(34,197,94,0.4);
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 0.85rem; color: #4ade80;
-            font-weight: 600;
+            display:flex; align-items:center; gap:6px;
+            background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4);
+            border-radius:20px; padding:6px 14px;
+            font-size:0.82rem; color:#4ade80; font-weight:600;
         }
-        .live-dot {
-            width: 8px; height: 8px;
-            background: #4ade80; border-radius: 50%;
-            animation: livePulse 1.5s infinite;
+        .live-dot { width:8px; height:8px; background:#4ade80; border-radius:50%; animation:livePulse 1.5s infinite; }
+        @keyframes livePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+        /* 저장 버튼 */
+        .save-btn {
+            display:flex; align-items:center; gap:6px;
+            background:linear-gradient(135deg,#f59e0b,#d97706);
+            border:none; border-radius:20px; padding:8px 16px;
+            color:#1a0533; font-size:0.82rem; font-weight:700;
+            cursor:pointer; transition:transform 0.2s, box-shadow 0.2s;
         }
-        @keyframes livePulse {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
+        .save-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(245,158,11,0.4); }
+        .save-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+        /* ---- 탭 ---- */
+        .tab-bar {
+            display:flex; gap:4px;
+            padding:14px 20px 0;
+            border-bottom:1px solid rgba(255,255,255,0.08);
         }
+        .tab-btn {
+            padding:10px 20px; border:none; border-radius:10px 10px 0 0;
+            font-size:0.9rem; font-weight:600; cursor:pointer;
+            transition:all 0.2s; font-family:'Noto Sans KR',sans-serif;
+        }
+        .tab-btn.active {
+            background:rgba(255,255,255,0.1); color:#ffd700;
+            border-bottom:2px solid #ffd700;
+        }
+        .tab-btn:not(.active) { background:transparent; color:rgba(255,255,255,0.4); }
+        .tab-btn:not(.active):hover { color:rgba(255,255,255,0.7); }
+
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
 
         /* ---- 통계 카드 ---- */
         .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            padding: 16px 20px;
+            display:grid; grid-template-columns:repeat(4,1fr);
+            gap:12px; padding:16px 20px;
         }
         .stat-card {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            transition: transform 0.2s;
+            background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+            border-radius:16px; padding:14px; text-align:center; transition:transform 0.2s;
         }
-        .stat-card:hover { transform: translateY(-2px); }
-        .stat-icon { font-size: 1.8rem; margin-bottom: 6px; }
-        .stat-num {
-            font-size: 1.8rem; font-weight: 900;
-            background: linear-gradient(135deg, #ffd700, #ff9500);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+        .stat-card:hover { transform:translateY(-2px); }
+        .stat-icon { font-size:1.6rem; margin-bottom:4px; }
+        .stat-num { font-size:1.8rem; font-weight:900;
+            background:linear-gradient(135deg,#ffd700,#ff9500);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .stat-label { font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:3px; }
 
         /* ---- 필터/검색 ---- */
-        .toolbar {
-            padding: 0 20px 12px;
-            display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-        }
+        .toolbar { padding:0 20px 12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
         .toolbar input {
-            flex: 1; min-width: 200px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 10px;
-            padding: 10px 16px;
-            color: white; font-size: 0.9rem; outline: none;
-            transition: border-color 0.3s;
+            flex:1; min-width:180px;
+            background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+            border-radius:10px; padding:9px 14px; color:white; font-size:0.88rem; outline:none;
         }
-        .toolbar input:focus { border-color: #ffd700; }
-        .toolbar input::placeholder { color: rgba(255,255,255,0.35); }
-        .filter-btn {
-            padding: 10px 16px; border-radius: 10px; border: none;
-            font-size: 0.85rem; cursor: pointer; font-weight: 600;
-            transition: all 0.2s;
-        }
-        .filter-btn.active {
-            background: linear-gradient(135deg,#6366f1,#8b5cf6);
-            color: white;
-        }
-        .filter-btn:not(.active) {
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.6);
-        }
+        .toolbar input::placeholder { color:rgba(255,255,255,0.35); }
+        .filter-btn { padding:9px 14px; border-radius:10px; border:none; font-size:0.82rem; cursor:pointer; font-weight:600; }
+        .filter-btn.active { background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; }
+        .filter-btn:not(.active) { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.6); }
 
         /* ---- 학생 테이블 ---- */
-        .table-wrapper {
-            padding: 0 20px 30px;
-        }
-        .student-table {
-            width: 100%; border-collapse: separate; border-spacing: 0 8px;
-        }
+        .table-wrapper { padding:0 20px 30px; }
+        .student-table { width:100%; border-collapse:separate; border-spacing:0 8px; }
         .student-table thead th {
-            background: rgba(255,255,255,0.05);
-            padding: 10px 14px;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: rgba(255,255,255,0.4);
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background:rgba(255,255,255,0.05); padding:10px 14px;
+            font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;
+            color:rgba(255,255,255,0.4); text-align:left;
+            border-bottom:1px solid rgba(255,255,255,0.08);
         }
-        .student-row {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-        .student-row:hover { background: rgba(255,255,255,0.1); }
-        .student-row td {
-            padding: 12px 14px;
-            vertical-align: middle;
-        }
-        .student-row td:first-child { border-radius: 12px 0 0 12px; }
-        .student-row td:last-child { border-radius: 0 12px 12px 0; }
+        .student-row { background:rgba(255,255,255,0.05); border-radius:12px; transition:background 0.2s; cursor:pointer; }
+        .student-row:hover { background:rgba(255,255,255,0.1); }
+        .student-row td { padding:11px 14px; vertical-align:middle; }
+        .student-row td:first-child { border-radius:12px 0 0 12px; }
+        .student-row td:last-child { border-radius:0 12px 12px 0; }
+        .student-name { font-weight:700; font-size:0.95rem; color:#f1f5f9; }
+        .student-time { font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+        .progress-wrap { display:flex; align-items:center; gap:8px; }
+        .progress-bar-bg { flex:1; height:7px; background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden; }
+        .progress-bar-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899); transition:width 0.5s ease; }
+        .progress-text { font-size:0.75rem; color:rgba(255,255,255,0.5); width:32px; }
+        .status-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; }
+        .status-not-started { background:rgba(100,116,139,0.2); color:#94a3b8; }
+        .status-in-progress { background:rgba(251,191,36,0.15); color:#fbbf24; }
+        .status-completed { background:rgba(34,197,94,0.15); color:#4ade80; }
+        .rooms-dots { display:flex; gap:3px; }
+        .room-dot { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700; }
+        .room-dot.cleared { background:#4ade80; color:#052e16; }
+        .room-dot.not-cleared { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.3); }
+        .feedback-preview { max-width:180px; font-size:0.8rem; color:rgba(255,255,255,0.6); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .no-feedback { color:rgba(255,255,255,0.25); font-style:italic; }
+        .star-display { color:#fbbf24; font-size:0.82rem; }
+        .empty-state { text-align:center; padding:60px 20px; color:rgba(255,255,255,0.3); }
+        .empty-state .empty-icon { font-size:3.5rem; margin-bottom:14px; }
+        .loading { text-align:center; padding:60px; color:rgba(255,255,255,0.5); font-family:'Gamja Flower',cursive; }
+        .spinner { width:40px; height:40px; border:3px solid rgba(255,215,0,0.2); border-top-color:#ffd700; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
+        @keyframes spin { to { transform:rotate(360deg); } }
 
-        /* 이름 셀 */
-        .student-name {
-            font-weight: 700; font-size: 1rem; color: #f1f5f9;
-        }
-        .student-time {
-            font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px;
-        }
+        /* ---- 🏆 순위표 ---- */
+        .ranking-section { padding:16px 20px 30px; }
+        .ranking-title { font-family:'Gamja Flower',cursive; color:#ffd700; font-size:1.2rem; margin-bottom:16px; }
 
-        /* 진행 바 */
-        .progress-wrap {
-            display: flex; align-items: center; gap: 8px;
+        /* 시상대 TOP 3 */
+        .podium-wrap {
+            display:flex; align-items:flex-end; justify-content:center;
+            gap:12px; margin-bottom:28px;
         }
-        .progress-bar-bg {
-            flex: 1; height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 99px; overflow: hidden;
+        .podium-card {
+            text-align:center; border-radius:16px;
+            background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+            padding:16px 20px; flex:1; max-width:160px; position:relative;
+            transition:transform 0.2s;
         }
-        .progress-bar-fill {
-            height: 100%; border-radius: 99px;
-            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
-            transition: width 0.5s ease;
-        }
-        .progress-text { font-size: 0.78rem; color: rgba(255,255,255,0.5); width: 36px; }
+        .podium-card:hover { transform:translateY(-4px); }
+        .podium-card.rank-1 { background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,165,0,0.1)); border-color:rgba(255,215,0,0.4); transform:scale(1.05); }
+        .podium-card.rank-2 { background:linear-gradient(135deg,rgba(192,192,192,0.12),rgba(150,150,150,0.08)); border-color:rgba(192,192,192,0.3); }
+        .podium-card.rank-3 { background:linear-gradient(135deg,rgba(205,127,50,0.12),rgba(165,100,30,0.08)); border-color:rgba(205,127,50,0.3); }
+        .podium-medal { font-size:2rem; margin-bottom:6px; }
+        .podium-name { font-weight:700; font-size:0.95rem; color:#f1f5f9; margin-bottom:4px; word-break:break-all; }
+        .podium-score { font-size:1.3rem; font-weight:900;
+            background:linear-gradient(135deg,#ffd700,#ff9500);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .podium-detail { font-size:0.72rem; color:rgba(255,255,255,0.45); margin-top:4px; }
+        .podium-empty { color:rgba(255,255,255,0.2); font-style:italic; font-size:0.85rem; }
 
-        /* 상태 뱃지 */
-        .status-badge {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 4px 10px; border-radius: 20px;
-            font-size: 0.78rem; font-weight: 600;
+        /* 전체 순위 테이블 */
+        .rank-table { width:100%; border-collapse:separate; border-spacing:0 6px; }
+        .rank-table thead th {
+            padding:8px 12px; font-size:0.72rem; text-transform:uppercase;
+            color:rgba(255,255,255,0.4); text-align:left;
+            border-bottom:1px solid rgba(255,255,255,0.08);
         }
-        .status-not-started { background: rgba(100,116,139,0.2); color: #94a3b8; }
-        .status-in-progress { background: rgba(251,191,36,0.15); color: #fbbf24; }
-        .status-completed { background: rgba(34,197,94,0.15); color: #4ade80; }
+        .rank-row { background:rgba(255,255,255,0.05); border-radius:10px; cursor:pointer; transition:background 0.2s; }
+        .rank-row:hover { background:rgba(255,255,255,0.1); }
+        .rank-row td { padding:10px 12px; vertical-align:middle; }
+        .rank-row td:first-child { border-radius:10px 0 0 10px; }
+        .rank-row td:last-child { border-radius:0 10px 10px 0; }
+        .rank-num { font-size:1.1rem; font-weight:900; color:#ffd700; width:36px; }
+        .rank-num.top3 { font-size:1.3rem; }
 
-        /* 방 진행 표시 */
-        .rooms-dots {
-            display: flex; gap: 4px;
-        }
-        .room-dot {
-            width: 22px; height: 22px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.65rem; font-weight: 700;
-        }
-        .room-dot.cleared { background: #4ade80; color: #052e16; }
-        .room-dot.not-cleared { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); }
+        /* 소감 모달 */
+        .feedback-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center; }
+        .feedback-modal-overlay.active { display:flex; }
+        .feedback-modal { background:linear-gradient(135deg,#1e1b4b,#312e81); border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:28px; max-width:480px; width:90%; position:relative; }
+        .feedback-modal h3 { color:#ffd700; font-family:'Gamja Flower',cursive; font-size:1.2rem; margin-bottom:14px; }
+        .feedback-modal .feedback-full-text { background:rgba(255,255,255,0.07); border-radius:12px; padding:14px; font-family:'Gowun Dodum',sans-serif; line-height:1.7; color:#e2e8f0; font-size:0.92rem; white-space:pre-wrap; }
+        .modal-close { position:absolute; top:14px; right:16px; background:none; border:none; color:rgba(255,255,255,0.5); font-size:1.3rem; cursor:pointer; }
 
-        /* 소감 셀 */
-        .feedback-preview {
-            max-width: 200px;
-            font-size: 0.82rem;
-            color: rgba(255,255,255,0.6);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .no-feedback { color: rgba(255,255,255,0.25); font-style: italic; }
+        /* 저장 중 오버레이 */
+        .saving-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; align-items:center; justify-content:center; flex-direction:column; gap:16px; font-family:'Gamja Flower',cursive; font-size:1.3rem; color:#ffd700; }
+        .saving-overlay.active { display:flex; }
 
-        /* 별점 */
-        .star-display { color: #fbbf24; font-size: 0.85rem; }
-
-        /* 빈 상태 */
-        .empty-state {
-            text-align: center; padding: 60px 20px;
-            color: rgba(255,255,255,0.3);
-        }
-        .empty-state .empty-icon { font-size: 4rem; margin-bottom: 16px; }
-        .empty-state p { font-size: 1rem; font-family: 'Gamja Flower', cursive; }
-
-        /* 소감 상세 모달 */
-        .feedback-modal-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.7); z-index: 9999;
-            align-items: center; justify-content: center;
-        }
-        .feedback-modal-overlay.active { display: flex; }
-        .feedback-modal {
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 20px;
-            padding: 28px;
-            max-width: 480px; width: 90%;
-            position: relative;
-        }
-        .feedback-modal h3 { color: #ffd700; font-family: 'Gamja Flower', cursive; font-size: 1.2rem; margin-bottom: 16px; }
-        .feedback-modal .feedback-full-text {
-            background: rgba(255,255,255,0.07);
-            border-radius: 12px; padding: 16px;
-            font-family: 'Gowun Dodum', sans-serif;
-            line-height: 1.7; color: #e2e8f0; font-size: 0.95rem;
-            white-space: pre-wrap;
-        }
-        .modal-close {
-            position: absolute; top: 14px; right: 16px;
-            background: none; border: none; color: rgba(255,255,255,0.5);
-            font-size: 1.3rem; cursor: pointer;
-        }
-
-        /* 로딩 스피너 */
-        .loading {
-            text-align: center; padding: 60px;
-            color: rgba(255,255,255,0.5); font-family: 'Gamja Flower', cursive;
-        }
-        .spinner {
-            width: 40px; height: 40px;
-            border: 3px solid rgba(255,215,0,0.2);
-            border-top-color: #ffd700;
-            border-radius: 50%; animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Firebase 경고 */
-        .firebase-warning {
-            margin: 12px 20px;
-            background: rgba(239,68,68,0.15);
-            border: 1px solid rgba(239,68,68,0.4);
-            border-radius: 12px;
-            padding: 14px 18px;
-            font-size: 0.85rem; color: #fca5a5;
-            font-family: 'Gowun Dodum', sans-serif;
-            line-height: 1.6;
-        }
-
-        /* 반응형 */
-        @media (max-width: 768px) {
-            .stats-row { grid-template-columns: repeat(2, 1fr); }
-            .student-table thead th:nth-child(n+5) { display: none; }
-            .student-row td:nth-child(n+5) { display: none; }
+        @media (max-width:768px) {
+            .stats-row { grid-template-columns:repeat(2,1fr); }
+            .podium-wrap { gap:8px; }
+            .podium-card { padding:12px; }
         }
     </style>
 </head>
 <body>
 
+<!-- 저장 중 오버레이 -->
+<div class="saving-overlay" id="saving-overlay">
+    <div class="spinner" style="border-top-color:#ffd700;"></div>
+    <div>📸 이미지 저장 중...</div>
+</div>
+
 <!-- 헤더 -->
-<header class="dashboard-header">
+<header class="dashboard-header" id="dashboard-header">
     <div>
         <div class="header-title">📊 선생님 실시간 모니터링</div>
-        <div class="header-subtitle">영양 분석관 공주 - 학생 진행 현황</div>
+        <div class="header-subtitle">영양 분석관 공주 · <span id="header-date"></span></div>
     </div>
-    <div class="live-badge">
-        <div class="live-dot"></div>
-        LIVE
+    <div class="header-right">
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+        <button class="save-btn" id="save-progress-btn" onclick="saveAsImage('tab-progress')">
+            📷 현황 저장
+        </button>
+        <button class="save-btn" onclick="saveAsImage('tab-ranking')" style="background:linear-gradient(135deg,#8b5cf6,#6366f1);">
+            🏆 순위 저장
+        </button>
     </div>
 </header>
 
-<!-- Firebase 경고 (설정 안 됐을 때만 표시) -->
-<div id="firebase-warning" class="firebase-warning" style="display:none;">
-    ⚠️ <strong>Firebase가 설정되지 않았습니다!</strong><br>
-    <code>firebase-config.js</code> 파일을 열어 Firebase 프로젝트 정보를 입력해주세요.<br>
-    👉 <a href="https://console.firebase.google.com/" target="_blank" style="color:#fbbf24;">Firebase Console 바로가기</a>
+<!-- 탭 메뉴 -->
+<div class="tab-bar">
+    <button class="tab-btn active" id="tab-btn-progress" onclick="switchTab('progress')">📋 진행 현황</button>
+    <button class="tab-btn" id="tab-btn-ranking" onclick="switchTab('ranking')">🏆 순위표</button>
 </div>
 
-<!-- 통계 카드 -->
-<div class="stats-row">
-    <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-num" id="stat-total">0</div>
-        <div class="stat-label">전체 학생</div>
+<!-- ======================== 탭1: 진행 현황 ======================== -->
+<div class="tab-content active" id="tab-progress">
+
+    <!-- 통계 카드 -->
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="stat-total">0</div><div class="stat-label">전체 학생</div></div>
+        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-num" id="stat-active">0</div><div class="stat-label">진행 중</div></div>
+        <div class="stat-card"><div class="stat-icon">🎉</div><div class="stat-num" id="stat-completed">0</div><div class="stat-label">완료</div></div>
+        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-num" id="stat-avg-rating">-</div><div class="stat-label">평균 별점</div></div>
     </div>
-    <div class="stat-card">
-        <div class="stat-icon">🔥</div>
-        <div class="stat-num" id="stat-active">0</div>
-        <div class="stat-label">진행 중</div>
+
+    <!-- 필터 -->
+    <div class="toolbar">
+        <input type="text" id="search-input" placeholder="🔍 학생 이름 검색..." oninput="filterStudents()">
+        <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">전체</button>
+        <button class="filter-btn" id="filter-active" onclick="setFilter('active')">진행 중 🔥</button>
+        <button class="filter-btn" id="filter-completed" onclick="setFilter('completed')">완료 ✅</button>
+        <button class="filter-btn" id="filter-feedback" onclick="setFilter('feedback')">소감 있음 💬</button>
     </div>
-    <div class="stat-card">
-        <div class="stat-icon">🎉</div>
-        <div class="stat-num" id="stat-completed">0</div>
-        <div class="stat-label">완료</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-icon">⭐</div>
-        <div class="stat-num" id="stat-avg-rating">-</div>
-        <div class="stat-label">평균 별점</div>
+
+    <!-- 테이블 -->
+    <div class="table-wrapper">
+        <div id="loading" class="loading"><div class="spinner"></div><p>학생 데이터 불러오는 중...</p></div>
+        <table class="student-table" id="student-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>학생</th><th>방 진행</th><th>진행률</th><th>상태</th>
+                    <th>현재 단계</th><th>별점</th><th>활동 소감</th>
+                </tr>
+            </thead>
+            <tbody id="student-tbody"></tbody>
+        </table>
+        <div id="empty-state" class="empty-state" style="display:none;">
+            <div class="empty-icon">🏫</div>
+            <p>아직 접속한 학생이 없어요!<br>학생들이 게임을 시작하면 여기에 나타납니다.</p>
+        </div>
     </div>
 </div>
 
-<!-- 필터 -->
-<div class="toolbar">
-    <input type="text" id="search-input" placeholder="🔍 학생 이름 검색..." oninput="filterStudents()">
-    <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">전체</button>
-    <button class="filter-btn" id="filter-active" onclick="setFilter('active')">진행 중 🔥</button>
-    <button class="filter-btn" id="filter-completed" onclick="setFilter('completed')">완료 ✅</button>
-    <button class="filter-btn" id="filter-feedback" onclick="setFilter('feedback')">소감 있음 💬</button>
-</div>
+<!-- ======================== 탭2: 순위표 ======================== -->
+<div class="tab-content" id="tab-ranking">
+    <div class="ranking-section">
+        <div class="ranking-title">🏆 학생 순위표 (점수 기준)</div>
 
-<!-- 학생 테이블 -->
-<div class="table-wrapper">
-    <div id="loading" class="loading">
-        <div class="spinner"></div>
-        <p>학생 데이터 불러오는 중...</p>
-    </div>
-    <table class="student-table" id="student-table" style="display:none;">
-        <thead>
-            <tr>
-                <th>학생</th>
-                <th>진행 방</th>
-                <th>진행률</th>
-                <th>상태</th>
-                <th>현재 단계</th>
-                <th>별점</th>
-                <th>활동 소감</th>
-            </tr>
-        </thead>
-        <tbody id="student-tbody"></tbody>
-    </table>
-    <div id="empty-state" class="empty-state" style="display:none;">
-        <div class="empty-icon">🏫</div>
-        <p>아직 접속한 학생이 없어요!<br>학생들이 게임을 시작하면 여기에 나타납니다.</p>
+        <!-- TOP 3 시상대 -->
+        <div class="podium-wrap" id="podium-wrap">
+            <!-- JS로 채워짐 -->
+        </div>
+
+        <!-- 전체 순위 테이블 -->
+        <table class="rank-table" id="rank-table">
+            <thead>
+                <tr><th>순위</th><th>학생</th><th>점수</th><th>완료 방</th><th>완료 여부</th><th>별점</th><th>소감</th></tr>
+            </thead>
+            <tbody id="rank-tbody"></tbody>
+        </table>
+        <div id="rank-empty" class="empty-state" style="display:none;">
+            <div class="empty-icon">🏆</div>
+            <p>아직 참여한 학생이 없어요!</p>
+        </div>
     </div>
 </div>
 
@@ -365,77 +308,73 @@
 
 <script>
 // ===========================
-// 대시보드 상태
+// 상태 및 유틸
 // ===========================
 let allStudents = [];
 let currentFilter = 'all';
 let searchQuery = '';
+const roomNames = ['탄수화물','단백질','지방','비타민','무기질','물'];
 
-// 방 이름
-const roomNames = ['탄수화물', '단백질', '지방', '비타민', '무기질', '물'];
+// 헤더 날짜
+document.getElementById('header-date').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'long',day:'numeric'});
 
-// 타임스탬프 → 상대 시간
 function timeAgo(ts) {
     if (!ts) return '-';
     const date = ts.toDate ? ts.toDate() : new Date(ts);
     const diff = Math.floor((Date.now() - date.getTime()) / 1000);
     if (diff < 60) return `${diff}초 전`;
     if (diff < 3600) return `${Math.floor(diff/60)}분 전`;
-    if (diff < 86400) return `${Math.floor(diff/3600)}시간 전`;
-    return `${Math.floor(diff/86400)}일 전`;
+    return `${Math.floor(diff/3600)}시간 전`;
 }
 
-// 별점 → 이모지
 function starsToEmoji(rating) {
     if (!rating || rating === 0) return '<span style="color:rgba(255,255,255,0.25)">-</span>';
-    return '⭐'.repeat(rating) + `<span style="font-size:0.75rem;color:rgba(255,255,255,0.4);"> (${rating}/5)</span>`;
+    return '⭐'.repeat(rating) + `<span style="font-size:0.7rem;color:rgba(255,255,255,0.4);"> (${rating}/5)</span>`;
 }
 
-// 상태 뱃지
-function getStatusBadge(student) {
-    if (student.completed) {
-        return '<span class="status-badge status-completed">🎉 완료</span>';
-    } else if (student.clearedRooms && student.clearedRooms.length > 0) {
-        return '<span class="status-badge status-in-progress">🔥 진행 중</span>';
-    } else {
-        return '<span class="status-badge status-not-started">💤 시작 전</span>';
-    }
+function getStatusBadge(s) {
+    if (s.completed) return '<span class="status-badge status-completed">🎉 완료</span>';
+    if (s.clearedRooms && s.clearedRooms.length > 0) return '<span class="status-badge status-in-progress">🔥 진행 중</span>';
+    return '<span class="status-badge status-not-started">💤 시작 전</span>';
 }
 
-// 방 진행 점 표시
 function getRoomDots(clearedRooms) {
     const cleared = clearedRooms || [];
-    return Array.from({length: 6}, (_, i) => {
-        const isCleared = cleared.includes(i + 1);
-        return `<div class="room-dot ${isCleared ? 'cleared' : 'not-cleared'}" title="${roomNames[i]}">${i+1}</div>`;
+    return Array.from({length:6},(_,i) => {
+        const ok = cleared.includes(i+1);
+        return `<div class="room-dot ${ok?'cleared':'not-cleared'}" title="${roomNames[i]}">${i+1}</div>`;
     }).join('');
 }
 
-// 진행률 계산
-function getProgress(student) {
-    const cleared = (student.clearedRooms || []).length;
-    const extra = student.completed ? 1 : 0;
-    return Math.min(100, Math.round((cleared / 6) * 100));
+function getProgress(s) {
+    return Math.min(100, Math.round(((s.clearedRooms||[]).length / 6) * 100));
 }
 
 // ===========================
-// 테이블 렌더링
+// 탭 전환
+// ===========================
+function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.getElementById(`tab-btn-${tab}`).classList.add('active');
+    if (tab === 'ranking') renderRanking();
+}
+
+// ===========================
+// 진행 현황 렌더링
 // ===========================
 function renderStudents() {
     const tbody = document.getElementById('student-tbody');
-    
-    // 필터 적용
     let filtered = allStudents.filter(s => {
         const matchSearch = !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase());
         let matchFilter = true;
-        if (currentFilter === 'active') matchFilter = !s.completed && (s.clearedRooms || []).length > 0;
+        if (currentFilter === 'active') matchFilter = !s.completed && (s.clearedRooms||[]).length > 0;
         if (currentFilter === 'completed') matchFilter = s.completed;
         if (currentFilter === 'feedback') matchFilter = !!s.feedback;
         return matchSearch && matchFilter;
     });
-
-    // 완료 먼저, 그 다음 진행 중, 미시작 순
-    filtered.sort((a, b) => {
+    filtered.sort((a,b) => {
         const score = s => s.completed ? 2 : (s.clearedRooms||[]).length > 0 ? 1 : 0;
         return score(b) - score(a) || (b.score||0) - (a.score||0);
     });
@@ -445,40 +384,29 @@ function renderStudents() {
         document.getElementById('empty-state').style.display = 'block';
         return;
     }
-
     document.getElementById('student-table').style.display = 'table';
     document.getElementById('empty-state').style.display = 'none';
 
     tbody.innerHTML = filtered.map(s => {
         const progress = getProgress(s);
-        const startTime = s.startedAt ? timeAgo(s.startedAt) : '-';
         const feedbackPreview = s.feedback
-            ? `<span class="feedback-preview" title="${s.feedback.replace(/"/g,'&quot;')}">${s.feedback}</span>`
-            : '<span class="no-feedback">아직 없음</span>';
-        
+            ? `<span class="feedback-preview">${s.feedback}</span>`
+            : '<span class="no-feedback">-</span>';
         return `
         <tr class="student-row" onclick="showFeedbackModal('${s.id}')">
-            <td>
-                <div class="student-name">${s.name}</div>
-                <div class="student-time">⏰ ${startTime}</div>
-            </td>
+            <td><div class="student-name">${s.name}</div><div class="student-time">⏰ ${timeAgo(s.startedAt)}</div></td>
             <td><div class="rooms-dots">${getRoomDots(s.clearedRooms)}</div></td>
-            <td>
-                <div class="progress-wrap">
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width:${progress}%"></div>
-                    </div>
-                    <span class="progress-text">${progress}%</span>
-                </div>
-            </td>
+            <td><div class="progress-wrap">
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${progress}%"></div></div>
+                <span class="progress-text">${progress}%</span>
+            </div></td>
             <td>${getStatusBadge(s)}</td>
-            <td style="font-size:0.82rem;color:rgba(255,255,255,0.6);">${s.currentStage || '-'}</td>
+            <td style="font-size:0.8rem;color:rgba(255,255,255,0.6);">${s.currentStage||'-'}</td>
             <td class="star-display">${starsToEmoji(s.rating)}</td>
             <td>${feedbackPreview}</td>
         </tr>`;
     }).join('');
 
-    // 통계 업데이트
     updateStats();
 }
 
@@ -487,14 +415,72 @@ function updateStats() {
     const completed = allStudents.filter(s => s.completed).length;
     const active = allStudents.filter(s => !s.completed && (s.clearedRooms||[]).length > 0).length;
     const rated = allStudents.filter(s => s.rating && s.rating > 0);
-    const avgRating = rated.length > 0
-        ? (rated.reduce((sum, s) => sum + s.rating, 0) / rated.length).toFixed(1)
-        : '-';
-
+    const avgRating = rated.length > 0 ? (rated.reduce((sum,s) => sum+s.rating,0)/rated.length).toFixed(1) : '-';
     document.getElementById('stat-total').textContent = total;
     document.getElementById('stat-active').textContent = active;
     document.getElementById('stat-completed').textContent = completed;
     document.getElementById('stat-avg-rating').textContent = avgRating;
+}
+
+// ===========================
+// 순위표 렌더링
+// ===========================
+function renderRanking() {
+    // 점수 기준 정렬 (같은 점수면 완료 시간 빠른 순)
+    const sorted = [...allStudents].sort((a,b) => {
+        if ((b.score||0) !== (a.score||0)) return (b.score||0) - (a.score||0);
+        // 완료 시간 비교
+        const aT = a.completedAt ? (a.completedAt.toDate ? a.completedAt.toDate() : new Date(a.completedAt)) : new Date(9999,0);
+        const bT = b.completedAt ? (b.completedAt.toDate ? b.completedAt.toDate() : new Date(b.completedAt)) : new Date(9999,0);
+        return aT - bT;
+    });
+
+    if (sorted.length === 0) {
+        document.getElementById('rank-table').style.display = 'none';
+        document.getElementById('rank-empty').style.display = 'block';
+        return;
+    }
+    document.getElementById('rank-table').style.display = 'table';
+    document.getElementById('rank-empty').style.display = 'none';
+
+    // TOP 3 시상대
+    const medals = ['🥇','🥈','🥉'];
+    const rankClasses = ['rank-1','rank-2','rank-3'];
+    const podiumOrder = [1, 0, 2]; // 2등, 1등, 3등 순서로 배치
+    const podiumWrap = document.getElementById('podium-wrap');
+    podiumWrap.innerHTML = podiumOrder.map(idx => {
+        const s = sorted[idx];
+        if (!s) return `<div class="podium-card" style="opacity:0.3"><div class="podium-medal">${medals[idx]}</div><div class="podium-empty">-</div></div>`;
+        return `
+        <div class="podium-card ${rankClasses[idx]}" onclick="showFeedbackModal('${s.id}')">
+            <div class="podium-medal">${medals[idx]}</div>
+            <div class="podium-name">${s.name}</div>
+            <div class="podium-score">${s.score||0}점</div>
+            <div class="podium-detail">${(s.clearedRooms||[]).length}/6방 ${s.completed?'✅':''}</div>
+            ${s.rating ? `<div style="color:#fbbf24;font-size:0.85rem;margin-top:4px;">${'⭐'.repeat(s.rating)}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    // 전체 순위 테이블
+    const tbody = document.getElementById('rank-tbody');
+    tbody.innerHTML = sorted.map((s, i) => {
+        const rank = i + 1;
+        const isTop3 = rank <= 3;
+        const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}`;
+        const feedbackPreview = s.feedback
+            ? `<span class="feedback-preview">${s.feedback}</span>`
+            : '<span class="no-feedback">-</span>';
+        return `
+        <tr class="rank-row" onclick="showFeedbackModal('${s.id}')">
+            <td><span class="rank-num ${isTop3?'top3':''}">${rankEmoji}</span></td>
+            <td><div class="student-name">${s.name}</div></td>
+            <td style="font-weight:900;font-size:1.1rem;color:#ffd700;">${s.score||0}점</td>
+            <td><div class="rooms-dots">${getRoomDots(s.clearedRooms)}</div></td>
+            <td>${getStatusBadge(s)}</td>
+            <td class="star-display">${starsToEmoji(s.rating)}</td>
+            <td>${feedbackPreview}</td>
+        </tr>`;
+    }).join('');
 }
 
 // ===========================
@@ -530,33 +516,73 @@ function closeFeedbackModal() {
 }
 
 // ===========================
+// 📷 이미지 저장
+// ===========================
+async function saveAsImage(tabId) {
+    // 저장할 탭으로 전환
+    const tab = tabId === 'tab-progress' ? 'progress' : 'ranking';
+    switchTab(tab);
+
+    // 저장 중 표시
+    const overlay = document.getElementById('saving-overlay');
+    overlay.classList.add('active');
+
+    try {
+        await new Promise(r => setTimeout(r, 500)); // 렌더링 대기
+
+        const target = document.getElementById(tabId);
+        const header = document.getElementById('dashboard-header');
+
+        // 임시 캡처용 래퍼 만들기
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);padding:0;width:' + (target.scrollWidth) + 'px;';
+        wrapper.appendChild(header.cloneNode(true));
+        wrapper.appendChild(target.cloneNode(true));
+        document.body.appendChild(wrapper);
+
+        const canvas = await html2canvas(wrapper, {
+            backgroundColor: '#0f0c29',
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            scrollX: 0, scrollY: 0,
+            width: wrapper.scrollWidth,
+            height: wrapper.scrollHeight,
+        });
+
+        document.body.removeChild(wrapper);
+
+        // 다운로드
+        const link = document.createElement('a');
+        const dateStr = new Date().toLocaleDateString('ko-KR').replace(/\./g,'').replace(/ /g,'_');
+        const tabName = tab === 'progress' ? '진행현황' : '순위표';
+        link.download = `영양분석관_${tabName}_${dateStr}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    } catch(e) {
+        console.error('이미지 저장 실패:', e);
+        alert('이미지 저장에 실패했어요. 다시 시도해주세요.');
+    } finally {
+        overlay.classList.remove('active');
+    }
+}
+
+// ===========================
 // Firebase 실시간 리스너
 // ===========================
 function startRealtimeListener() {
     if (!db) {
-        document.getElementById('loading').innerHTML = `
-            <div style="font-size:3rem;">⚠️</div>
-            <p style="margin-top:12px;">Firebase가 연결되지 않았어요!<br>firebase-config.js를 설정해주세요.</p>
-        `;
-        document.getElementById('firebase-warning').style.display = 'block';
+        document.getElementById('loading').innerHTML = `<div style="font-size:2.5rem;">⚠️</div><p style="margin-top:10px;">Firebase가 연결되지 않았어요!<br>firebase-config.js를 설정해주세요.</p>`;
         return;
     }
-
     db.collection('sessions').orderBy('startedAt', 'desc').onSnapshot(snapshot => {
         document.getElementById('loading').style.display = 'none';
-
-        allStudents = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-
+        allStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         renderStudents();
+        // 순위 탭이 열려있으면 같이 갱신
+        if (document.getElementById('tab-ranking').classList.contains('active')) renderRanking();
     }, err => {
-        console.error('Firestore 오류:', err);
-        document.getElementById('loading').innerHTML = `
-            <div style="font-size:2rem;color:#f87171;">❌ 데이터 불러오기 실패</div>
-            <p style="margin-top:8px;font-size:0.85rem;color:rgba(255,255,255,0.4);">${err.message}</p>
-        `;
+        document.getElementById('loading').innerHTML = `<div style="font-size:1.8rem;color:#f87171;">❌ 오류</div><p style="font-size:0.85rem;margin-top:8px;color:rgba(255,255,255,0.4);">${err.message}</p>`;
     });
 }
 
@@ -564,7 +590,7 @@ function startRealtimeListener() {
 // 초기화
 // ===========================
 document.addEventListener('DOMContentLoaded', () => {
-    const ready = initFirebase();
+    initFirebase();
     startRealtimeListener();
 });
 </script>
