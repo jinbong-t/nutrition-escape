@@ -1487,6 +1487,8 @@ function clearRoom(roomNum) {
     if (!clearedRooms.includes(roomNum)) clearedRooms.push(roomNum);
     fillPotion(roomNum);
     revealCode(roomNum);
+    // Firebase 추적
+    if (typeof trackRoomClear === 'function') trackRoomClear(roomNum);
     showScreen('hub');
     updateHubRooms();
     if (clearedRooms.length === 6) {
@@ -1801,6 +1803,8 @@ function showEnding() {
     battleScreen.style.display = 'none';
     
     showScreen('ending');
+    // Firebase 추적
+    if (typeof trackEnding === 'function') trackEnding();
     
     // 엔딩 텍스트 초기화 후 타이핑 시작
     document.getElementById('ending-text').textContent = '';
@@ -1833,6 +1837,10 @@ function typeEnding() {
         // 타이핑이 끝나면 난쟁이들 이미지 표시
         const dwarfs = document.getElementById('ending-dwarfs');
         if (dwarfs) dwarfs.classList.remove('hidden');
+        // 소감 폼 표시
+        if (typeof showFeedbackSection === 'function') {
+            setTimeout(showFeedbackSection, 800);
+        }
     }
 }
 

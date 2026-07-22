@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>영양 분석관 공주 - 6대 영양소와 일곱 난쟁이</title>
     <meta name="description" content="백설공주와 함께 일곱 난쟁이의 영양 상태를 분석하고 치료하는 교육 어드벤처 게임">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Jua&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Pen+Script&family=Orbit&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -13,6 +16,115 @@
     <link rel="stylesheet" href="compact.css?v=1">
 </head>
 <body>
+
+<!-- ===================== 학생 이름 입력 모달 ===================== -->
+<div id="name-entry-overlay" style="
+    position: fixed; inset: 0; z-index: 99999;
+    background: linear-gradient(135deg, #1a0533 0%, #2d1b69 40%, #1e3a5f 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Gamja Flower', cursive;
+">
+    <!-- 별 파티클 배경 -->
+    <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">
+        <div style="position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;top:10%;left:20%;animation:twinkle 2s infinite;"></div>
+        <div style="position:absolute;width:2px;height:2px;background:#ffd700;border-radius:50%;top:30%;left:70%;animation:twinkle 1.5s infinite 0.5s;"></div>
+        <div style="position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;top:60%;left:40%;animation:twinkle 2.5s infinite 1s;"></div>
+        <div style="position:absolute;width:3px;height:3px;background:#ffd700;border-radius:50%;top:80%;left:80%;animation:twinkle 1.8s infinite 0.3s;"></div>
+        <div style="position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;top:50%;left:10%;animation:twinkle 2s infinite 1.2s;"></div>
+    </div>
+    <style>
+        @keyframes twinkle { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.2;transform:scale(0.5)} }
+        @keyframes floatUp { 0%{transform:translateY(20px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+        #name-entry-overlay .name-card {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
+            padding: 36px 32px;
+            text-align: center;
+            width: min(90vw, 400px);
+            animation: floatUp 0.6s ease forwards;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        #name-entry-overlay .name-title {
+            font-size: 1.6rem; color: #ffd700;
+            margin-bottom: 6px; line-height: 1.3;
+        }
+        #name-entry-overlay .name-sub {
+            font-size: 1rem; color: rgba(255,255,255,0.7);
+            margin-bottom: 24px; font-family: 'Gowun Dodum', sans-serif;
+        }
+        #name-entry-overlay input#student-name-input {
+            width: 100%; box-sizing: border-box;
+            padding: 14px 18px; font-size: 1.2rem;
+            border: 2px solid rgba(255,215,0,0.4);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white; font-family: 'Gamja Flower', cursive;
+            outline: none; text-align: center;
+            transition: border-color 0.3s;
+        }
+        #name-entry-overlay input#student-name-input:focus {
+            border-color: #ffd700;
+        }
+        #name-entry-overlay input#student-name-input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+        #name-entry-overlay .name-start-btn {
+            margin-top: 18px; width: 100%;
+            padding: 14px; font-size: 1.2rem;
+            background: linear-gradient(135deg, #ffd700, #ff9500);
+            color: #1a0533; border: none; border-radius: 12px;
+            font-family: 'Gamja Flower', cursive;
+            cursor: pointer; font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+        }
+        #name-entry-overlay .name-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.5);
+        }
+    </style>
+    <div class="name-card">
+        <div style="font-size:3rem;margin-bottom:12px;">📖✨</div>
+        <div class="name-title">영양 분석관 공주의 모험</div>
+        <div class="name-sub">시작하기 전에 정보를 입력해주세요!</div>
+
+        <!-- 학반번호 + 이름 두 칸 -->
+        <div style="display:flex;gap:10px;margin-bottom:0;">
+            <div style="flex:1;text-align:left;">
+                <div style="font-size:0.85rem;color:rgba(255,215,0,0.8);margin-bottom:6px;font-family:'Gowun Dodum',sans-serif;">🏫 학반번호</div>
+                <input
+                    type="text"
+                    id="student-class-input"
+                    placeholder="예) 2501"
+                    maxlength="8"
+                    style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:1.1rem;border:2px solid rgba(255,215,0,0.4);border-radius:12px;background:rgba(255,255,255,0.1);color:white;font-family:'Gamja Flower',cursive;outline:none;text-align:center;transition:border-color 0.3s;"
+                    onfocus="this.style.borderColor='#ffd700'"
+                    onblur="this.style.borderColor='rgba(255,215,0,0.4)'"
+                    onkeydown="if(event.key==='Enter') document.getElementById('student-name-input').focus()"
+                >
+            </div>
+            <div style="flex:2;text-align:left;">
+                <div style="font-size:0.85rem;color:rgba(255,215,0,0.8);margin-bottom:6px;font-family:'Gowun Dodum',sans-serif;">👤 이름</div>
+                <input
+                    type="text"
+                    id="student-name-input"
+                    placeholder="예) 김영양"
+                    maxlength="10"
+                    style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:1.1rem;border:2px solid rgba(255,215,0,0.4);border-radius:12px;background:rgba(255,255,255,0.1);color:white;font-family:'Gamja Flower',cursive;outline:none;text-align:center;transition:border-color 0.3s;"
+                    onfocus="this.style.borderColor='#ffd700'"
+                    onblur="this.style.borderColor='rgba(255,215,0,0.4)'"
+                    onkeydown="if(event.key==='Enter') startWithName()"
+                >
+            </div>
+        </div>
+
+        <button class="name-start-btn" onclick="startWithName()">🚀 모험 시작!</button>
+    </div>
+</div>
+
 <div id="game-container">
 
 <!-- 음향 토글 버튼 (항상 최상단 고정) -->
@@ -877,6 +989,60 @@
             <p class="final-code-desc">🎉 <strong>영양전도사</strong> 코드 완성! 🎉<br>백설공주가 6대 영양소의 비밀을 모두 밝혀냈습니다!</p>
         </div>
         <div class="book-body" id="ending-text"></div>
+
+        <!-- 활동 소감 폼 -->
+        <div id="feedback-section" style="
+            margin-top: 20px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #fcd34d;
+            display: none;
+        ">
+            <div style="font-size:1.3rem;font-weight:bold;color:#78350f;margin-bottom:10px;font-family:'Gamja Flower',cursive;">
+                ✍️ 오늘 활동 어땠나요?
+            </div>
+
+            <!-- 별점 -->
+            <div id="star-rating" style="font-size:2rem;margin-bottom:12px;cursor:pointer;">
+                <span class="star" data-val="1" onclick="setRating(1)">⭐</span>
+                <span class="star" data-val="2" onclick="setRating(2)">⭐</span>
+                <span class="star" data-val="3" onclick="setRating(3)">⭐</span>
+                <span class="star" data-val="4" onclick="setRating(4)">⭐</span>
+                <span class="star" data-val="5" onclick="setRating(5)">⭐</span>
+            </div>
+            <div id="rating-label" style="font-size:0.9rem;color:#92400e;margin-bottom:12px;font-family:'Gowun Dodum',sans-serif;">별을 클릭해서 점수를 매겨주세요!</div>
+
+            <!-- 소감 입력 -->
+            <textarea id="feedback-text"
+                placeholder="오늘 배운 것, 어려웠던 점, 재미있었던 것을 자유롭게 써주세요! 😊"
+                style="
+                    width:100%; box-sizing:border-box;
+                    min-height:100px; padding:12px;
+                    border:2px solid #fcd34d; border-radius:10px;
+                    font-family:'Gowun Dodum',sans-serif;
+                    font-size:1rem; line-height:1.6;
+                    resize:none; outline:none;
+                    background: rgba(255,253,235,0.8);
+                    color:#78350f;
+                "
+            ></textarea>
+
+            <button id="feedback-submit-btn" onclick="handleFeedbackSubmit()" style="
+                margin-top:12px; width:100%; padding:12px;
+                background:linear-gradient(135deg,#f59e0b,#d97706);
+                color:white; border:none; border-radius:10px;
+                font-family:'Gamja Flower',cursive;
+                font-size:1.1rem; font-weight:bold;
+                cursor:pointer;
+                transition: transform 0.2s;
+            ">💌 소감 제출하기</button>
+
+            <!-- 제출 완료 메시지 -->
+            <div id="feedback-done" style="display:none;text-align:center;padding:16px;color:#16a34a;font-family:'Gamja Flower',cursive;font-size:1.2rem;">
+                🎉 소감이 선생님께 전달됐어요! 수고했어요! 🌟
+            </div>
+        </div>
     </div>
 </section>
 
@@ -899,6 +1065,78 @@
 </div>
 
 </div>
+    <script src="firebase-config.js"></script>
+    <script src="tracker.js"></script>
     <script src="app.js?v=2"></script>
+    <script>
+        // Firebase 초기화 (tracker.js보다 나중에 실행)
+        document.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+        });
+
+        // 학생 이름 입력 후 게임 시작
+        function startWithName() {
+            const nameInput = document.getElementById('student-name-input');
+            const name = nameInput.value.trim();
+            if (!name) {
+                nameInput.style.borderColor = '#ef4444';
+                nameInput.placeholder = '⚠️ 이름을 입력해주세요!';
+                setTimeout(() => {
+                    nameInput.style.borderColor = 'rgba(255,215,0,0.4)';
+                    nameInput.placeholder = '예) 홍길동 또는 1모둠 김철수';
+                }, 1500);
+                return;
+            }
+            // 오버레이 숨기기
+            const overlay = document.getElementById('name-entry-overlay');
+            overlay.style.transition = 'opacity 0.5s';
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
+
+            // 트래커 초기화
+            initTracker(name);
+        }
+
+        // 별점 설정
+        let currentRating = 0;
+        const ratingLabels = ['', '😔 어려웠어요', '😐 그냥 그랬어요', '🙂 괜찮았어요', '😊 재미있었어요', '🤩 최고였어요!'];
+        function setRating(val) {
+            currentRating = val;
+            const stars = document.querySelectorAll('#star-rating .star');
+            stars.forEach((s, i) => {
+                s.textContent = i < val ? '⭐' : '☆';
+            });
+            document.getElementById('rating-label').textContent = ratingLabels[val] || '';
+        }
+
+        // 소감 제출
+        async function handleFeedbackSubmit() {
+            const text = document.getElementById('feedback-text').value.trim();
+            if (!text) {
+                document.getElementById('feedback-text').style.borderColor = '#ef4444';
+                setTimeout(() => { document.getElementById('feedback-text').style.borderColor = '#fcd34d'; }, 1500);
+                return;
+            }
+            const btn = document.getElementById('feedback-submit-btn');
+            btn.disabled = true;
+            btn.textContent = '📤 제출 중...';
+
+            await submitFeedback(text, currentRating || 0);
+
+            btn.style.display = 'none';
+            document.getElementById('feedback-done').style.display = 'block';
+            document.getElementById('feedback-text').disabled = true;
+        }
+
+        // 엔딩 화면에서 소감 폼 표시 (typeEnding 완료 후 호출)
+        function showFeedbackSection() {
+            const section = document.getElementById('feedback-section');
+            if (section) {
+                section.style.display = 'block';
+                section.style.animation = 'floatUp 0.6s ease forwards';
+                section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    </script>
 </body>
 </html>
