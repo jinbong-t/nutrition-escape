@@ -221,7 +221,7 @@ function skipIntro() {
 // 허브 / 방 이동
 // ===========================
 function enterRoom(roomNum) {
-    if (roomNum > 1 && !clearedRooms.includes(roomNum - 1)) {
+    if (roomNum > 1 && roomNum !== 7 && !clearedRooms.includes(roomNum - 1)) {
         showModal(`먼저 ${getRoomName(roomNum - 1)} 방을 해결해야 해요!`);
         return;
     }
