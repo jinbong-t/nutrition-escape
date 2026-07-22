@@ -1921,6 +1921,7 @@ function checkR7Stage2() {
             closeModal();
             document.getElementById('r7-stage2').classList.add('hidden');
             document.getElementById('r7-stage3').classList.remove('hidden');
+            initVitaminDrag();
         }, 2000);
     } else {
         playWrong();
@@ -1928,45 +1929,126 @@ function checkR7Stage2() {
     }
 }
 
-function toggleR7Vit(el) {
-    playClick();
-    const val = el.getAttribute('data-val');
+function initVitaminDrag() {
+    const vits = document.querySelectorAll('.r7-vit-btn');
+    const blender = document.getElementById('blender-container');
+    const contents = document.getElementById('blender-contents');
     
-    if (el.classList.contains('in-cart')) {
-        el.classList.remove('in-cart');
-        r7SelectedVits = r7SelectedVits.filter(v => v !== val);
-    } else {
-        if (r7SelectedVits.length >= 2) {
-            showModal('최대 2가지만 선택할 수 있습니다.', false);
-            return;
-        }
-        el.classList.add('in-cart');
-        r7SelectedVits.push(val);
-    }
+    vits.forEach(el => {
+        let startX=0, startY=0, initialX=0, initialY=0;
+        
+        const dragStart = (e) => {
+            if (el.style.display === 'none') return;
+            if (r7SelectedVits.length >= 2) {
+                showModal('최대 2가지만 넣을 수 있습니다!', false);
+                return;
+            }
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, {passive: false});
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+        };
+        
+        const drag = (e) => {
+            e.preventDefault();
+            let currentX, currentY;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX;
+                currentY = e.touches[0].clientY;
+            } else {
+                currentX = e.clientX;
+                currentY = e.clientY;
+            }
+            let diffX = currentX - startX;
+            let diffY = currentY - startY;
+            el.style.transform = `translate(${diffX}px, ${diffY}px)`;
+            el.style.zIndex = 100;
+        };
+        
+        const dragEnd = (e) => {
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchend', dragEnd);
+            
+            const bRect = blender.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            
+            if (
+                elRect.left < bRect.right &&
+                elRect.right > bRect.left &&
+                elRect.top < bRect.bottom &&
+                elRect.bottom > bRect.top
+            ) {
+                el.style.display = 'none';
+                const val = el.getAttribute('data-val');
+                r7SelectedVits.push(val);
+                
+                const div = document.createElement('div');
+                div.textContent = el.innerText;
+                div.style.fontSize = '0.9rem';
+                div.style.background = '#fff';
+                div.style.borderRadius = '5px';
+                div.style.padding = '3px';
+                div.style.color = '#000';
+                contents.appendChild(div);
+                playClick();
+            } else {
+                el.style.transform = `translate(0px, 0px)`;
+                el.style.zIndex = '';
+            }
+        };
+        
+        el.addEventListener('mousedown', dragStart);
+        el.addEventListener('touchstart', dragStart, {passive: false});
+    });
 }
 
 function checkR7Stage3() {
     playClick();
     if (r7SelectedVits.length !== 2) {
-        showModal('비타민 2가지를 선택해주세요!', false);
+        showModal('비타민 2가지를 믹서기에 넣어주세요!', false);
         return;
     }
     
-    const hasA = r7SelectedVits.includes('A');
-    const hasC = r7SelectedVits.includes('C');
+    // Add swirl animation
+    document.getElementById('blender-contents').classList.add('swirl-anim');
+    document.getElementById('blender-container').classList.add('blender-shaking');
     
-    if (hasA && hasC) {
-        showModal('🎉 대성공! (비타민 A + 비타민 C)\n마법의 주스를 마시고 형들이 모두 건강해졌어요!', true);
-        setTimeout(() => {
-            closeModal();
-            document.getElementById('r7-stage3').classList.add('hidden');
-            // 마지막 방 클리어 시 마녀 등장!
-            startWitchCutscene();
-        }, 2500);
-    } else {
-        playWrong();
-        showModal('❌ 맛이 이상해요! 야맹증과 괴혈병을 치료할 진짜 비타민을 다시 골라보세요.', false);
-    }
+    setTimeout(() => {
+        document.getElementById('blender-contents').classList.remove('swirl-anim');
+        document.getElementById('blender-container').classList.remove('blender-shaking');
+        
+        const hasA = r7SelectedVits.includes('A');
+        const hasC = r7SelectedVits.includes('C');
+        
+        if (hasA && hasC) {
+            showModal('🎉 대성공! (비타민 A + 비타민 C)\n마법의 주스를 마시고 형들이 모두 건강해졌어요!', true);
+            setTimeout(() => {
+                closeModal();
+                document.getElementById('r7-stage3').classList.add('hidden');
+                startWitchCutscene();
+            }, 2500);
+        } else {
+            playWrong();
+            showModal('❌ 맛이 이상해요! 야맹증과 괴혈병을 치료할 진짜 비타민을 다시 골라보세요.', false);
+            // Reset for retry
+            r7SelectedVits = [];
+            document.getElementById('blender-contents').innerHTML = '';
+            document.querySelectorAll('.r7-vit-btn').forEach(el => {
+                el.style.display = 'block';
+                el.style.transform = 'translate(0px, 0px)';
+            });
+        }
+    }, 1500);
 }
 
 function explodeBomb() {

@@ -292,12 +292,13 @@
             이 환자에게 시급히 처방해야 할 <b>두 가지 비타민</b>을 선택하세요!
         </div>
         
-        <div class="market-items" id="r7-vitamin-options" style="justify-content: center; margin-top: 15px;">
-            <div class="market-item r7-vit-btn" data-val="A" onclick="toggleR7Vit(this)">비타민 A</div>
-            <div class="market-item r7-vit-btn" data-val="B1" onclick="toggleR7Vit(this)">비타민 B1</div>
-            <div class="market-item r7-vit-btn" data-val="C" onclick="toggleR7Vit(this)">비타민 C</div>
-            <div class="market-item r7-vit-btn" data-val="D" onclick="toggleR7Vit(this)">비타민 D</div>
+        <div class="market-items" id="r7-vitamin-options" style="justify-content: center; margin-top: 15px; position: relative; z-index: 50;">
+            <div class="market-item r7-vit-btn" data-val="A" style="cursor: grab; user-select: none;">비타민 A</div>
+            <div class="market-item r7-vit-btn" data-val="B1" style="cursor: grab; user-select: none;">비타민 B1</div>
+            <div class="market-item r7-vit-btn" data-val="C" style="cursor: grab; user-select: none;">비타민 C</div>
+            <div class="market-item r7-vit-btn" data-val="D" style="cursor: grab; user-select: none;">비타민 D</div>
         </div>
+        <div style="text-align: center; color: #ef4444; font-weight: bold; margin-top: 10px; font-size: 0.9rem;">👇 비타민을 믹서기로 꾹 눌러서 드래그하세요! 👇</div>
         
         <!-- Blender UI -->
         <div id="blender-container" style="margin: 20px auto; width: 140px; height: 160px; border: 4px solid #cbd5e1; border-top: none; border-radius: 0 0 25px 25px; position: relative; background: rgba(255,255,255,0.7); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1);">
