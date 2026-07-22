@@ -54,6 +54,11 @@ h2, .quiz-question, .quiz-label, .stage-name, .mission-desc, .hud-title {
     background-blend-mode: normal !important;
 }
 
+/* 환상적인 빛 효과가 클릭을 막지 않도록 수정 */
+#intro::before {
+    pointer-events: none !important;
+}
+
 
 /* ===== 허브 및 엔딩 배경 ===== */
 #hub {
