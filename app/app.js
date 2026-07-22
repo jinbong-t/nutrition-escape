@@ -1862,9 +1862,9 @@ function checkR7Stage1() {
         return;
     }
     
-    // 탄 60g * 4 + 단 20g * 4 + 지 10g * 9 = 240 + 80 + 90 = 410
-    if (parseInt(inputVal) === 410) {
-        showModal('🎉 정답입니다! (탄수화물 240 + 단백질 80 + 지방 90 = 410kcal)', true);
+    // 씩씩이 식단: 탄 60g * 4 + 단 10g * 4 + 지 5g * 9 = 240 + 40 + 45 = 325
+    if (parseInt(inputVal) === 325) {
+        showModal('🎉 정답입니다! (탄수화물 240 + 단백질 40 + 지방 45 = 325kcal)', true);
         setTimeout(() => {
             closeModal();
             document.getElementById('r7-stage1').classList.add('hidden');
