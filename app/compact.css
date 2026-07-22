@@ -229,4 +229,16 @@
     .modal-content { padding: 20px !important; }
     .modal.witch .modal-content b { font-size: 1.4rem !important; word-break: keep-all !important; margin-bottom: 8px !important; }
     .modal.witch .modal-content span { font-size: 0.95rem !important; word-break: keep-all !important; }
+    
+    /* Lock Dials (Safe) */
+    .safe-dial { transform: scale(0.8) !important; margin: -10px -5px !important; }
+    
+    /* Witch Intro Text (Room 4) */
+    .spooky-witch-emoji img { width: 90px !important; }
+    .quiz-label.spooky-text { margin-left: 70px !important; font-size: 0.75rem !important; padding: 4px !important; }
+    .quiz-question.spooky-text { font-size: 0.8rem !important; line-height: 1.4 !important; }
+    
+    /* Bone Game */
+    #bone-game-container { height: 220px !important; }
+    .bone-item { font-size: 2.5rem !important; }
 }
