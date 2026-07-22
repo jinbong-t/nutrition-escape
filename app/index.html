@@ -185,8 +185,7 @@
 
     <!-- 씩씩이 가이드 -->
     <div id="ssikssiki-guide" onclick="clickSsikssiki()">
-        <div id="ssikssiki-bubble" class="hidden">공주님, 힘내세요! 형들을 부탁해요!</div>
-        <img src="../씩씩이.png" alt="씩씩이" class="ssikssiki-img">
+        <img src="../씩씩이 본캐만.png" alt="씩씩이" class="ssikssiki-img">
     </div>
 
 </section>
@@ -763,6 +762,17 @@
         <div class="modal-icon">💡</div>
         <p id="hint-modal-text"></p>
         <button class="btn" onclick="closeHintModal()">닫기</button>
+    </div>
+</div>
+
+<!-- 씩씩이 전용 팝업 -->
+<div id="ssikssiki-modal" class="modal">
+    <div class="modal-content" style="background: transparent; border: none; box-shadow: none; display: flex; flex-direction: column; align-items: center;">
+        <img src="../씩씩이 본캐만.png" alt="씩씩이" style="height: 350px; margin-bottom: -20px; z-index: 10; animation: bounceIn 0.5s ease-out; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));">
+        <div style="background: white; border: 4px solid #16a34a; border-radius: 20px; padding: 30px 20px 20px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+            <p id="ssikssiki-modal-text" style="font-size: 1.3rem; font-weight: 900; color: #166534; margin-bottom: 20px;"></p>
+            <button class="btn" style="background: #16a34a;" onclick="document.getElementById('ssikssiki-modal').classList.remove('active')">알겠어!</button>
+        </div>
     </div>
 </div>
 

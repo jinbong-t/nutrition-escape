@@ -248,23 +248,12 @@ let ssikssikiQuotes = [
 ];
 
 function clickSsikssiki() {
-    const bubble = document.getElementById('ssikssiki-bubble');
-    if (!bubble) return;
+    const modal = document.getElementById('ssikssiki-modal');
+    const modalText = document.getElementById('ssikssiki-modal-text');
+    if (!modal || !modalText) return;
     
-    // 리플로우(Reflow)를 활용해 애니메이션 재시작
-    bubble.classList.add('hidden');
-    bubble.classList.remove('pop-in');
-    void bubble.offsetWidth;
-    
-    bubble.classList.remove('hidden');
-    bubble.classList.add('pop-in');
-    
-    bubble.textContent = ssikssikiQuotes[Math.floor(Math.random() * ssikssikiQuotes.length)];
-    
-    if (bubble.hideTimer) clearTimeout(bubble.hideTimer);
-    bubble.hideTimer = setTimeout(() => {
-        bubble.classList.add('hidden');
-    }, 3000);
+    modalText.textContent = ssikssikiQuotes[Math.floor(Math.random() * ssikssikiQuotes.length)];
+    modal.classList.add('active');
 }
 
 // ===========================
