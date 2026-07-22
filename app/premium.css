@@ -880,3 +880,8 @@ h2 {
     button[onclick="toggleMute();"] { right: 80px !important; }
 }
 
+
+/* 타이핑 효과 글자 깨짐 방지용 */
+.word-wrap { display: inline-block; white-space: nowrap; }
+#intro-text, .book-body { word-break: keep-all !important; overflow-wrap: break-word !important; }
+

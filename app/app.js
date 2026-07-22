@@ -226,19 +226,37 @@ const introTextEl = document.getElementById('intro-text');
 const introControls = document.getElementById('intro-controls');
 const startBtn = document.getElementById('start-btn');
 
+let currentWordSpan = null;
+
 function typeWriter() {
     isTyping = true;
     const currentText = introPages[introPageIndex];
     const textArray = Array.from(currentText); // 이모지(🍎) 깨짐 방지용 배열 변환
     
+    // 처음에 단어 묶음용 span 생성
+    if (typeIndex === 0) {
+        currentWordSpan = document.createElement('span');
+        currentWordSpan.className = 'word-wrap';
+        introTextEl.appendChild(currentWordSpan);
+    }
+    
     if (typeIndex < textArray.length) {
         const char = textArray[typeIndex];
-        if (char === '\n') introTextEl.appendChild(document.createElement('br'));
-        else { 
+        if (char === '\n') {
+            introTextEl.appendChild(document.createElement('br'));
+            currentWordSpan = document.createElement('span');
+            currentWordSpan.className = 'word-wrap';
+            introTextEl.appendChild(currentWordSpan);
+        } else if (char === ' ') {
+            introTextEl.appendChild(document.createTextNode(' '));
+            currentWordSpan = document.createElement('span');
+            currentWordSpan.className = 'word-wrap';
+            introTextEl.appendChild(currentWordSpan);
+        } else { 
             const span = document.createElement('span'); 
             span.className = 'magic-char'; 
             span.textContent = char; 
-            introTextEl.appendChild(span); 
+            currentWordSpan.appendChild(span); 
         }
         typeIndex++;
         typeTimer = setTimeout(typeWriter, 35);
