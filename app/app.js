@@ -1768,7 +1768,9 @@ function checkR7Stage3() {
         playWrong();
         showModal('❌ 오진입니다! 야맹증과 괴혈병을 예방하는 비타민을 다시 확인해보세요.', false);
     }
-}\n\nfunction explodeBomb() {
+}
+
+function explodeBomb() {
     playExplosion();
     showModal('💥 펑!!! 잘못된 선을 잘랐거나 시간이 초과되었습니다!', false);
     setTimeout(() => {
