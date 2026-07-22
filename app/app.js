@@ -475,7 +475,7 @@ function checkLie(roomNum, btn, isCorrect) {
         const explain = document.getElementById(`lie-explain-${roomNum}`);
         if (explain) explain.classList.remove('hidden');
         showModal('🎉 거짓말을 찾았습니다!', true);
-        setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1800);
+        setTimeout(() => { closeModal(); setTimeout(() => { nextQuizStage(roomNum, 3); }, 2000); }, 1200);
     } else {
         btn.classList.add('lie-wrong');
         showModal('❌ 그 문장은 사실이에요! 다시 살펴보세요.', false);

@@ -1008,3 +1008,31 @@ h2 {
     color: #047857 !important;
     font-weight: bold;
 }
+/* ===== 피드백 반영: UI 밸런스 및 버그 수정 ===== */
+/* 거짓말 하이라이트 글씨 블록화 방지 */
+.quiz-question span.lie-highlight {
+    display: inline-block !important;
+    margin-top: 0 !important;
+    padding: 0px 6px !important;
+    line-height: 1.2 !important;
+}
+
+/* 분류 확인하기 버튼 중앙 정렬 */
+button[onclick^="checkClassifyQ"] {
+    display: block !important;
+    margin: 15px auto 0 !important;
+    width: 90%;
+    max-width: 300px;
+}
+
+/* 질문과 지문 글자 크기 밸런스 (모바일) */
+@media (max-width: 600px) {
+    .quiz-question {
+        font-size: 0.95rem !important;
+    }
+    .secret-diary .note-stmt {
+        font-size: 0.95rem !important;
+        line-height: 26px !important;
+        padding: 5px 10px !important;
+    }
+}
