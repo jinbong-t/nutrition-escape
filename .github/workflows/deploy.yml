@@ -27,10 +27,15 @@ jobs:
       - name: GitHub Pages 설정
         uses: actions/configure-pages@v5
 
-      - name: 전체 폴더 업로드
+      - name: 이미지·영상 app 폴더로 복사
+        run: |
+          cp *.png app/ 2>/dev/null || true
+          cp *.mp4 app/ 2>/dev/null || true
+
+      - name: app 폴더 업로드
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './app'
 
       - name: 배포하기
         id: deployment
