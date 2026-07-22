@@ -149,4 +149,4 @@
         border-radius: 10px !important;
         line-height: 1.3 !important;
     }
-}
+}\n    /* Room Header Layout Fix */\n    .room-header { gap: 10px !important; flex-wrap: nowrap !important; justify-content: space-between !important; padding: 5px !important; }\n    .room-header h2 { font-size: 0.85rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin: 0 !important; }\n    .back-btn { font-size: 0.75rem !important; padding: 6px 10px !important; white-space: nowrap !important; flex-shrink: 0 !important; }\n}
