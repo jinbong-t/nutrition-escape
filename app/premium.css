@@ -1116,3 +1116,14 @@ button[onclick^="checkClassifyQ"] {
     max-width: 300px;
     text-align: center;
 }
+/* ===== 피드백 반영 5차: 빈칸 텍스트 크기 조정 ===== */
+.blank {
+    padding: 2px 8px !important;
+    font-size: 0.95rem !important;
+    min-width: 50px !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+    margin: 0 2px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}

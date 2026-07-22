@@ -421,55 +421,14 @@ function nextQuizStage(roomNum, currentQ) {
         // 마녀 깜짝 등장 영상 재생 (3번 방 클리어 시)
         if (roomNum === 3) {
             setTimeout(() => {
-                const videoContainer = document.createElement('div');
-                videoContainer.id = 'witch-video-container';
-                videoContainer.style.position = 'fixed';
-                videoContainer.style.top = '0';
-                videoContainer.style.left = '0';
-                videoContainer.style.width = '100vw';
-                videoContainer.style.height = '100vh';
-                videoContainer.style.backgroundColor = 'black';
-                videoContainer.style.zIndex = '999999';
-                videoContainer.style.display = 'flex';
-                videoContainer.style.justifyContent = 'center';
-                videoContainer.style.alignItems = 'center';
-
-                const videoEl = document.createElement('video');
-                videoEl.src = '../witch-video.mp4';
-                videoEl.style.maxWidth = '100%';
-                videoEl.style.maxHeight = '100%';
-                videoEl.autoplay = true;
-                videoEl.controls = false;
-                
-                videoEl.onended = () => {
-                    if (document.body.contains(videoContainer)) {
-                        document.body.removeChild(videoContainer);
-                    }
-                };
-                
-                videoContainer.appendChild(videoEl);
-                
-                const skipBtn = document.createElement('button');
-                skipBtn.innerText = '건너뛰기 ⏩';
-                skipBtn.style.position = 'absolute';
-                skipBtn.style.bottom = '30px';
-                skipBtn.style.right = '20px';
-                skipBtn.style.padding = '10px 20px';
-                skipBtn.style.fontSize = '1rem';
-                skipBtn.style.backgroundColor = 'rgba(255,255,255,0.2)';
-                skipBtn.style.color = 'white';
-                skipBtn.style.border = '1px solid white';
-                skipBtn.style.borderRadius = '8px';
-                skipBtn.style.cursor = 'pointer';
-                skipBtn.onclick = () => {
-                    if (document.body.contains(videoContainer)) {
-                        document.body.removeChild(videoContainer);
-                    }
-                };
-                videoContainer.appendChild(skipBtn);
-                
-                document.body.appendChild(videoContainer);
-                videoEl.play().catch(e => console.error("Video autoplay blocked", e));
+                const witchHTML = `
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <video src="../witch-video.mp4" autoplay style="max-width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);" onended="this.pause()"></video>
+                    </div>
+                    <b style="color:#7e22ce; font-size:2.2rem; display:block; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">나쁜 식습관 마녀 등장!</b>
+                    <span style="font-size:1.3rem; color: #4c1d95; font-weight: bold; display: block; line-height: 1.4;">"히히히! 영양소들을 다 모으게 둘 순 없지!<br>다음 방부터는 더 어려워질 거다!"</span>
+                `;
+                showModal(witchHTML, 'witch');
             }, 800);
         }
     }
@@ -707,9 +666,18 @@ function initWordCards() {
 }
 
 function fillBlank(blankNum) {
-    if (!r2SelectedWord) { showModal('먼저 단어 카드를 선택해 주세요!'); return; }
-    r2BlankFills[blankNum] = r2SelectedWord;
     const el = document.getElementById(`blank${blankNum}`);
+    
+    if (el.classList.contains('filled') && !r2SelectedWord) {
+        r2BlankFills[blankNum] = null;
+        el.textContent = '?';
+        el.classList.remove('filled');
+        return;
+    }
+
+    if (!r2SelectedWord) { showModal('먼저 단어 카드를 선택해 주세요!'); return; }
+    
+    r2BlankFills[blankNum] = r2SelectedWord;
     el.textContent = r2SelectedWord;
     el.classList.add('filled');
     r2SelectedWord = null;
@@ -733,23 +701,51 @@ function checkDiaryQ(roomNum) {
 // ===========================
 function clickOrder(roomNum, el) {
     if (el.classList.contains('order-placed')) return;
-    if (r2OrderSlot > 4) return;
 
-    const slotEl = document.querySelector(`#r2-order-result [data-slot="${r2OrderSlot}"]`);
-    if (!slotEl) return;
+    // 빈 슬롯 찾기
+    let targetSlot = 1;
+    let slotEl = null;
+    while (targetSlot <= 4) {
+        slotEl = document.querySelector(`#r2-order-result [data-slot="${targetSlot}"]`);
+        if (!slotEl.classList.contains('slot-filled')) break;
+        targetSlot++;
+    }
+
+    if (targetSlot > 4 || !slotEl) return;
 
     slotEl.querySelector('.slot-text').textContent = el.textContent;
     slotEl.classList.add('slot-filled');
     el.classList.add('order-placed');
-    el.dataset.assignedSlot = r2OrderSlot;
+    el.dataset.assignedSlot = targetSlot;
 
-    r2OrderSequence.push({ slot: r2OrderSlot, correct: parseInt(el.dataset.correct), el });
-    r2OrderSlot++;
+    r2OrderSequence.push({ slot: targetSlot, correct: parseInt(el.dataset.correct), el });
+    // r2OrderSlot 갱신 불필요 (동적 검색)
+}
+
+function removeOrder(slotEl) {
+    if (!slotEl.classList.contains('slot-filled')) return;
+    
+    const slotNum = parseInt(slotEl.dataset.slot);
+    const seqIndex = r2OrderSequence.findIndex(item => item.slot === slotNum);
+    
+    if (seqIndex !== -1) {
+        const item = r2OrderSequence[seqIndex];
+        item.el.classList.remove('order-placed');
+        delete item.el.dataset.assignedSlot;
+        r2OrderSequence.splice(seqIndex, 1);
+    }
+    
+    slotEl.querySelector('.slot-text').textContent = '?';
+    slotEl.classList.remove('slot-filled');
 }
 
 function checkOrderQ(roomNum) {
-    if (r2OrderSlot <= 4) { showModal(`아직 ${5 - r2OrderSlot}개가 남았어요!`, false); return; }
+    if (r2OrderSequence.length < 4) { showModal(`아직 ${4 - r2OrderSequence.length}개가 남았어요!`, false); return; }
+    
+    // slot 순서대로 정렬 후 검사
+    r2OrderSequence.sort((a, b) => a.slot - b.slot);
     const isCorrect = r2OrderSequence.every((item, idx) => item.correct === idx + 1);
+    
     if (isCorrect) {
         showModal('🎉 완벽한 순서입니다! 필수 아미노산의 비밀을 풀었어요!', true);
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 1800);
@@ -757,7 +753,6 @@ function checkOrderQ(roomNum) {
         showModal('순서가 틀렸어요! 문장이 자연스럽게 이어지도록 다시 생각해 보세요.', false);
         // 초기화
         r2OrderSequence = [];
-        r2OrderSlot = 1;
         document.querySelectorAll('.order-card').forEach(c => { c.classList.remove('order-placed'); delete c.dataset.assignedSlot; });
         document.querySelectorAll('.order-slot').forEach(s => { s.querySelector('.slot-text').textContent = '?'; s.classList.remove('slot-filled'); });
     }
