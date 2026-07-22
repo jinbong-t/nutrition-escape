@@ -24,20 +24,102 @@
 body {
     background: var(--bg-dark) !important;
     color: var(--text-bright) !important;
+    font-family: 'Jua', 'Noto Sans KR', sans-serif !important;
 }
 
-/* ===== 방 배경 - 개별 방 배경은 유지, 개야조 요소만 오버라이드 ===== */
+/* 제목 & 강조 글시: 필기체 */
+h2, .quiz-question, .quiz-label, .stage-name, .mission-desc, .hud-title {
+    font-family: 'Jua', 'Noto Sans KR', sans-serif !important;
+    letter-spacing: -0.3px;
+}
+
+/* 다이얼(금고 알파벳) 글자 확실히 보이기 */
+.dial-value {
+    color: #1a1a2e !important;
+    font-family: 'Orbit', monospace !important;
+    font-weight: 900 !important;
+    background: #ffffff !important;
+}
+
+
+/* ===== 방 배경 - 기존 배경 이미지 유지, 자연스럽게 어둘리기 ===== */
 [id^="room-screen-"] {
-    /* 배경 이미지는 style.css에서 설정됨 - 여기에서 오버라이드 하지 않음 */
-    background-color: rgba(10, 5, 30, 0.6);
+    background-color: rgba(5, 0, 18, 0.38) !important; /* 희미하게만 어둥게 - 배경 이미지 유지 */
     background-blend-mode: overlay;
 }
 
+/* 인트로 화면은 기존 배경으로 */
+#intro {
+    background-color: transparent !important;
+    background-blend-mode: normal !important;
+}
 
-/* ===== 허브 배경 ===== */
+
+/* ===== 허브 및 엔딩 배경 ===== */
 #hub {
     background: radial-gradient(ellipse at top, #1a1035 0%, #0f0a1e 100%) !important;
 }
+
+/* ===== 엔딩 화면 ===== */
+#ending {
+    background: radial-gradient(ellipse at center, #0f0a1e, #1a0d3b) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ending-book {
+    background: rgba(30, 20, 70, 0.85) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    color: var(--text-bright);
+    padding: 40px !important;
+    max-width: 800px;
+    width: 90%;
+}
+.ending-book .fairytale-header {
+    color: var(--accent) !important;
+    text-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+    font-size: 2.5rem !important;
+    margin-bottom: 20px;
+}
+.ending-book .final-code-desc {
+    color: var(--text-bright) !important;
+    font-size: 1.2rem;
+}
+#ending-text {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    color: #e2e8f0 !important;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+    white-space: pre-line;
+    text-align: center;
+}
+.ending-dwarfs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.ending-dwarfs img {
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s;
+    height: 200px;
+    object-fit: cover;
+}
+.ending-dwarfs img:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
 
 /* ===== HUD 바 ===== */
 .hub-hud {
@@ -530,3 +612,132 @@ h2 {
     .bomb-body { width: 160px; height: 160px; }
     #sound-toggle-btn { width: 34px; height: 34px; font-size: 0.9rem; top: 10px; right: 10px; }
 }
+
+/* ===== 인트로 버튼 클릭 보장 ===== */
+.page-right {
+    pointer-events: auto !important;
+}
+.page-right button#start-btn {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 600 !important;
+    cursor: pointer;
+}
+
+/* ===== 금고 다이얼 ===== */
+.safe-box {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+.safe-dial {
+    background: linear-gradient(180deg, #1e293b, #334155);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.dial-btn {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    width: 46px;
+    height: 32px;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+.dial-btn:hover { background: var(--primary) !important; }
+.dial-value {
+    width: 46px;
+    height: 56px;
+    background: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 2px 0;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    color: #1e293b !important;
+    font-family: 'Orbit', monospace !important;
+}
+
+/* ===== 장바구니 카트 디자인 ===== */
+.cart-area {
+    background: rgba(10, 5, 30, 0.6);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(99,102,241,0.5);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 12px;
+    min-height: 80px;
+    position: relative;
+    overflow: hidden;
+}
+.cart-area::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+}
+.cart-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.cart-label svg { color: var(--accent); }
+.cart-items-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 장바구니 안 아이템 (market-item이 담긴 것) */
+.cart-area .market-item,
+.cart-area [class] {
+    background: rgba(99,102,241,0.2) !important;
+    border: 1.5px solid var(--primary) !important;
+    border-radius: 50px !important;
+    color: white !important;
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    transition: all 0.2s;
+}
+
+/* 시장 아이템 선택된 상태 */
+.market-item.in-cart {
+    background: linear-gradient(135deg, var(--accent), #f97316) !important;
+    border-color: var(--accent) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(245,158,11,0.4) !important;
+}
+
+/* r5-cart 내부 동적 생성 아이템 */
+#r5-cart-items .cart-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(99,102,241,0.2);
+    border: 1.5px solid var(--primary);
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 700;
+    animation: bounceIn 0.3s;
+}
+

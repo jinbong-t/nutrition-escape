@@ -7,7 +7,7 @@
     <meta name="description" content="백설공주와 함께 일곱 난쟁이의 영양 상태를 분석하고 치료하는 교육 어드벤처 게임">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Orbit&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Jua&family=Nanum+Pen+Script&family=Orbit&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="premium.css">
 </head>
@@ -212,7 +212,7 @@
     <!-- 1스테이지: 영양 밸런스 저울 -->
     <div class="quiz-stage hidden" id="r7-stage1">
         <div class="quiz-label" style="background: #10b981;">⚖️ 1단계: 영양 밸런스 저울</div>
-        <div class="quiz-question">햄버거 세트(탄수화물, 지방, 나트륨 과다)의 불균형을 맞출 영양소 무게추 2개를 올려주세요!</div>
+        <div class="quiz-question">햄버거 세트는 탄수화물과 지방이 지나치게 많아요.<br>이 햄버거에 부족한 <b>두 가지 영양소</b>를 골라서 저울의 균형을 맞춰주세요!<br><span style="font-size:0.85em;opacity:0.8">✔ 정답: 비타민, 단백질, 물 중 어떤 조합이든 가능!</span></div>
         
         <div class="scale-container" id="r7-scale-container">
             <div class="scale-arm" id="r7-scale-arm"></div>
@@ -230,6 +230,7 @@
             <div class="weight-item" data-type="water" onclick="selectWeight(this)">💧 물</div>
             <div class="weight-item" data-type="protein" onclick="selectWeight(this)">🥩 단백질</div>
             <div class="weight-item" data-type="fat" onclick="selectWeight(this)">🧈 지방</div>
+            <div class="weight-item" data-type="mineral" onclick="selectWeight(this)">🦨 무기질</div>
         </div>
         <div id="scale-selected-info">영양소를 클릭해서 2개 선택하세요</div>
         <button id="scale-add-btn" onclick="addSelectedToScale()">⚖️ 저울에 올리기</button>
@@ -541,22 +542,22 @@
             <div class="safe-box">
                 <div class="safe-dial">
                     <button class="dial-btn" onclick="changeDial(0, 1)">▲</button>
-                    <div class="dial-value" id="dial-0">A</div>
+                    <div class="dial-value" id="dial-0" style="color:black;">A</div>
                     <button class="dial-btn" onclick="changeDial(0, -1)">▼</button>
                 </div>
                 <div class="safe-dial">
                     <button class="dial-btn" onclick="changeDial(1, 1)">▲</button>
-                    <div class="dial-value" id="dial-1">A</div>
+                    <div class="dial-value" id="dial-1" style="color:black;">A</div>
                     <button class="dial-btn" onclick="changeDial(1, -1)">▼</button>
                 </div>
                 <div class="safe-dial">
                     <button class="dial-btn" onclick="changeDial(2, 1)">▲</button>
-                    <div class="dial-value" id="dial-2">A</div>
+                    <div class="dial-value" id="dial-2" style="color:black;">A</div>
                     <button class="dial-btn" onclick="changeDial(2, -1)">▼</button>
                 </div>
                 <div class="safe-dial">
                     <button class="dial-btn" onclick="changeDial(3, 1)">▲</button>
-                    <div class="dial-value" id="dial-3">A</div>
+                    <div class="dial-value" id="dial-3" style="color:black;">A</div>
                     <button class="dial-btn" onclick="changeDial(3, -1)">▼</button>
                 </div>
             </div>
@@ -575,7 +576,7 @@
         </div>
         <div class="quiz-options">
             <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">① 빈혈을 막기 위해 <b>소고기</b>를 먹고, 후식으로 <b>오렌지</b>를 먹는다.</button>
-            <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">② 뼈를 튼튼하게 하려고 <b>우유</b>를 마시고, 밖에 나가 <b>햇빛</b>을 쬐며 뛰어논다.</button>
+            <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">② 뼈를 튼튼하게 하려고 <b>우유</b>를 마시고, 밖에 나가 <b>햇빛</b>을 쬐며 뛰어놀다.</button>
             <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'correct')" style="text-align: left; padding: 15px;">③ 뼈가 자라길 바라며 어두컴컴한 방에 틀어박혀 <b>멸치</b>만 계속 씹어 먹는다.</button>
             <button class="option-btn zigzag-btn" onclick="checkOption(4,3,this,'wrong')" style="text-align: left; padding: 15px;">④ <b>고기</b>를 먹을 때 <b>싱싱한 야채 쌈</b>을 크게 싸서 함께 먹는다.</button>
         </div>
@@ -630,7 +631,14 @@
             <div class="market-item" data-answer="no" onclick="addToCart(this)">🥤 콜라</div>
         </div>
         <div class="cart-area" id="r5-cart">
-            <div class="cart-label">🛒 장바구니 (3개를 담으세요)</div>
+            <div class="cart-label">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                장바구니 (3개를 담으세요)
+            </div>
+            <div class="cart-items-row" id="r5-cart-items"></div>
         </div>
         <button class="btn" onclick="checkCartQ(5)">확인하기</button>
         <button class="hint-btn" id="hint-5-2" onclick="showHint('5-2', this)">💡 힌트 (1회용)</button>
