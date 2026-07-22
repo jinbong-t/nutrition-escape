@@ -1121,6 +1121,8 @@ function startBoneGame() {
     clearInterval(boneGameInterval);
     clearTimeout(boneSpawnInterval);
     container.removeEventListener('mousemove', handleBoneMove);
+    container.removeEventListener('touchmove', handleBoneMove);
+    container.removeEventListener('touchstart', handleBoneMove);
     document.removeEventListener('keydown', handleBoneKeyDown);
     document.removeEventListener('keyup', handleBoneKeyUp);
     
@@ -1132,6 +1134,8 @@ function startBoneGame() {
     boneGameActive = true;
     
     container.addEventListener('mousemove', handleBoneMove);
+    container.addEventListener('touchmove', handleBoneMove, { passive: false });
+    container.addEventListener('touchstart', handleBoneMove, { passive: false });
     document.addEventListener('keydown', handleBoneKeyDown);
     document.addEventListener('keyup', handleBoneKeyUp);
     
@@ -1158,14 +1162,26 @@ function scheduleNextSpawn() {
 let lastMouseX = 0;
 function handleBoneMove(e) {
     if (!boneGameActive) return;
+    
+    // 모바일에서 스크롤 방지
+    if (e.type === 'touchmove' || e.type === 'touchstart') {
+        if (e.cancelable) e.preventDefault();
+    }
+    
     const container = document.getElementById('bone-game-container');
     const player = document.getElementById('bone-player');
     const rect = container.getBoundingClientRect();
-    let x = e.clientX - rect.left;
+    
+    let clientX = e.clientX;
+    if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+    }
+    
+    let x = clientX - rect.left;
     
     if (x < 30) x = 30;
     if (x > rect.width - 30) x = rect.width - 30;
-    bonePlayerX = x; // 마우스 좌표로 갱신
+    bonePlayerX = x; // 마우스/터치 좌표로 갱신
 }
 
 function spawnBoneItem() {
