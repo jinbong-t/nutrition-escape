@@ -1375,24 +1375,17 @@ function updateWitchGame() {
             item.el.remove();
             junkFoods.splice(i, 1);
             
-            // 씩씩이(마을) 데미지 (마구 쏟아지므로 데미지를 1%로 줄여서 오래 버틸 수 있게 함)
+            // 마을 데미지 (마구 쏟아지므로 데미지를 1%로 줄여서 오래 버틸 수 있게 함)
             villageHp -= 1;
             if (villageHp < 0) villageHp = 0;
             document.getElementById('village-hp-bar').style.width = `${villageHp}%`;
-            
-            // 씩씩이 피격 이펙트 (빨갛게 번쩍임)
-            const defender = document.getElementById('ssikssiki-defender');
-            if (defender) {
-                defender.classList.add('ssikssiki-hit');
-                setTimeout(() => defender.classList.remove('ssikssiki-hit'), 200);
-            }
             
             // 화면 붉게 깜빡임 효과 (타격감)
             area.style.boxShadow = 'inset 0 0 50px rgba(239,68,68,0.9)';
             setTimeout(() => { area.style.boxShadow = ''; }, 200);
             
             if (villageHp <= 0) {
-                endWitchBattle(false, '씩씩이의 체력이 0이 되어 쓰러졌습니다! 😭 다시 도전하세요!');
+                endWitchBattle(false, '마을 방어력이 0이 되어 파괴되었습니다! 😭 다시 도전하세요!');
                 return;
             }
         }

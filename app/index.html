@@ -691,10 +691,8 @@
         <!-- 마녀 캐릭터 -->
         <img src="../마녀.png" alt="마녀" class="witch-boss" id="witch-boss" onclick="hitWitch()">
         
-        <!-- 바닥(마을) -> 씩씩이 보호 -->
-        <div id="village-ground">
-            <img src="../씩씩이.png" alt="씩씩이" class="ssikssiki-defender" id="ssikssiki-defender">
-        </div>
+        <!-- 바닥(마을) -->
+        <div id="village-ground"></div>
     </div>
     
     <!-- UI 레이어 (하단 콤팩트 대시보드) -->
@@ -712,9 +710,9 @@
             <!-- 타이머 -->
             <div class="boss-timer" id="witch-timer" style="margin: 0 15px; font-size: 1.6rem; min-width: 120px;">20.0초</div>
             
-            <!-- 마을 방어력 -> 씩씩이 체력 -->
+            <!-- 마을 방어력 -->
             <div style="flex: 1; text-align: center;">
-                <div style="font-size:0.9rem; margin-bottom:4px; color: #3b82f6; font-weight: bold;">씩씩이 체력</div>
+                <div style="font-size:0.9rem; margin-bottom:4px; color: #3b82f6; font-weight: bold;">마을 방어력</div>
                 <div class="boss-hp-bar-container" style="border-color: #3b82f6; width: 90%; height: 15px; margin: 0 auto;">
                     <div class="boss-hp-bar" id="village-hp-bar" style="background: #3b82f6;"></div>
                 </div>
@@ -767,8 +765,8 @@
 
 <!-- 씩씩이 전용 팝업 -->
 <div id="ssikssiki-modal" class="modal">
-    <div class="modal-content" style="background: transparent; border: none; box-shadow: none; display: flex; flex-direction: column; align-items: center;">
-        <img src="../씩씩이 본캐만.png" alt="씩씩이" style="height: 350px; margin-bottom: -20px; z-index: 10; animation: bounceIn 0.5s ease-out; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));">
+    <div class="modal-content" style="background: transparent; border: none; box-shadow: none; display: flex; flex-direction: column; align-items: center; max-width: 500px;">
+        <img src="../씩씩이 본캐만.png" alt="씩씩이" style="height: 350px; width: auto; max-width: 100%; object-fit: contain; margin-bottom: -20px; z-index: 10; animation: bounceIn 0.5s ease-out; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));">
         <div style="background: white; border: 4px solid #16a34a; border-radius: 20px; padding: 30px 20px 20px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
             <p id="ssikssiki-modal-text" style="font-size: 1.3rem; font-weight: 900; color: #166534; margin-bottom: 20px;"></p>
             <button class="btn" style="background: #16a34a;" onclick="document.getElementById('ssikssiki-modal').classList.remove('active')">알겠어!</button>
