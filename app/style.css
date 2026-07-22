@@ -2596,8 +2596,8 @@ h2 {
 .vending-btn-real { width: 100%; padding: 15px 5px; border-radius: 8px; border: 3px solid rgba(0,0,0,0.2); font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: transform 0.1s, filter 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
 .vending-btn-real:active { transform: scale(0.95); box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 .vending-price { font-size: 0.8rem; background: black; color: #10b981; padding: 2px 8px; border-radius: 4px; font-family: monospace; letter-spacing: 1px; }
-.vending-slot { height: 60px; background: #1f2937; border-radius: 5px; border: inset 4px #111827; margin-top: 10px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.vending-slot-flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border-bottom: 2px solid rgba(0,0,0,0.5); transform-origin: top; transition: transform 0.3s; }
+.vending-slot { height: 100px; background: #1f2937; border-radius: 10px; border: inset 6px #111827; margin-top: 15px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 10px 20px rgba(0,0,0,0.8); }
+.vending-slot-flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border-bottom: 3px solid rgba(0,0,0,0.7); transform-origin: top; transition: transform 0.3s; z-index: 5; }
 .vending-machine.shake-vending { animation: shakeVending 0.4s ease-in-out; }
 @keyframes shakeVending { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px) rotate(-1deg); } 40% { transform: translateX(5px) rotate(1deg); } 60% { transform: translateX(-5px) rotate(-1deg); } 80% { transform: translateX(5px) rotate(1deg); } }
 
