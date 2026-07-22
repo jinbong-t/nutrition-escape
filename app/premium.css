@@ -702,8 +702,7 @@ h2 {
 }
 
 /* 장바구니 안 아이템 (market-item이 담긴 것) */
-.cart-area .market-item,
-.cart-area [class] {
+.cart-area .market-item, .cart-area .cart-item {
     background: rgba(99,102,241,0.2) !important;
     border: 1.5px solid var(--primary) !important;
     border-radius: 50px !important;
@@ -1136,3 +1135,11 @@ button[onclick^="checkClassifyQ"] {
     margin-bottom: 10px !important;
     height: auto !important; /* 텍스트 넘침 방지 */
 }
+
+
+/* ===== 피드백 반영 9차 ===== */
+.speech-bubble, .story-text { font-size: 1.15rem !important; padding: 15px 20px !important; line-height: 1.6 !important; margin-bottom: 15px !important; }
+#flashlight-cursor { display: none !important; }
+.cart-label { background: transparent !important; border: none !important; color: #fbbf24 !important; font-size: 1.1rem !important; }
+.error-table { background: #fffbeb !important; }
+.error-table td { color: #451a03 !important; font-weight: bold !important; text-shadow: none !important; }
