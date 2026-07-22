@@ -31,6 +31,18 @@ html, body {
 }
 
 /* =========================================
+   엔딩 헤더 (THE END) 크기 축소
+   한 줄에 맞게
+========================================= */
+#ending .fairytale-header,
+.ending-book .fairytale-header {
+    font-size: 1.4rem !important;
+    margin-bottom: 10px !important;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+}
+
+/* =========================================
    MOBILE COMPACT OPTIMIZATION 
    (Forced to fit on one screen)
 ========================================= */
