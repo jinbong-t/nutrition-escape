@@ -1021,8 +1021,8 @@ h2 {
 button[onclick^="checkClassifyQ"] {
     display: block !important;
     margin: 15px auto 0 !important;
-    width: 90%;
-    max-width: 300px;
+    width: auto !important;
+    padding: 12px 25px !important;
 }
 
 /* 질문과 지문 글자 크기 밸런스 (모바일) */
@@ -1112,9 +1112,19 @@ button[onclick^="checkOrderQ"],
 button[onclick^="checkClassifyQ"] {
     display: block !important;
     margin: 15px auto 0 !important;
-    width: 90%;
-    max-width: 300px;
+    width: auto !important;
+    padding: 12px 25px !important;
     text-align: center;
+}
+/* ===== 피드백 반영 6차: 허브 화면(방 목록) 레이아웃 2열 및 모바일 최적화 수정 ===== */
+.stages-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+}
+@media (max-width: 600px) {
+    .stages-grid {
+        gap: 8px !important;
+    }
 }
 /* ===== 피드백 반영 5차: 빈칸 텍스트 크기 조정 ===== */
 .blank {
