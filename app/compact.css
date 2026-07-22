@@ -214,6 +214,9 @@
     #r6-ox-question { font-size: 0.9rem !important; min-height: unset !important; margin-bottom: 10px !important; }
     #r6-ox-container button { width: 60px !important; height: 60px !important; font-size: 2.5rem !important; border-radius: 10px !important; border-width: 3px !important; }
 
-    /* Boss Room */
+    /* Boss Room & Witch Modal */
     .witch-boss { font-size: 5rem !important; margin: 10px 0 !important; }
+    .modal-content { padding: 20px !important; }
+    .modal.witch .modal-content b { font-size: 1.4rem !important; word-break: keep-all !important; margin-bottom: 8px !important; }
+    .modal.witch .modal-content span { font-size: 0.95rem !important; word-break: keep-all !important; }
 }
