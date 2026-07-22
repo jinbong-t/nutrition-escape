@@ -303,6 +303,14 @@ function skipIntro() {
     }, 300);
 }
 
+// 개발자/선생님용 엔딩 테스트 단축키 (F9)
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'F9') {
+        console.log("엔딩 강제 호출!");
+        showEnding();
+    }
+});
+
 // startBtn 이벤트 리스너 제거 (HTML inline onclick으로 이동함)
 
 // ===========================
