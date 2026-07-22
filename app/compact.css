@@ -239,10 +239,10 @@
     .quiz-question.spooky-text { font-size: 0.8rem !important; line-height: 1.4 !important; }
     
     /* Bone Game */
-    #bone-game-container { height: 260px !important; width: 100% !important; max-width: 450px !important; margin: 0 auto !important; }
+    #bone-game-container { height: 450px !important; width: 100% !important; max-width: 450px !important; margin: 0 auto !important; }
     .bone-item { font-size: 2.5rem !important; }
     #room-screen-5 { text-align: center; }
-    #room-screen-5 .btn { margin: 10px auto !important; display: block !important; }
+    #room-screen-5 .btn { margin: 15px auto !important; display: block !important; width: 200px !important; }
     
     /* Matching Game (Room 3) */
     .matching-game { gap: 10px !important; }
