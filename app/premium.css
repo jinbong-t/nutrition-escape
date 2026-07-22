@@ -806,6 +806,7 @@ h2 {
         left: 0 !important;
         transform-origin: left center !important;
         border-radius: 10px !important;
+        z-index: 20 !important; /* 내부 페이지들(z-index: 15)보다 위로 올라오게 함 */
     }
     
     .cover-front, .cover-back {
