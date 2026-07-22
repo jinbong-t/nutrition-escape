@@ -418,15 +418,58 @@ function nextQuizStage(roomNum, currentQ) {
         const clearEl = document.getElementById(`r${roomNum}-clear`); 
         if (clearEl) clearEl.classList.remove('hidden'); 
         
-        // 마녀 깜짝 등장 (3번 방 클리어 시)
+        // 마녀 깜짝 등장 영상 재생 (3번 방 클리어 시)
         if (roomNum === 3) {
             setTimeout(() => {
-                const witchHTML = `
-                    <div class="witch-emoji">🧙‍♀️</div>
-                    <b style="color:#7e22ce; font-size:2.5rem; display:block; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">나쁜 식습관 마녀 등장!</b>
-                    <span style="font-size:1.5rem; color: #4c1d95; font-weight: bold; display: block; line-height: 1.4;">"히히히! 영양소들을 다 모으게 둘 순 없지!<br>다음 방부터는 더 어려워질 거다!"</span>
-                `;
-                showModal(witchHTML, 'witch');
+                const videoContainer = document.createElement('div');
+                videoContainer.id = 'witch-video-container';
+                videoContainer.style.position = 'fixed';
+                videoContainer.style.top = '0';
+                videoContainer.style.left = '0';
+                videoContainer.style.width = '100vw';
+                videoContainer.style.height = '100vh';
+                videoContainer.style.backgroundColor = 'black';
+                videoContainer.style.zIndex = '999999';
+                videoContainer.style.display = 'flex';
+                videoContainer.style.justifyContent = 'center';
+                videoContainer.style.alignItems = 'center';
+
+                const videoEl = document.createElement('video');
+                videoEl.src = '../witch-video.mp4';
+                videoEl.style.maxWidth = '100%';
+                videoEl.style.maxHeight = '100%';
+                videoEl.autoplay = true;
+                videoEl.controls = false;
+                
+                videoEl.onended = () => {
+                    if (document.body.contains(videoContainer)) {
+                        document.body.removeChild(videoContainer);
+                    }
+                };
+                
+                videoContainer.appendChild(videoEl);
+                
+                const skipBtn = document.createElement('button');
+                skipBtn.innerText = '건너뛰기 ⏩';
+                skipBtn.style.position = 'absolute';
+                skipBtn.style.bottom = '30px';
+                skipBtn.style.right = '20px';
+                skipBtn.style.padding = '10px 20px';
+                skipBtn.style.fontSize = '1rem';
+                skipBtn.style.backgroundColor = 'rgba(255,255,255,0.2)';
+                skipBtn.style.color = 'white';
+                skipBtn.style.border = '1px solid white';
+                skipBtn.style.borderRadius = '8px';
+                skipBtn.style.cursor = 'pointer';
+                skipBtn.onclick = () => {
+                    if (document.body.contains(videoContainer)) {
+                        document.body.removeChild(videoContainer);
+                    }
+                };
+                videoContainer.appendChild(skipBtn);
+                
+                document.body.appendChild(videoContainer);
+                videoEl.play().catch(e => console.error("Video autoplay blocked", e));
             }, 800);
         }
     }

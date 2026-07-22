@@ -1086,3 +1086,33 @@ button[onclick^="checkClassifyQ"] {
 .room-clear {
     padding: 20px 10px !important;
 }
+/* ===== 피드백 반영 4차: 글꼴, 버튼 중앙 배치, 단어 카드 크기 조율 ===== */
+/* 일기장 손글씨 느낌 적용 */
+.secret-diary .note-stmt {
+    font-family: 'Gamja Flower', cursive !important;
+    font-size: 1.15rem !important; /* 모바일 가독성을 위해 살짝 유지 */
+    letter-spacing: 0.5px;
+}
+
+/* 단어 카드(.word-card) 크기 및 간격 축소 */
+.word-cards {
+    gap: 6px !important;
+    justify-content: center !important;
+}
+.word-card {
+    padding: 8px 12px !important;
+    font-size: 0.95rem !important;
+    margin: 3px !important;
+    border-radius: 8px !important;
+}
+
+/* 각종 확인 버튼 중앙 배치 */
+button[onclick^="checkDiaryQ"],
+button[onclick^="checkOrderQ"],
+button[onclick^="checkClassifyQ"] {
+    display: block !important;
+    margin: 15px auto 0 !important;
+    width: 90%;
+    max-width: 300px;
+    text-align: center;
+}
