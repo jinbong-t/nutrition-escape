@@ -606,55 +606,7 @@ h2 {
     .bomb-timer { font-size: 2rem; }
 }
 
-@media (max-width: 480px) {
-    [id^="room-screen-"] { padding: 12px 10px !important; gap: 10px !important; }
-    .stages-grid { gap: 4px !important; padding: 0 8px !important; }
-    .stage-card { padding: 4px 4px 6px !important; border-width: 1px !important; border-radius: 12px !important; }
-    
-    /* 허브 한 화면 최적화 */
-    .hub-hud { padding: 4px 10px !important; }
-    .hud-avatar { width: 30px !important; height: 30px !important; }
-    .hud-title { font-size: 0.9rem !important; margin-bottom: 0 !important; }
-    .hud-progress-text { font-size: 0.7rem !important; }
-    
-    .hub-mission-banner { padding: 6px 10px !important; margin: 4px 10px !important; }
-    .mission-desc { font-size: 0.9rem !important; margin: 2px 0 !important; }
-    .hub-mission-banner p { font-size: 0.7rem !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
-    
-    .stages-container h2 { font-size: 0.9rem !important; margin: 2px 10px !important; padding-bottom: 2px !important; }
-    
-    /* 씩씩이 방 */
-    #room-7 { padding: 6px 10px !important; }
-    #room-7 .stage-name { font-size: 0.9rem !important; margin: 0 !important; }
-    #room-7 div[style*="font-size: 0.9rem"] { font-size: 0.65rem !important; margin: 2px 0 !important; line-height: 1.2 !important; }
-    #room-7 .stage-enter-btn { padding: 4px 10px !important; font-size: 0.7rem !important; margin-top: 2px !important; }
-    #room-7 > div:last-child { width: 45px !important; height: 45px !important; }
-    
-    .stage-img-wrap { width: 44px; height: 44px; border-width: 2px !important; }
-    .stage-name { font-size: 0.75rem !important; margin: 2px 0 !important; }
-    .stage-nutrient-badge { font-size: 0.5rem !important; padding: 2px 4px !important; margin-bottom: 2px !important; }
-    .stage-enter-btn { padding: 2px 4px !important; font-size: 0.65rem !important; border-radius: 4px !important; }
-    .quiz-stage { padding: 12px 10px !important; border-radius: 10px !important; }
-    .quiz-label { font-size: 0.85rem !important; padding: 6px 10px !important; margin-bottom: 8px !important; }
-    .quiz-question { font-size: 0.85rem !important; line-height: 1.6 !important; margin-bottom: 12px !important; }
-    .quiz-question span { font-size: 0.75rem !important; display: block; margin-top: 6px; line-height: 1.5 !important; }
-    .speech-bubble { font-size: 0.9rem !important; padding: 12px 14px !important; margin-bottom: 14px !important; line-height: 1.6 !important; }
-    .story-text { font-size: 0.85rem !important; padding: 10px !important; line-height: 1.6 !important; }
-    .room-header h2 { font-size: 1rem !important; line-height: 1.4 !important; }
-    .room-header .btn, .room-header .back-btn { padding: 6px 10px !important; font-size: 0.8rem !important; }
-    .market-items { gap: 6px !important; margin-bottom: 8px !important; }
-    .market-item { font-size: 0.8rem !important; padding: 8px 10px !important; border-radius: 8px !important; border-width: 2px !important; }
-    .cart-area { padding: 10px !important; min-height: 60px !important; border-width: 2px !important; }
-    .cart-label { font-size: 0.85rem !important; margin-bottom: 6px !important; }
-    .option-btn { font-size: 0.8rem !important; padding: 8px 10px !important; border-radius: 8px !important; }
-    .btn { padding: 8px 16px !important; font-size: 0.85rem !important; }
-    .error-table th, .error-table td { padding: 6px !important; font-size: 0.75rem !important; }
-    .weight-options { gap: 6px !important; }
-    .weight-item { padding: 8px 10px !important; font-size: 0.8rem !important; min-width: 60px !important; }
-    .scale-arm { width: 240px; }
-    .bomb-body { width: 160px; height: 160px; }
-    #sound-toggle-btn { width: 34px; height: 34px; font-size: 0.9rem; top: 10px; right: 10px; }
-}
+
 
 /* ===== 인트로 버튼 클릭 보장 ===== */
 .page-right {
@@ -1116,16 +1068,7 @@ button[onclick^="checkClassifyQ"] {
     padding: 12px 25px !important;
     text-align: center;
 }
-/* ===== 피드백 반영 6차: 허브 화면(방 목록) 레이아웃 2열 및 모바일 최적화 수정 ===== */
-.stages-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-}
-@media (max-width: 600px) {
-    .stages-grid {
-        gap: 8px !important;
-    }
-}
+
 /* ===== 피드백 반영 5차: 빈칸 텍스트 크기 조정 ===== */
 .blank {
     padding: 2px 8px !important;
