@@ -92,8 +92,11 @@
         justify-content: space-between !important;
         padding: 4px 8px !important;
     }
-    #room-7 .stage-img-wrap {
-        width: 35px !important; height: 35px !important; margin: 0 !important;
+    #room-7 > div:nth-child(2) {
+        width: 55px !important; 
+        height: 55px !important; 
+        margin-left: 5px !important;
+        border-width: 2px !important;
     }
     #room-7 > div:first-child .stage-name { 
         font-size: 0.75rem !important; 
