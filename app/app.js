@@ -784,6 +784,14 @@ function startBoneGame() {
     
     const container = document.getElementById('bone-game-container');
     const player = document.getElementById('bone-player');
+    
+    // 이전 잔여 이벤트/인터벌 확실히 정리
+    clearInterval(boneGameInterval);
+    clearTimeout(boneSpawnInterval);
+    container.removeEventListener('mousemove', handleBoneMove);
+    document.removeEventListener('keydown', handleBoneKeyDown);
+    document.removeEventListener('keyup', handleBoneKeyUp);
+    
     bonePlayerX = container.offsetWidth / 2;
     player.style.left = `${bonePlayerX}px`;
     
@@ -969,7 +977,6 @@ function handleBoneCollision(item) {
         container.appendChild(floatText);
         setTimeout(() => floatText.remove(), 1000);
         
-        const player = document.getElementById('bone-player');
         const hole = document.createElement('div');
         hole.className = 'bone-hole';
         hole.style.left = `${20 + Math.random() * 30}px`;
@@ -1002,6 +1009,9 @@ function endBoneGame(isWin, failReason = '') {
     boneGameActive = false;
     clearInterval(boneGameInterval);
     clearTimeout(boneSpawnInterval);
+    
+    const container = document.getElementById('bone-game-container');
+    if(container) container.removeEventListener('mousemove', handleBoneMove);
     document.removeEventListener('keydown', handleBoneKeyDown);
     document.removeEventListener('keyup', handleBoneKeyUp);
     
