@@ -1111,3 +1111,28 @@ button[onclick^="checkClassifyQ"] {
     align-content: flex-start !important;
     width: 100% !important;
 }
+/* ===== 피드백 반영 8차: 손전등 문제 모바일 오류 수정 및 메모장(diary-page) 레이아웃 개선 ===== */
+/* 손전등 효과 완전 제거 및 항상 밝게 유지 */
+.dark-overlay {
+    display: none !important;
+}
+.dark-room-content, .dark-room-container {
+    background: #fdf6e3 !important;
+    height: auto !important;
+    min-height: 200px !important;
+    padding-bottom: 20px !important;
+}
+
+/* 메모장(비타민 문제) 레이아웃 겹침 방지 및 폰트 통일 */
+.diary-container {
+    gap: 20px !important; /* 겹치지 않도록 간격 넓힘 */
+    padding: 10px !important;
+}
+.diary-page {
+    width: 90% !important;
+    max-width: 280px !important;
+    font-family: 'Gamja Flower', cursive !important; /* 예쁜 폰트로 통일 */
+    font-size: 1.2rem !important; /* 가독성 향상 */
+    margin-bottom: 10px !important;
+    height: auto !important; /* 텍스트 넘침 방지 */
+}
