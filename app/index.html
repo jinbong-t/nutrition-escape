@@ -285,13 +285,13 @@
             </div>
 
             <!-- 스페셜: 씩씩이 -->
-            <div class="stage-card" id="room-7" style="grid-column: 1 / -1; background: #f0fdf4; border-color: #22c55e; box-shadow: 0 4px 15px rgba(34,197,94,0.3); display: flex; flex-direction: row; align-items: center; padding: 15px; cursor: pointer;" onclick="enterRoom(7)">
+            <div class="stage-card" id="room-7" style="grid-column: 1 / -1; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #22c55e; box-shadow: 0 4px 15px rgba(34,197,94,0.3); display: flex; flex-direction: row; align-items: center; padding: 14px; cursor: pointer; margin-top: 6px;" onclick="enterRoom(7)">
                 <div style="flex: 1; text-align: left;">
-                    <div class="stage-name" style="color: #14532d; font-size: 1.1rem; margin-top: 0;">씩씩이 (건강지킴이)</div>
-                    <div style="font-size: 0.85rem; color: #166534; margin: 6px 0; line-height: 1.5;">완벽한 영양 밸런스를 가진 난쟁이!<br>씩씩이와 대화하며 응원을 받아보세요!</div>
-                    <div class="stage-enter-btn" style="background: #15803d; color: white; display: inline-block; width: auto; padding: 8px 15px;">대화하기 💬</div>
+                    <div style="color: #14532d; font-size: 1.15rem; font-weight: 900; font-family: 'Gamja Flower', cursive; margin-bottom: 6px;">💪 씩씩이 (건강지킴이)</div>
+                    <div style="font-size: 0.95rem; color: #166534; line-height: 1.55; font-family: 'Gowun Dodum', sans-serif;">완벽한 영양 밸런스를 가진 난쟁이!<br>씩씩이와 대화하며 응원을 받아보세요!</div>
+                    <div style="margin-top: 8px; display: inline-block; background: #15803d; color: white; border-radius: 10px; padding: 7px 14px; font-size: 0.95rem; font-family: 'Gamja Flower', cursive;">대화하기 💬</div>
                 </div>
-                <div style="width: 90px; height: 90px; background: white; border-radius: 8px; border: 3px solid #bbf7d0; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-left: 10px; flex-shrink: 0;">
+                <div style="width: 80px; height: 80px; background: white; border-radius: 10px; border: 2px solid #bbf7d0; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-left: 10px; flex-shrink: 0;">
                     <img src="./씩씩이 본캐만.png" alt="씩씩이" style="height: 100%; width: 100%; object-fit: contain;">
                 </div>
             </div>
@@ -300,7 +300,7 @@
     </div>
 
     <!-- 하단 코드 패널 -->
-    <div class="hub-code-panel">
+    <div class="hub-code-panel" style="margin-top: 0 !important;">
         <div class="code-panel-title">🔐 영양 비밀 코드</div>
         <div class="code-letters">
             <div class="code-letter" id="code-1"><span class="code-lock">🔒</span></div>
@@ -1157,33 +1157,6 @@
                 });
             }
         });
-
-        // 슩슩이 대화 모달 (enterRoom(7) 예외 쮘리)
-        // room-7 커스터마이징을 위해 씩씩이 대화 모달
-        const ssikssikiModal = document.createElement('div');
-        ssikssikiModal.id = 'ssikssiki-chat-modal';
-        ssikssikiModal.style.cssText = 'display:none; position:fixed; inset:0; z-index:99998; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center;';
-        ssikssikiModal.innerHTML = `
-            <div style="background:white; border-radius:20px; padding:24px; max-width:350px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.4); text-align:center; font-family:'Gamja Flower',cursive;">
-                <div style="font-size:2.5rem; margin-bottom:8px;">💪</div>
-                <div style="font-size:1.3rem; font-weight:bold; color:#14532d; margin-bottom:12px;">씩씩이의 응원</div>
-                <div id="ssikssiki-chat-text" style="font-size:1.1rem; color:#166534; line-height:1.6; min-height:60px; background:#f0fdf4; border-radius:12px; padding:14px; margin-bottom:16px;"></div>
-                <button onclick="this.closest('#ssikssiki-chat-modal').style.display='none'" style="background:#15803d; color:white; border:none; border-radius:12px; padding:10px 24px; font-size:1rem; font-family:'Gamja Flower',cursive; cursor:pointer;">교갰 고마워! 👋</button>
-            </div>
-        `;
-        document.body.appendChild(ssikssikiModal);
-
-        // enterRoom(7) 를 덕류하여 씩씩이 대화 모달 펼치기
-        const _origEnterRoom = typeof enterRoom === 'function' ? enterRoom : null;
-        window._ssikssikiQuotes = [
-            "공주님! 6대 영양소를 모두 알게 되셔다니 정말 대단해요! 🎉",
-            "저는 매일 아침에 우유 한 잔, 밥에는 야채를 ﳅ득 먹어요!",
-            "영양소는 어느 하나도 부족하면 안 돼요! 군형 잡힌 식사가 최고!",
-            "물을 하루 8잔 마셔요! 탈수가 오는줄도 모르고 지날 수 있다고요!",
-            "외에 나가 햇빛을 쭐이는 게 비타민 D를 만들어줘요! 🌞",
-            "오늘 배운 내용을 집에서도 실천해보세요! 실천이 진짜 공부님! 💪"
-        ];
-
 
         // 엔딩 화면에서 소감 폼 표시 (typeEnding 완료 후 호출)
         function showFeedbackSection() {
