@@ -152,7 +152,7 @@ html, body {
         justify-content: space-between !important;
         padding: 6px 12px !important;
         margin-top: 4px !important;
-        margin-bottom: -10px !important; /* 당겨서 간격 축소 */
+        margin-bottom: 8px !important; /* 약간의 여유 공간 */
     }
     #room-7 > div:nth-child(2) {
         width: 55px !important; 
