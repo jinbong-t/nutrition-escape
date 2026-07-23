@@ -1850,7 +1850,7 @@ function startWitchBattle() {
     
     // 게임 루프 시작
     witchGameLoop = setInterval(updateWitchGame, 30); // 프레임 증가
-    witchMoveInterval = setInterval(moveWitchRandomly, 1000); // 더 빠르게 이동
+    witchMoveInterval = setInterval(moveWitchRandomly, 600); // 아주 빠르게 여기저기 이동!
     junkSpawnInterval = setInterval(spawnJunkFood, 100); // 엄청나게 쏟아짐 (100ms)
 }
 
@@ -1860,8 +1860,8 @@ function moveWitchRandomly() {
     
     // 가로 10% ~ 90%
     const newX = 10 + Math.random() * 80;
-    // 맨 위에서만 머물도록 고정 (하늘)
-    const newY = 0;
+    // 세로 0% ~ 45% (화면 상단 절반에서 자유롭게 이동)
+    const newY = Math.random() * 45;
     
     boss.style.left = `${newX}%`;
     boss.style.top = `${newY}%`;

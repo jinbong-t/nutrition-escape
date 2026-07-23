@@ -303,7 +303,7 @@ html, body {
     /* Bone Game */
     /* Bone Game */
     #bone-game-container { height: 450px !important; width: 100% !important; max-width: 500px !important; margin: 0 auto !important; }
-    #bone-player { font-size: 3.5rem !important; text-shadow: 0 0 5px rgba(255,255,255,0.8); }
+    #bone-player { font-size: 3.5rem !important; }
     .bone-item { font-size: 2.5rem !important; }
     #room-screen-5 { text-align: center; }
     #room-screen-5 .btn { margin: 15px auto !important; display: block !important; width: 200px !important; }
