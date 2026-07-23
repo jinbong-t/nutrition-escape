@@ -247,7 +247,7 @@ html, body {
     
     /* Room 1 & 4: Diary Boxes */
     .diary-container { gap: 5px !important; padding: 10px !important; margin-top: 5px !important; }
-    .diary-page { font-size: 0.75rem !important; padding: 6px !important; line-height: 1.2 !important; margin-bottom: 5px !important; }
+    .diary-page { font-size: 0.95rem !important; padding: 10px !important; line-height: 1.4 !important; margin-bottom: 8px !important; }
 
     /* Room 5 & 6: Vending Machine & Market */
     .vending-machine { width: 100% !important; max-width: 250px !important; padding: 10px !important; margin: 0 auto !important; }
