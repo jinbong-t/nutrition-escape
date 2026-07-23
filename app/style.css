@@ -2501,8 +2501,9 @@ h2 {
     position: absolute;
     bottom: 10px;
     left: 50%;
-    transform: translateX(-50%);
-    font-size: 5rem;
+    transform: translateX(-50%) scale(0.75, 0.35);
+    font-size: 8rem;
+    transform-origin: bottom center;
     filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.3));
     z-index: 10;
     pointer-events: none;
