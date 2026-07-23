@@ -478,11 +478,7 @@ window.addEventListener('keydown', (e) => {
 // 허브 / 방 이동
 // ===========================
 function enterRoom(roomNum) {
-    // 씩씩이(7번)는 대화 모달로 처리!
-    if (roomNum === 7) {
-        showSsikssikiChat();
-        return;
-    }
+    // 씩씩이(7번) 방도 일반 퀴즈 방으로 진입하도록 수정
     // 테스트를 위해 모든 방 잠금 해제 (새로고침 시 진행상황 초기화 방지용)
     // if (roomNum > 1 && !clearedRooms.includes(roomNum - 1)) {
     //     showModal(`먼저 ${getRoomName(roomNum - 1)} 방을 해결해야 해요!`);
