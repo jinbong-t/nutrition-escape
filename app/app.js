@@ -424,12 +424,16 @@ function nextIntroPage() {
 
 // 모험 시작 버튼 클릭 핸들러 (모바일/PC 터치 이슈 해결)
 function startAdventure(e) {
-    if (e) {
-        e.stopPropagation();
-        e.preventDefault();
+    try {
+        if (e) {
+            e.stopPropagation();
+            if (e.cancelable) e.preventDefault();
+        }
+        showScreen('hub');
+        updateHubRooms();
+    } catch (err) {
+        alert("모험 시작 오류: " + err.message);
     }
-    showScreen('hub');
-    updateHubRooms();
 }
 
 // ===========================
