@@ -101,7 +101,7 @@ html, body {
     /* Stages Grid & Cards - Slightly larger to fill space */
     .hub-stages-wrap {
         flex: none !important;
-        padding-bottom: 0px !important;
+        padding-bottom: 10px !important;
     }
     .stages-section-title {
         font-size: 1.0rem !important;
@@ -109,8 +109,8 @@ html, body {
     }
     .stages-grid {
         grid-template-columns: repeat(3, 1fr) !important;
-        gap: 6px !important;
-        padding: 0 8px 0px !important;
+        gap: 8px !important;
+        padding: 0 8px 10px !important;
     }
     .stage-card {
         padding: 6px 4px 4px !important;
@@ -150,9 +150,9 @@ html, body {
         flex-direction: row !important;
         align-items: center !important;
         justify-content: space-between !important;
-        padding: 6px 12px !important;
-        margin-top: 4px !important;
-        margin-bottom: 8px !important; /* 약간의 여유 공간 */
+        padding: 8px 12px !important;
+        margin-top: 6px !important;
+        margin-bottom: 0px !important;
     }
     #room-7 > div:nth-child(2) {
         width: 55px !important; 
