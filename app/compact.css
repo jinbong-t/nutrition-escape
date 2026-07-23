@@ -252,8 +252,9 @@ html, body {
     .market-items { gap: 6px !important; }
     .market-item { padding: 6px 8px !important; font-size: 0.75rem !important; }
     
-    /* Room 5: Error Table */
-    .error-table th, .error-table td { padding: 4px 6px !important; font-size: 0.75rem !important; }
+    /* Room 5: Error Table - 열 간격 넓힐! */
+    .error-table th, .error-table td { padding: 8px 10px !important; font-size: 0.8rem !important; }
+    .error-table-wrap { overflow-x: visible !important; }
     
     /* Drag & Drop Blanks */
     .slots { gap: 4px !important; padding: 5px !important; }
@@ -295,7 +296,8 @@ html, body {
     .quiz-question.spooky-text { font-size: 0.8rem !important; line-height: 1.4 !important; }
     
     /* Bone Game */
-    #bone-game-container { height: 450px !important; width: 100% !important; max-width: 450px !important; margin: 0 auto !important; }
+    /* Bone Game */
+    #bone-game-container { height: 280px !important; width: 100% !important; max-width: 500px !important; margin: 0 auto !important; }
     .bone-item { font-size: 2.5rem !important; }
     #room-screen-5 { text-align: center; }
     #room-screen-5 .btn { margin: 15px auto !important; display: block !important; width: 200px !important; }

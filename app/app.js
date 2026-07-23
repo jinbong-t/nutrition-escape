@@ -45,6 +45,126 @@ function playClear() {
     [523, 659, 784, 1047].forEach((f, i) => playTone(f, 'sine', 0.3, 0.4, i * 0.12));
 }
 
+// 🎵 책장 넘기는 소리
+function playPageTurn() {
+    if (!soundEnabled) return;
+    try {
+        const ctx = getAudioCtx();
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.25, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+            const t = i / ctx.sampleRate;
+            data[i] = (Math.random() * 2 - 1) * 0.3 * Math.exp(-t * 20);
+        }
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.5, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 2000;
+        filter.Q.value = 0.5;
+        src.connect(filter);
+        filter.connect(g);
+        g.connect(ctx.destination);
+        src.start();
+        // 약간 지연된 두 번째 레이어
+        playTone(1500, 'sine', 0.06, 0.08, 0.05);
+        playTone(800, 'sine', 0.04, 0.06, 0.1);
+    } catch(e) {}
+}
+
+// 🔒 자물쇠 철컹 소리
+function playLockOpen() {
+    if (!soundEnabled) return;
+    try {
+        const ctx = getAudioCtx();
+        // 철컹하는 금속음
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.3, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+            const t = i / ctx.sampleRate;
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-t * 15) * 0.6;
+        }
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.7, ctx.currentTime);
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 1000;
+        src.connect(filter);
+        filter.connect(g);
+        g.connect(ctx.destination);
+        src.start();
+        // 클릭 metal sound
+        playTone(900, 'square', 0.08, 0.5, 0);
+        playTone(600, 'square', 0.06, 0.4, 0.05);
+        playTone(400, 'sine', 0.1, 0.3, 0.1);
+    } catch(e) {}
+}
+
+// 👻 귀신 소리
+function playGhostSound() {
+    if (!soundEnabled) return;
+    try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        osc.type = 'sine';
+        // 으스스하게 주파수를 흔들리게
+        osc.frequency.setValueAtTime(300, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(200, ctx.currentTime + 0.3);
+        osc.frequency.linearRampToValueAtTime(350, ctx.currentTime + 0.6);
+        osc.frequency.linearRampToValueAtTime(150, ctx.currentTime + 1.0);
+        gainNode.gain.setValueAtTime(0, ctx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.2);
+        gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 1.2);
+        // 두 번째 하모닉
+        const osc2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        osc2.connect(g2); g2.connect(ctx.destination);
+        osc2.type = 'sawtooth';
+        osc2.frequency.setValueAtTime(150, ctx.currentTime);
+        osc2.frequency.linearRampToValueAtTime(100, ctx.currentTime + 0.8);
+        g2.gain.setValueAtTime(0, ctx.currentTime);
+        g2.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.3);
+        g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.0);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 1.0);
+    } catch(e) {}
+}
+
+// 🏆 코드 완성 팡파르
+function playCodeComplete() {
+    if (!soundEnabled) return;
+    const fanfare = [523, 659, 784, 659, 784, 1047, 784, 1047, 1319];
+    fanfare.forEach((f, i) => playTone(f, 'sine', 0.3, 0.5, i * 0.1));
+    // 반짝이는 하이 노트
+    setTimeout(() => {
+        playTone(2093, 'sine', 0.5, 0.6, 0);
+        playTone(1760, 'sine', 0.3, 0.4, 0.1);
+        playTone(2093, 'sine', 0.6, 0.7, 0.2);
+    }, 950);
+}
+
+// 🎉 합격음 (스테이지 클리어)
+function playStagePass() {
+    if (!soundEnabled) return;
+    // 기분 좋은 도-미-솔-도 상행
+    playTone(523, 'sine', 0.2, 0.4, 0);
+    playTone(659, 'sine', 0.2, 0.4, 0.12);
+    playTone(784, 'sine', 0.2, 0.4, 0.24);
+    playTone(1047, 'sine', 0.4, 0.5, 0.36);
+    playTone(1319, 'sine', 0.5, 0.6, 0.5);
+}
+
 function playBombSuccess() {
     playTone(400, 'sine', 0.1, 0.3, 0);
     playTone(600, 'sine', 0.1, 0.3, 0.1);
@@ -289,6 +409,7 @@ function typeWriter() {
 
 function nextIntroPage() {
     if (isTyping) return;
+    playPageTurn(); // 📄 책장 넘기는 소리!
     if (introPageIndex >= introPages.length - 1) {
         // 마지막 페이지에서 클릭하면 바로 게임 시작 (버튼 클릭 안 먹히는 현상 대비)
         showScreen('hub'); 
@@ -309,6 +430,7 @@ function nextIntroPage() {
 function openDoor() {
     const doorScreen = document.getElementById('door-screen');
     if (!doorScreen) return;
+    playPageTurn(); // 📄 책 열리는 소리!
     doorScreen.classList.add('fly-away');
     setTimeout(() => {
         doorScreen.style.display = 'none';
@@ -316,7 +438,11 @@ function openDoor() {
         const bookCover = document.getElementById('book-cover');
         if (bookContainer && bookCover) {
             bookContainer.classList.add('active');
-            setTimeout(() => { bookCover.classList.add('open'); setTimeout(typeWriter, 1500); }, 500);
+            setTimeout(() => { 
+                playPageTurn(); // 📄 표지 넘기는 소리!
+                bookCover.classList.add('open'); 
+                setTimeout(typeWriter, 1500); 
+            }, 500);
         } else { typeWriter(); }
     }, 1000);
 }
@@ -352,20 +478,61 @@ window.addEventListener('keydown', (e) => {
 // 허브 / 방 이동
 // ===========================
 function enterRoom(roomNum) {
+    // 씩씩이(7번)는 대화 모달로 처리!
+    if (roomNum === 7) {
+        showSsikssikiChat();
+        return;
+    }
     if (roomNum > 1 && !clearedRooms.includes(roomNum - 1)) {
         showModal(`먼저 ${getRoomName(roomNum - 1)} 방을 해결해야 해요!`);
         return;
     }
     currentRoom = roomNum;
     showScreen(`room-screen-${roomNum}`);
-    
-    if (roomNum === 7) {
-        resetRoom7();
-        return;
-    }
-    
     if (!roomQuizState[roomNum]) roomQuizState[roomNum] = 1;
     showQuizStage(roomNum, roomQuizState[roomNum]);
+}
+
+// 씩씩이 대화 모달 표시
+function showSsikssikiChat() {
+    const quotes = [
+        "공주님! 6대 영양소를 모두 배우다니 정말 대단해요! 💪",
+        "저는 매일 아침 우유 한 잔, 밥에는 채소를 듬뿍 먹어요!",
+        "영양소는 어느 하나도 부족하면 안 돼요! 균형 잡힌 식사가 최고!",
+        "물을 하루 8잔 마셔요! 갈증이 없어도 조금씩 자주 마셔야 해요~",
+        "밖에 나가 햇빛을 쬐는 게 비타민 D를 만들어줘요! 🌞",
+        "오늘 배운 영양소 지식을 집에서도 실천해봐요! 실천이 진짜 공부! 📚",
+        "저처럼 건강해지려면 편식은 금물! 골고루 먹는 게 최고예요! 🥗",
+        "단백질은 근육을 만들고, 탄수화물은 에너지를 줘요! 잊지 마세요!",
+    ];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    
+    // 이미 존재하는 모달 사용 또는 새로 생성
+    let modal = document.getElementById('ssikssiki-chat-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'ssikssiki-chat-modal';
+        modal.style.cssText = 'position:fixed; inset:0; z-index:99998; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center;';
+        modal.innerHTML = `
+            <div style="background:white; border-radius:24px; padding:28px 24px; max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.5); text-align:center; font-family:'Gamja Flower',cursive;">
+                <div style="width:90px; height:90px; border-radius:12px; border:3px solid #bbf7d0; overflow:hidden; margin:0 auto 12px; background:#f0fdf4;">
+                    <img src="./씩씩이 본캐만.png" style="width:100%;height:100%;object-fit:contain;" alt="씩씩이">
+                </div>
+                <div style="font-size:1.2rem; font-weight:bold; color:#14532d; margin-bottom:14px;">씩씩이의 응원 💪</div>
+                <div id="ssikssiki-chat-text" style="font-size:1.05rem; color:#166534; line-height:1.7; background:#f0fdf4; border-radius:14px; padding:16px; margin-bottom:18px; border: 2px solid #bbf7d0;"></div>
+                <div style="display:flex; gap:8px; justify-content:center;">
+                    <button onclick="showSsikssikiChat()" style="background:#dcfce7; color:#14532d; border:2px solid #22c55e; border-radius:10px; padding:10px 16px; font-size:0.95rem; font-family:'Gamja Flower',cursive; cursor:pointer;">다른 말 듣기 🔄</button>
+                    <button onclick="document.getElementById('ssikssiki-chat-modal').style.display='none'" style="background:#15803d; color:white; border:none; border-radius:10px; padding:10px 16px; font-size:0.95rem; font-family:'Gamja Flower',cursive; cursor:pointer;">고마워! 👋</button>
+                </div>
+            </div>
+        `;
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+        document.body.appendChild(modal);
+    }
+    
+    document.getElementById('ssikssiki-chat-text').textContent = quote;
+    modal.style.display = 'flex';
+    playCorrect();
 }
 
 function getRoomName(num) {
@@ -438,14 +605,28 @@ function nextQuizStage(roomNum, currentQ) {
         // 마녀 깜짝 등장 영상 재생 (3번 방 클리어 시)
         if (roomNum === 3) {
             setTimeout(() => {
+                playGhostSound(); // 👻 귀신 소리!
+                // witch-video.mp4 경로 시도 (루트/앱 모두 대응)
+                const videoSrc = ['./witch-video.mp4', '../witch-video.mp4', '/witch-video.mp4'].find(s => s) || '../witch-video.mp4';
                 const witchHTML = `
                     <div style="text-align: center; margin-bottom: 15px;">
-                        <video src="../witch-video.mp4" autoplay style="max-width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);" onended="this.pause()"></video>
+                        <video id="witch-popup-video" autoplay playsinline muted style="max-width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); max-height: 200px;" onended="this.pause()">
+                            <source src="../witch-video.mp4" type="video/mp4">
+                            <source src="./witch-video.mp4" type="video/mp4">
+                        </video>
                     </div>
                     <b style="color:#7e22ce; font-size:2.2rem; display:block; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">나쁜 식습관 마녀 등장!</b>
                     <span style="font-size:1.3rem; color: #4c1d95; font-weight: bold; display: block; line-height: 1.4;">"히히히! 영양소들을 다 모으게 둘 순 없지!<br>다음 방부터는 더 어려워질 거다!"</span>
                 `;
                 showModal(witchHTML, 'witch');
+                // 모달이 뜬 후 비디오 재생 시도
+                setTimeout(() => {
+                    const v = document.getElementById('witch-popup-video');
+                    if (v) {
+                        v.muted = false;
+                        v.play().catch(() => { v.muted = true; v.play().catch(()=>{}); });
+                    }
+                }, 300);
             }, 800);
         }
     }
@@ -459,7 +640,7 @@ function checkOption(roomNum, qNum, btn, result) {
     allBtns.forEach(b => b.disabled = true);
     if (result === 'correct') {
         btn.classList.add('correct');
-        playCorrect();
+        playStagePass(); // 🎵 합격음!
         showModal('🎉 정답입니다!', true);
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, qNum); }, 1500);
     } else {
@@ -517,6 +698,7 @@ function selectTableRow(el, roomNum, isCorrect) {
         el.classList.add('row-correct');
         const explain = document.getElementById(`lie-explain-${roomNum}`);
         if (explain) explain.classList.remove('hidden');
+        playStagePass(); // 🎵 합격음!
         showModal('🎉 오류를 찾았습니다! "체내 수분 평형"은 나트륨의 역할이에요!', true);
         setTimeout(() => { closeModal(); nextQuizStage(roomNum, 3); }, 2500);
     } else {
@@ -968,7 +1150,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = e.clientY - rect.top;
         const overlay = document.getElementById('dark-overlay');
         if (overlay) {
-            overlay.style.background = `radial-gradient(circle 65px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.99) 100%)`;
+            // 손전등 빛 크기 3/4로 줄임 (65 → 49px)
+            overlay.style.background = `radial-gradient(circle 49px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.99) 100%)`;
         }
     });
 
@@ -985,7 +1168,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = touch.clientY - rect.top;
         const overlay = document.getElementById('dark-overlay');
         if (overlay) {
-            overlay.style.background = `radial-gradient(circle 65px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.99) 100%)`;
+            // 손전등 빛 크기 3/4로 줄임 (65 → 49px)
+            overlay.style.background = `radial-gradient(circle 49px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.99) 100%)`;
         }
     }
 
@@ -1037,7 +1221,8 @@ function changeDial(index, dir) {
 function checkSafeCode(roomNum) {
     const code = safeState.join('');
     if (code === 'CDAB') {
-        showModal('🔓 찰칵! 금고 문이 열렸습니다!', true);
+        playLockOpen(); // 🔒 자물쇠 철컹 소리!
+        showModal('🔓 철컹! 금고 문이 열렸습니다!', true);
         setTimeout(() => { 
             closeModal(); 
             nextQuizStage(roomNum, 2); 
@@ -1509,6 +1694,7 @@ function clearRoom(roomNum) {
     updateHubRooms();
     if (clearedRooms.length === 6) {
         setTimeout(() => { 
+            playCodeComplete(); // 🏆 코드 완성 팡파르!
             showModal('🎉 6대 영양소 코드를 모두 모았습니다!<br><br>이제 하단의 <b>씩씩이 방</b>에 들어가 최종 점검을 받으세요!', true); 
         }, 1200);
     }
