@@ -483,10 +483,11 @@ function enterRoom(roomNum) {
         showSsikssikiChat();
         return;
     }
-    if (roomNum > 1 && !clearedRooms.includes(roomNum - 1)) {
-        showModal(`먼저 ${getRoomName(roomNum - 1)} 방을 해결해야 해요!`);
-        return;
-    }
+    // 테스트를 위해 모든 방 잠금 해제 (새로고침 시 진행상황 초기화 방지용)
+    // if (roomNum > 1 && !clearedRooms.includes(roomNum - 1)) {
+    //     showModal(`먼저 ${getRoomName(roomNum - 1)} 방을 해결해야 해요!`);
+    //     return;
+    // }
     currentRoom = roomNum;
     showScreen(`room-screen-${roomNum}`);
     if (!roomQuizState[roomNum]) roomQuizState[roomNum] = 1;
