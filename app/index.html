@@ -123,6 +123,13 @@
 
         <button class="name-start-btn" onclick="startWithName()">🚀 모험 시작!</button>
     </div>
+
+    <!-- 푸터 -->
+    <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 0.85rem; color: rgba(255,255,255,0.6); font-family: 'Gowun Dodum', sans-serif;">
+        <a href="#" onclick="event.preventDefault(); showPolicyModal('terms')" style="color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 10px; border-bottom: 1px solid rgba(255,255,255,0.4);">이용약관</a>
+        <a href="#" onclick="event.preventDefault(); showPolicyModal('privacy')" style="color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 10px; border-bottom: 1px solid rgba(255,255,255,0.4);">개인정보처리방침</a>
+        <span style="margin: 0 10px;">BY. LEE JIN YOUNG</span>
+    </div>
 </div>
 
 <div id="game-container">
@@ -1172,6 +1179,41 @@
                 section.style.animation = 'floatUp 0.6s ease forwards';
                 section.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+        }
+    </script>
+
+    <!-- 정책 모달 -->
+    <div id="policy-modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100000; align-items:center; justify-content:center; padding: 20px; font-family: 'Gowun Dodum', sans-serif;">
+        <div style="background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; width: 100%; max-width: 500px; padding: 24px; color: white; position: relative;">
+            <button onclick="document.getElementById('policy-modal-overlay').style.display='none'" style="position:absolute; top:16px; right:20px; background:none; border:none; color:rgba(255,255,255,0.5); font-size:1.5rem; cursor:pointer;">✕</button>
+            <h3 id="policy-modal-title" style="color: #ffd700; font-family: 'Gamja Flower', cursive; font-size: 1.5rem; margin-bottom: 16px; text-align: center;"></h3>
+            <div id="policy-modal-content" style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.6; max-height: 50vh; overflow-y: auto; white-space: pre-wrap;"></div>
+        </div>
+    </div>
+    <script>
+        function showPolicyModal(type) {
+            const titleEl = document.getElementById('policy-modal-title');
+            const contentEl = document.getElementById('policy-modal-content');
+            
+            if (type === 'terms') {
+                titleEl.textContent = '📜 이용약관';
+                contentEl.innerHTML = `본 앱('6대 영양소와 일곱 난쟁이')은 중학교 과학 수업 및 교육 목적으로 제작된 에듀테크 서비스입니다.
+
+1. 본 서비스는 복잡한 회원가입이나 로그인 없이 <b>이름과 학반 정보</b>만으로 간편하게 이용할 수 있습니다.
+2. 서비스 내에서 제공되는 모든 미니게임과 디자인, 스토리 콘텐츠의 저작권은 제작자(LEE JIN YOUNG)에게 있습니다.
+3. 건전한 학습 목적으로만 사용해주시길 바라며, 타인에게 불쾌감을 주는 부적절한 닉네임 사용 시 예고 없이 데이터가 삭제될 수 있습니다.
+4. 본 서비스는 교육용이므로 시스템 업데이트나 점검 등에 따라 일시적으로 접속이 제한될 수 있습니다.`;
+            } else if (type === 'privacy') {
+                titleEl.textContent = '🛡️ 개인정보처리방침';
+                contentEl.innerHTML = `본 앱은 원활한 교육 및 모니터링을 위해 최소한의 정보만을 수집하며, 학생들의 프라이버시를 최우선으로 존중합니다.
+
+1. <b>수집 항목</b>: 학반 번호, 이름(또는 별명), 게임 진행 데이터(클리어한 방, 점수, 플레이 시간, 학습 소감)
+2. <b>수집 목적</b>: 선생님의 실시간 학습 현황 모니터링 및 수업 평가(수행평가/활동 점검 등)
+3. <b>보유 및 이용 기간</b>: 수집된 데이터는 학기 중 또는 선생님이 대시보드에서 직접 '데이터 초기화'를 누르기 전까지 보안 서버(Firebase)에 안전하게 보관되며, 이후 영구적으로 파기됩니다.
+4. <b>제3자 제공</b>: 본 서비스는 수집된 데이터를 상업적 목적으로 절대 활용하지 않으며 제3자에게 제공하거나 판매하지 않습니다.`;
+            }
+            
+            document.getElementById('policy-modal-overlay').style.display = 'flex';
         }
     </script>
 </body>
