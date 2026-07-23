@@ -1832,6 +1832,7 @@ let witchGameLoop = null;
 let witchMoveInterval = null;
 let junkSpawnInterval = null;
 let isWitchDead = false;
+let witchFailCount = 0; // 마녀전 실패 횟수
 let junkFoods = [];
 
 function startWitchBattle() {
@@ -1991,8 +1992,8 @@ function endWitchBattle(isWin, msg) {
     clearInterval(witchGameLoop);
     clearInterval(witchMoveInterval);
     clearInterval(junkSpawnInterval);
-    
     if (isWin) {
+        witchFailCount = 0; // 승리 시 초기화
         document.getElementById('witch-hp-bar').style.width = '0%';
         // 필드에 남은 정크푸드 폭발 효과
         document.querySelectorAll('.junk-food').forEach(j => {
@@ -2007,7 +2008,18 @@ function endWitchBattle(isWin, msg) {
             showEnding();
         }, 2500);
     } else {
-        showModal(msg, false);
+        witchFailCount++;
+        if (witchFailCount >= 10) {
+            witchFailCount = 0;
+            showModal('너무 어려우셨죠? 😢 마녀가 스스로 지쳐서 도망갔어요!<br>특별히 다음으로 넘어가게 해줄게요!', true);
+            setTimeout(() => {
+                closeModal();
+                showEnding();
+            }, 3500);
+            return;
+        }
+
+        showModal(msg + `<br><br><span style="font-size:1rem; color:#ef4444;">(현재 실패: ${witchFailCount} / 10번 실패 시 자동 통과)</span>`, false);
         setTimeout(() => {
             closeModal();
             startWitchBattle(); // 재도전
