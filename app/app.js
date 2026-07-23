@@ -486,6 +486,12 @@ function enterRoom(roomNum) {
     // }
     currentRoom = roomNum;
     showScreen(`room-screen-${roomNum}`);
+    
+    if (roomNum === 7) {
+        resetRoom7();
+        return;
+    }
+    
     if (!roomQuizState[roomNum]) roomQuizState[roomNum] = 1;
     showQuizStage(roomNum, roomQuizState[roomNum]);
 }
