@@ -1070,7 +1070,7 @@
 
 </div>
     <script src="firebase-config.js"></script>
-    <script src="tracker.js"></script>
+    <script src="tracker.js?v=2"></script>
     <script src="app.js?v=13"></script>
     <script>
         // Firebase 초기화 (tracker.js보다 나중에 실행)
@@ -1080,6 +1080,10 @@
 
         // 학생 이름 입력 후 게임 시작
         function startWithName() {
+            const classInput = document.getElementById('student-class-input');
+            let classNum = classInput ? classInput.value.trim() : '';
+            if (!classNum) classNum = '미지정'; // 반을 입력하지 않은 경우
+
             const nameInput = document.getElementById('student-name-input');
             const name = nameInput.value.trim();
             if (!name) {
@@ -1087,7 +1091,7 @@
                 nameInput.placeholder = '⚠️ 이름을 입력해주세요!';
                 setTimeout(() => {
                     nameInput.style.borderColor = 'rgba(255,215,0,0.4)';
-                    nameInput.placeholder = '예) 홍길동 또는 1모둠 김철수';
+                    nameInput.placeholder = '예) 김영양';
                 }, 1500);
                 return;
             }
@@ -1097,8 +1101,8 @@
             overlay.style.opacity = '0';
             setTimeout(() => { overlay.style.display = 'none'; }, 500);
 
-            // 트래커 초기화
-            initTracker(name);
+            // 트래커 초기화 (반 번호 추가)
+            initTracker(classNum, name);
         }
 
         // 별점 설정

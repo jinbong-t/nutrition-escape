@@ -224,8 +224,14 @@
         <button class="save-btn" onclick="saveAsImage('tab-ranking')" style="background:linear-gradient(135deg,#8b5cf6,#6366f1);">
             🏆 순위 이미지
         </button>
+        <select id="global-class-filter" onchange="filterStudents()" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:8px 14px; color:white; font-size:0.85rem; font-weight:bold; outline:none; font-family:'Noto Sans KR',sans-serif; cursor:pointer; margin-right:5px;">
+            <option value="all" style="color:black">🏫 모든 반</option>
+        </select>
         <button class="save-btn" onclick="exportToCSV()" style="background:linear-gradient(135deg,#10b981,#059669); color:white;">
-            📊 엑셀 다운로드
+            📊 다운로드
+        </button>
+        <button class="save-btn" onclick="resetAllData()" style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white;">
+            🗑️ 초기화
         </button>
     </div>
 </header>
@@ -315,6 +321,7 @@
 // ===========================
 let allStudents = [];
 let currentFilter = 'all';
+let currentClassFilter = 'all';
 let searchQuery = '';
 const roomNames = ['탄수화물','단백질','지방','비타민','무기질','물'];
 
@@ -371,7 +378,13 @@ function renderStudents() {
     const tbody = document.getElementById('student-tbody');
     let filtered = allStudents.filter(s => {
         const matchSearch = !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchClass = currentClassFilter === 'all' || s.classNum === currentClassFilter;
         let matchFilter = true;
+        if (currentFilter === 'active') matchFilter = !s.completed && (s.clearedRooms||[]).length > 0;
+        if (currentFilter === 'completed') matchFilter = s.completed;
+        if (currentFilter === 'feedback') matchFilter = !!s.feedback;
+        return matchSearch && matchClass && matchFilter;
+    });
         if (currentFilter === 'active') matchFilter = !s.completed && (s.clearedRooms||[]).length > 0;
         if (currentFilter === 'completed') matchFilter = s.completed;
         if (currentFilter === 'feedback') matchFilter = !!s.feedback;
@@ -429,8 +442,11 @@ function updateStats() {
 // 순위표 렌더링
 // ===========================
 function renderRanking() {
+    // 반 필터 적용
+    let rankStudents = allStudents.filter(s => currentClassFilter === 'all' || s.classNum === currentClassFilter);
+
     // 점수 기준 정렬 (같은 점수면 완료 시간 빠른 순)
-    const sorted = [...allStudents].sort((a,b) => {
+    const sorted = rankStudents.sort((a,b) => {
         if ((b.score||0) !== (a.score||0)) return (b.score||0) - (a.score||0);
         // 완료 시간 비교
         const aT = a.completedAt ? (a.completedAt.toDate ? a.completedAt.toDate() : new Date(a.completedAt)) : new Date(9999,0);
@@ -499,7 +515,10 @@ function setFilter(filter) {
 
 function filterStudents() {
     searchQuery = document.getElementById('search-input').value;
+    const classFilterEl = document.getElementById('global-class-filter');
+    if (classFilterEl) currentClassFilter = classFilterEl.value;
     renderStudents();
+    renderRanking();
 }
 
 // ===========================
@@ -581,7 +600,7 @@ function exportToCSV() {
 
     // CSV 헤더 (한글 깨짐 방지를 위해 BOM 포함)
     const BOM = "\uFEFF";
-    let csvContent = BOM + "학생 이름,점수,클리어한 방 개수,완료 여부,별점,소감,접속시간,완료시간\n";
+    let csvContent = BOM + "학반,학생 이름,점수,클리어한 방 개수,완료 여부,별점,소감,접속시간,완료시간\n";
 
     // 데이터 행 생성
     allStudents.forEach(s => {
@@ -598,8 +617,9 @@ function exportToCSV() {
         
         const _start = s.startedAt && s.startedAt.toDate ? s.startedAt.toDate().toLocaleString('ko-KR') : '';
         const _end = s.completedAt && s.completedAt.toDate ? s.completedAt.toDate().toLocaleString('ko-KR') : '';
+        const _class = s.classNum || '미지정';
 
-        const row = `${_name},${_score},${_rooms},${_done},${_rating},${_feedback},"${_start}","${_end}"`;
+        const row = `${_class},${_name},${_score},${_rooms},${_done},${_rating},${_feedback},"${_start}","${_end}"`;
         csvContent += row + "\n";
     });
 
@@ -625,8 +645,24 @@ function startRealtimeListener() {
     db.collection('sessions').orderBy('startedAt', 'desc').onSnapshot(snapshot => {
         document.getElementById('loading').style.display = 'none';
         allStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        // 반 목록 추출 및 드롭다운 업데이트
+        const classes = new Set();
+        allStudents.forEach(s => { if(s.classNum) classes.add(s.classNum); });
+        const classFilterEl = document.getElementById('global-class-filter');
+        if (classFilterEl) {
+            const currentVal = classFilterEl.value;
+            let optionsHtml = '<option value="all" style="color:black">🏫 모든 반</option>';
+            Array.from(classes).sort().forEach(c => {
+                optionsHtml += `<option value="${c}" style="color:black">${c}</option>`;
+            });
+            classFilterEl.innerHTML = optionsHtml;
+            classFilterEl.value = currentVal; // 기존 선택값 유지
+            if (classFilterEl.selectedIndex === -1) classFilterEl.value = 'all';
+            currentClassFilter = classFilterEl.value;
+        }
+
         renderStudents();
-        // 순위 탭이 열려있으면 같이 갱신
         if (document.getElementById('tab-ranking').classList.contains('active')) renderRanking();
     }, err => {
         document.getElementById('loading').innerHTML = `<div style="font-size:1.8rem;color:#f87171;">❌ 오류</div><p style="font-size:0.85rem;margin-top:8px;color:rgba(255,255,255,0.4);">${err.message}</p>`;
@@ -636,6 +672,40 @@ function startRealtimeListener() {
 // ===========================
 // 초기화
 // ===========================
+async function resetAllData() {
+    if (!db) return;
+    const confirm1 = confirm("⚠️ 파이어베이스에 저장된 모든 학생 데이터를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다!");
+    if (!confirm1) return;
+    const confirm2 = prompt("정말로 전체 데이터를 초기화하려면 '초기화' 라고 입력해주세요.");
+    if (confirm2 !== '초기화') {
+        alert("초기화가 취소되었습니다.");
+        return;
+    }
+
+    try {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading').innerHTML = `<div class="spinner"></div><p>데이터 삭제 중...</p>`;
+        
+        const snapshot = await db.collection('sessions').get();
+        const batchSize = 500;
+        let count = 0;
+        
+        // Firestore는 클라이언트에서 컬렉션 전체 삭제가 어려워 문서 단위로 삭제
+        for (const doc of snapshot.docs) {
+            await db.collection('sessions').doc(doc.id).delete();
+            count++;
+        }
+        alert(`✅ 총 ${count}명의 학생 데이터가 성공적으로 삭제되었습니다.`);
+    } catch(e) {
+        console.error("데이터 초기화 오류:", e);
+        alert("데이터 초기화 중 오류가 발생했습니다: " + e.message);
+    } finally {
+        if(allStudents.length === 0) {
+            document.getElementById('loading').style.display = 'none';
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initFirebase();
     startRealtimeListener();

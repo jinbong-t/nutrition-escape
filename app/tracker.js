@@ -7,10 +7,14 @@ let studentName = null;
 let firebaseReady = false;
 
 // 학생 세션 초기화 (이름 입력 후 호출)
-async function initTracker(name) {
+async function initTracker(classNum, name) {
     studentName = name;
-    // 고유 ID = 이름 + 타임스탬프
-    studentId = name.replace(/\s/g,'_') + '_' + Date.now();
+    // 고유 ID = 반_이름_타임스탬프
+    const safeClass = classNum.replace(/\s/g,'_');
+    const safeName = name.replace(/\s/g,'_');
+    studentId = `${safeClass}_${safeName}_${Date.now()}`;
+    
+    localStorage.setItem('nutrition_student_class', classNum);
     localStorage.setItem('nutrition_student_name', name);
     localStorage.setItem('nutrition_student_id', studentId);
 
@@ -21,6 +25,7 @@ async function initTracker(name) {
 
     try {
         await db.collection('sessions').doc(studentId).set({
+            classNum: classNum,
             name: name,
             startedAt: firebase.firestore.FieldValue.serverTimestamp(),
             clearedRooms: [],
