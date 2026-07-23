@@ -169,15 +169,15 @@
                         <img src="assets/snow_white_user.jpg" alt="백설공주 삽화" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background: white;">
                     </div>
                 </div>
-                <div class="page-right" onclick="nextIntroPage()" style="cursor: pointer; z-index: 100;">
+                <div class="page-right" onclick="nextIntroPage()" style="cursor: pointer; z-index: 100; user-select: none; -webkit-user-select: none;">
                     <div class="book-body" id="intro-text" style="min-height: 250px; pointer-events: none;"></div>
                     
                     <div class="page-controls hidden" id="intro-controls" style="margin-top: 30px; text-align: center; pointer-events: none;">
                         <button class="btn">클릭해서 다음 장으로 ▶</button>
                     </div>
 
-                    <button id="start-btn" class="btn hidden" style="margin-top: 30px; position: relative; z-index: 500; pointer-events: auto;" onclick="event.stopPropagation(); showScreen('hub'); updateHubRooms();">
-                        <span class="btn-text">모험 시작하기 📖</span>
+                    <button id="start-btn" class="btn hidden" style="margin-top: 30px; position: relative; z-index: 500; pointer-events: auto; user-select: none; -webkit-user-select: none;" onclick="startAdventure(event)" onpointerdown="startAdventure(event)">
+                        <span class="btn-text" style="pointer-events: none;">모험 시작하기 📖</span>
                     </button>
                 </div>
             </div>
@@ -1078,7 +1078,7 @@
 </div>
     <script src="firebase-config.js"></script>
     <script src="tracker.js?v=2"></script>
-    <script src="app.js?v=13"></script>
+    <script src="app.js?v=14"></script>
     <script>
         // Firebase 초기화 (tracker.js보다 나중에 실행)
         document.addEventListener('DOMContentLoaded', () => {

@@ -422,6 +422,16 @@ function nextIntroPage() {
     typeWriter();
 }
 
+// 모험 시작 버튼 클릭 핸들러 (모바일/PC 터치 이슈 해결)
+function startAdventure(e) {
+    if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    showScreen('hub');
+    updateHubRooms();
+}
+
 // ===========================
 // 대문 열기
 // ===========================
