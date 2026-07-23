@@ -385,11 +385,6 @@ function renderStudents() {
         if (currentFilter === 'feedback') matchFilter = !!s.feedback;
         return matchSearch && matchClass && matchFilter;
     });
-        if (currentFilter === 'active') matchFilter = !s.completed && (s.clearedRooms||[]).length > 0;
-        if (currentFilter === 'completed') matchFilter = s.completed;
-        if (currentFilter === 'feedback') matchFilter = !!s.feedback;
-        return matchSearch && matchFilter;
-    });
     filtered.sort((a,b) => {
         const score = s => s.completed ? 2 : (s.clearedRooms||[]).length > 0 ? 1 : 0;
         return score(b) - score(a) || (b.score||0) - (a.score||0);
