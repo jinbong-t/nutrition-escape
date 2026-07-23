@@ -410,8 +410,10 @@ function typeWriter() {
 function nextIntroPage() {
     if (isTyping) return;
     playPageTurn(); // 📄 책장 넘기는 소리!
+    
+    // 마지막 페이지에서 근처 배경(책장)을 클릭해도 모험이 시작되도록 처리
     if (introPageIndex >= introPages.length - 1) {
-        // 마지막 페이지에서는 배경을 클릭해도 넘어가지 않고, 반드시 '모험 시작하기' 버튼을 눌러야 함
+        startAdventure();
         return;
     }
     
