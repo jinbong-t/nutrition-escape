@@ -411,9 +411,7 @@ function nextIntroPage() {
     if (isTyping) return;
     playPageTurn(); // 📄 책장 넘기는 소리!
     if (introPageIndex >= introPages.length - 1) {
-        // 마지막 페이지에서 클릭하면 바로 게임 시작 (버튼 클릭 안 먹히는 현상 대비)
-        showScreen('hub'); 
-        updateHubRooms();
+        // 마지막 페이지에서는 배경을 클릭해도 넘어가지 않고, 반드시 '모험 시작하기' 버튼을 눌러야 함
         return;
     }
     
