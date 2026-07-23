@@ -2501,7 +2501,7 @@ h2 {
     position: absolute;
     bottom: 10px;
     left: 50%;
-    transform: translateX(-50%) scale(1.5, 0.7);
+    transform: translateX(-50%);
     font-size: 4rem;
     filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.3));
     z-index: 10;
