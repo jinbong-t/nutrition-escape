@@ -99,6 +99,10 @@ html, body {
     }
 
     /* Stages Grid & Cards - Slightly larger to fill space */
+    .hub-stages-wrap {
+        flex: none !important;
+        padding-bottom: 0px !important;
+    }
     .stages-section-title {
         font-size: 1.0rem !important;
         margin: 6px 10px 4px !important;
