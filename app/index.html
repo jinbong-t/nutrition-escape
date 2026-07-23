@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Jua&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Pen+Script&family=Orbit&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=10">
     <link rel="stylesheet" href="premium.css?v=13">
     <link rel="stylesheet" href="compact.css?v=13">
 </head>
@@ -949,7 +949,7 @@
             
             <!-- 마녀 체력 -->
             <div style="flex: 1; text-align: center;">
-                <div style="font-size:0.9rem; margin-bottom:4px; color: #ef4444; font-weight: bold;">마녀 체력</div>
+                <div style="font-size:0.9rem; margin-bottom:4px; color: #ef4444; font-weight: bold;"><span onclick="if(typeof witchHp !== 'undefined') { witchHp = 0; hitWitch(); }" style="cursor: pointer;">마</span>녀 체력</div>
                 <div class="boss-hp-bar-container" style="width: 90%; height: 15px; margin: 0 auto;">
                     <div class="boss-hp-bar" id="witch-hp-bar"></div>
                 </div>
