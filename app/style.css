@@ -2502,7 +2502,7 @@ h2 {
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 4rem;
+    font-size: 5rem;
     filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.3));
     z-index: 10;
     pointer-events: none;
