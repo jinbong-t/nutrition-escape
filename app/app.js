@@ -1735,22 +1735,22 @@ function revealCode(roomNum) {
         hudDot.textContent = codeLetters[roomNum];
     }
     // 힌트 텍스트 업데이트
-    const cleared = clearedRooms.length;
+    const cleared = Math.min(clearedRooms.length, 7);
     const hintEl = document.getElementById('code-hint-text-hub') || document.querySelector('.code-hint-text');
     if (hintEl) {
-        if (cleared < 6) hintEl.textContent = `${cleared} / 6 완료! 앞으로 ${6 - cleared}방 남았어요!`;
-        else hintEl.textContent = '🎉 코드 완성! 영양전도사!';
+        if (cleared < 7) hintEl.textContent = `${cleared} / 7 완료! 앞으로 ${7 - cleared}방 남았어요!`;
+        else hintEl.textContent = '🎉 모든 방 완료! 마녀 등장 준비!';
     }
 }
 
 function updateHubRooms() {
-    const cleared = clearedRooms.length;
+    const cleared = Math.min(clearedRooms.length, 7);
 
     // HUD 진행 텍스트 업데이트
     const hudText = document.getElementById('hud-progress-text');
-    if (hudText) hudText.textContent = `${cleared} / 6 방 완료`;
+    if (hudText) hudText.textContent = `${cleared} / 7 방 완료`;
 
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 7; i++) {
         const card = document.getElementById(`room-${i}`);
         if (!card) continue;
 

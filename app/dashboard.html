@@ -323,7 +323,7 @@ let allStudents = [];
 let currentFilter = 'all';
 let currentClassFilter = 'all';
 let searchQuery = '';
-const roomNames = ['탄수화물','단백질','지방','비타민','무기질','물'];
+const roomNames = ['탄수화물','단백질','지방','비타민','무기질','물','씩씩이'];
 
 // 헤더 날짜
 document.getElementById('header-date').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'long',day:'numeric'});
@@ -350,14 +350,14 @@ function getStatusBadge(s) {
 
 function getRoomDots(clearedRooms) {
     const cleared = clearedRooms || [];
-    return Array.from({length:6},(_,i) => {
+    return Array.from({length:7},(_,i) => {
         const ok = cleared.includes(i+1);
         return `<div class="room-dot ${ok?'cleared':'not-cleared'}" title="${roomNames[i]}">${i+1}</div>`;
     }).join('');
 }
 
 function getProgress(s) {
-    return Math.min(100, Math.round(((s.clearedRooms||[]).length / 6) * 100));
+    return Math.min(100, Math.round(((s.clearedRooms||[]).length / 7) * 100));
 }
 
 // ===========================
@@ -470,7 +470,7 @@ function renderRanking() {
             <div class="podium-medal">${medals[idx]}</div>
             <div class="podium-name">${s.name}</div>
             <div class="podium-score">${s.score||0}점</div>
-            <div class="podium-detail">${(s.clearedRooms||[]).length}/6방 ${s.completed?'✅':''}</div>
+            <div class="podium-detail">${(s.clearedRooms||[]).length}/7방 ${s.completed?'✅':''}</div>
             ${s.rating ? `<div style="color:#fbbf24;font-size:0.85rem;margin-top:4px;">${'⭐'.repeat(s.rating)}</div>` : ''}
         </div>`;
     }).join('');
