@@ -519,10 +519,10 @@ function showSsikssikiChat() {
                     <img src="./씩씩이 본캐만.png" style="width:100%;height:100%;object-fit:contain;" alt="씩씩이">
                 </div>
                 <div style="font-size:1.2rem; font-weight:bold; color:#14532d; margin-bottom:14px;">씩씩이의 응원 💪</div>
-                <div id="ssikssiki-chat-text" style="font-size:1.05rem; color:#166534; line-height:1.7; background:#f0fdf4; border-radius:14px; padding:16px; margin-bottom:18px; border: 2px solid #bbf7d0;"></div>
+                <div id="ssikssiki-chat-text" style="font-size:1.35rem; color:#166534; line-height:1.6; background:#f0fdf4; border-radius:14px; padding:16px; margin-bottom:18px; border: 2px solid #bbf7d0; font-weight: bold;"></div>
                 <div style="display:flex; gap:8px; justify-content:center;">
-                    <button onclick="showSsikssikiChat()" style="background:#dcfce7; color:#14532d; border:2px solid #22c55e; border-radius:10px; padding:10px 16px; font-size:0.95rem; font-family:'Gamja Flower',cursive; cursor:pointer;">다른 말 듣기 🔄</button>
-                    <button onclick="document.getElementById('ssikssiki-chat-modal').style.display='none'" style="background:#15803d; color:white; border:none; border-radius:10px; padding:10px 16px; font-size:0.95rem; font-family:'Gamja Flower',cursive; cursor:pointer;">고마워! 👋</button>
+                    <button onclick="showSsikssikiChat()" style="background:#dcfce7; color:#14532d; border:2px solid #22c55e; border-radius:10px; padding:10px 16px; font-size:1.1rem; font-family:'Gamja Flower',cursive; cursor:pointer; font-weight: bold;">다른 말 듣기 🔄</button>
+                    <button onclick="document.getElementById('ssikssiki-chat-modal').style.display='none'" style="background:#15803d; color:white; border:none; border-radius:10px; padding:10px 16px; font-size:1.1rem; font-family:'Gamja Flower',cursive; cursor:pointer; font-weight: bold;">고마워! 👋</button>
                 </div>
             </div>
         `;

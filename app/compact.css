@@ -106,7 +106,7 @@ html, body {
     .stages-grid {
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 6px !important;
-        padding: 0 8px 8px !important;
+        padding: 0 8px 0px !important;
     }
     .stage-card {
         padding: 6px 4px 4px !important;
@@ -148,6 +148,7 @@ html, body {
         justify-content: space-between !important;
         padding: 6px 12px !important;
         margin-top: 4px !important;
+        margin-bottom: -10px !important; /* 당겨서 간격 축소 */
     }
     #room-7 > div:nth-child(2) {
         width: 55px !important; 
