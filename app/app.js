@@ -2019,7 +2019,7 @@ function endWitchBattle(isWin, msg) {
             return;
         }
 
-        showModal(msg + `<br><br><span style="font-size:1rem; color:#ef4444;">(현재 실패: ${witchFailCount} / 10번 실패 시 자동 통과)</span>`, false);
+        showModal(msg, false);
         setTimeout(() => {
             closeModal();
             startWitchBattle(); // 재도전
