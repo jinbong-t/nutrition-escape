@@ -2875,3 +2875,23 @@ h2 {
 .wire.cut { opacity: 0.3; pointer-events: none; }
 .wire.cut::after { content: 'âœ‚ï¸'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; }
 .ssikssiki-shout { margin-top: 30px; font-size: 1.5rem; font-weight: 900; color: #14532d; background: #dcfce7; padding: 15px 25px; border-radius: 20px; border: 4px dashed #22c55e; animation: bounceIn 0.5s; display: inline-block; max-width: 90%; word-break: keep-all; }
+
+/* ¾¿¾¿ÀÌ(room-7) Àá±Ý »óÅÂ ½ºÅ¸ÀÏ (ÀÎ¶óÀÎ ½ºÅ¸ÀÏ µ¤¾î¾²±â) */
+#room-7.locked {
+    background: linear-gradient(145deg, #f3f4f6, #e5e7eb) !important;
+    border-color: #d1d5db !important;
+    box-shadow: 0 4px 0 #9ca3af !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    filter: grayscale(100%) !important;
+}
+#room-7.locked * {
+    color: #6b7280 !important;
+}
+#room-7.locked .stage-enter-btn {
+    background: #9ca3af !important;
+    color: white !important;
+}
+#room-7.locked > div:last-child {
+    border-color: #d1d5db !important;
+}
