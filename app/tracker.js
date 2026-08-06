@@ -71,6 +71,7 @@ async function trackEnding() {
     if (!studentId || !firebaseReady) return;
     try {
         await db.collection('sessions').doc(studentId).update({
+            clearedRooms: firebase.firestore.FieldValue.arrayUnion(7),
             completed: true,
             currentStage: '🎉 엔딩 도달!',
             completedAt: firebase.firestore.FieldValue.serverTimestamp(),
