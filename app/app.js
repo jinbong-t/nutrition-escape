@@ -532,7 +532,7 @@ function showSsikssikiChat() {
         modal.innerHTML = `
             <div style="background:white; border-radius:24px; padding:28px 24px; max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.5); text-align:center; font-family:'Gamja Flower',cursive;">
                 <div style="width:90px; height:90px; border-radius:12px; border:3px solid #bbf7d0; overflow:hidden; margin:0 auto 12px; background:#f0fdf4;">
-                    <img src="../씩씩이 본캐만.png" style="width:100%;height:100%;object-fit:contain;" alt="씩씩이">
+                    <img src="assets/dwarf_ssikssiki_main.png" style="width:100%;height:100%;object-fit:contain;" alt="씩씩이">
                 </div>
                 <div style="font-size:1.2rem; font-weight:bold; color:#14532d; margin-bottom:14px;">씩씩이의 응원 💪</div>
                 <div id="ssikssiki-chat-text" style="font-size:1.35rem; color:#166534; line-height:1.6; background:#f0fdf4; border-radius:14px; padding:16px; margin-bottom:18px; border: 2px solid #bbf7d0; font-weight: bold;"></div>
