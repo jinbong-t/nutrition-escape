@@ -1872,8 +1872,8 @@ function startWitchBattle() {
 function scheduleWitchMove() {
     if (isWitchDead) return;
     
-    // 300ms ~ 1200ms 사이의 랜덤한 간격으로 다음 이동 예약 (빠를 때도 있고 느릴 때도 있게)
-    const nextMoveTime = 300 + Math.random() * 900;
+    // 600ms ~ 1500ms 사이의 랜덤한 간격으로 다음 이동 예약 (조금 더 느리게 완화!)
+    const nextMoveTime = 600 + Math.random() * 900;
     witchMoveInterval = setTimeout(() => {
         moveWitchRandomly();
         scheduleWitchMove();
