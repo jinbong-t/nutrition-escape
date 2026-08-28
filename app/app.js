@@ -1865,7 +1865,7 @@ function startWitchBattle() {
     
     // 게임 루프 시작
     witchGameLoop = setInterval(updateWitchGame, 30); // 프레임 증가
-    witchMoveInterval = setInterval(moveWitchRandomly, 600); // 아주 빠르게 여기저기 이동!
+    witchMoveInterval = setInterval(moveWitchRandomly, 1200); // 1.2초마다 이동하여 잡기 쉽게 완화!
     junkSpawnInterval = setInterval(spawnJunkFood, 100); // 엄청나게 쏟아짐 (100ms)
 }
 
