@@ -1865,8 +1865,19 @@ function startWitchBattle() {
     
     // 게임 루프 시작
     witchGameLoop = setInterval(updateWitchGame, 30); // 프레임 증가
-    witchMoveInterval = setInterval(moveWitchRandomly, 1200); // 1.2초마다 이동하여 잡기 쉽게 완화!
+    scheduleWitchMove(); // 랜덤한 속도로 마녀 이동 시작
     junkSpawnInterval = setInterval(spawnJunkFood, 100); // 엄청나게 쏟아짐 (100ms)
+}
+
+function scheduleWitchMove() {
+    if (isWitchDead) return;
+    
+    // 300ms ~ 1200ms 사이의 랜덤한 간격으로 다음 이동 예약 (빠를 때도 있고 느릴 때도 있게)
+    const nextMoveTime = 300 + Math.random() * 900;
+    witchMoveInterval = setTimeout(() => {
+        moveWitchRandomly();
+        scheduleWitchMove();
+    }, nextMoveTime);
 }
 
 function moveWitchRandomly() {
