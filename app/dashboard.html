@@ -268,8 +268,13 @@
         <table class="student-table" id="student-table" style="display:none;">
             <thead>
                 <tr>
-                    <th>학생</th><th>방 진행</th><th>진행률</th><th>상태</th>
-                    <th>현재 단계</th><th>별점</th><th>활동 소감</th>
+                    <th onclick="handleSort('name')" style="cursor:pointer;" title="클릭하여 정렬">학생 ↕</th>
+                    <th onclick="handleSort('progress')" style="cursor:pointer;" title="클릭하여 정렬">방 진행 ↕</th>
+                    <th onclick="handleSort('percent')" style="cursor:pointer;" title="클릭하여 정렬">진행률 ↕</th>
+                    <th onclick="handleSort('status')" style="cursor:pointer;" title="클릭하여 정렬">상태 ↕</th>
+                    <th onclick="handleSort('stage')" style="cursor:pointer;" title="클릭하여 정렬">현재 단계 ↕</th>
+                    <th onclick="handleSort('rating')" style="cursor:pointer;" title="클릭하여 정렬">별점 ↕</th>
+                    <th>활동 소감</th>
                 </tr>
             </thead>
             <tbody id="student-tbody"></tbody>
@@ -323,6 +328,8 @@ let allStudents = [];
 let currentFilter = 'all';
 let currentClassFilter = 'all';
 let searchQuery = '';
+let sortColumn = 'default';
+let sortDesc = true;
 const roomNames = ['탄수화물','단백질','지방','비타민','무기질','물','씩씩이'];
 
 // 헤더 날짜
@@ -374,6 +381,19 @@ function switchTab(tab) {
 }
 
 // ===========================
+// 테이블 정렬
+// ===========================
+function handleSort(col) {
+    if (sortColumn === col) {
+        sortDesc = !sortDesc;
+    } else {
+        sortColumn = col;
+        sortDesc = true;
+    }
+    renderStudents();
+}
+
+// ===========================
 // 진행 현황 렌더링
 // ===========================
 function renderStudents() {
@@ -388,8 +408,36 @@ function renderStudents() {
         return matchSearch && matchClass && matchFilter;
     });
     filtered.sort((a,b) => {
-        const score = s => s.completed ? 2 : (s.clearedRooms||[]).length > 0 ? 1 : 0;
-        return score(b) - score(a) || (b.score||0) - (a.score||0);
+        let valA, valB;
+        if (sortColumn === 'name') {
+            valA = a.name || '';
+            valB = b.name || '';
+        } else if (sortColumn === 'progress') {
+            valA = (a.clearedRooms||[]).length;
+            valB = (b.clearedRooms||[]).length;
+        } else if (sortColumn === 'percent') {
+            valA = getProgress(a);
+            valB = getProgress(b);
+        } else if (sortColumn === 'status') {
+            const score = s => s.completed ? 2 : (s.clearedRooms||[]).length > 0 ? 1 : 0;
+            valA = score(a);
+            valB = score(b);
+        } else if (sortColumn === 'stage') {
+            valA = a.currentStage || '';
+            valB = b.currentStage || '';
+        } else if (sortColumn === 'rating') {
+            valA = a.rating || 0;
+            valB = b.rating || 0;
+        } else {
+            // default
+            const score = s => s.completed ? 2 : (s.clearedRooms||[]).length > 0 ? 1 : 0;
+            valA = score(a) * 1000 + (a.score||0);
+            valB = score(b) * 1000 + (b.score||0);
+        }
+        
+        if (valA < valB) return sortDesc ? 1 : -1;
+        if (valA > valB) return sortDesc ? -1 : 1;
+        return 0;
     });
 
     if (filtered.length === 0) {
