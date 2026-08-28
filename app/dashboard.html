@@ -268,7 +268,10 @@
         <table class="student-table" id="student-table" style="display:none;">
             <thead>
                 <tr>
-                    <th onclick="handleSort('name')" style="cursor:pointer;" title="클릭하여 정렬">학생 ↕</th>
+                    <th>
+                        <span onclick="handleSort('name')" style="cursor:pointer; color:#94a3b8;" title="이름으로 정렬" onmouseover="this.style.color='white'" onmouseout="this.style.color='#94a3b8'">학생 ↕</span> <span style="color:rgba(255,255,255,0.2);">|</span>
+                        <span onclick="handleSort('time')" style="cursor:pointer; color:#94a3b8;" title="접속 시간으로 정렬" onmouseover="this.style.color='white'" onmouseout="this.style.color='#94a3b8'">시간 ↕</span>
+                    </th>
                     <th onclick="handleSort('progress')" style="cursor:pointer;" title="클릭하여 정렬">방 진행 ↕</th>
                     <th onclick="handleSort('percent')" style="cursor:pointer;" title="클릭하여 정렬">진행률 ↕</th>
                     <th onclick="handleSort('status')" style="cursor:pointer;" title="클릭하여 정렬">상태 ↕</th>
@@ -412,6 +415,9 @@ function renderStudents() {
         if (sortColumn === 'name') {
             valA = a.name || '';
             valB = b.name || '';
+        } else if (sortColumn === 'time') {
+            valA = a.startedAt ? (a.startedAt.toDate ? a.startedAt.toDate().getTime() : new Date(a.startedAt).getTime()) : 0;
+            valB = b.startedAt ? (b.startedAt.toDate ? b.startedAt.toDate().getTime() : new Date(b.startedAt).getTime()) : 0;
         } else if (sortColumn === 'progress') {
             valA = (a.clearedRooms||[]).length;
             valB = (b.clearedRooms||[]).length;
