@@ -483,13 +483,13 @@ function renderStudents() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:4px 8px; color:white; font-size:0.75rem; outline:none; cursor:pointer;">
+                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:100%; max-width: 350px;">
                         <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 안됨</option>
-                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>상</option>
-                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>중</option>
-                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>하</option>
+                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 6대 영양소의 기능과 결핍증을 완벽히 이해함</option>
+                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 6대 영양소의 종류와 핵심 기능을 대체로 이해함</option>
+                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 영양소 기능 이해가 다소 부족하여 추가 지도가 필요함</option>
                     </select>
-                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1rem;" title="평가 기준 보기">❓</button>
+                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
                 </div>
             </td>
         </tr>`;
@@ -572,13 +572,13 @@ function renderRanking() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:4px 8px; color:white; font-size:0.75rem; outline:none; cursor:pointer;">
+                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:100%; max-width: 350px;">
                         <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 안됨</option>
-                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>상</option>
-                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>중</option>
-                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>하</option>
+                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 6대 영양소의 기능과 결핍증을 완벽히 이해함</option>
+                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 6대 영양소의 종류와 핵심 기능을 대체로 이해함</option>
+                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 영양소 기능 이해가 다소 부족하여 추가 지도가 필요함</option>
                     </select>
-                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1rem;" title="평가 기준 보기">❓</button>
+                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
                 </div>
             </td>
         </tr>`;
