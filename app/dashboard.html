@@ -483,11 +483,11 @@ function renderStudents() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:100%; max-width: 350px;">
-                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 안됨</option>
-                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 6대 영양소의 기능과 결핍증을 완벽히 이해함</option>
-                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 6대 영양소의 종류와 핵심 기능을 대체로 이해함</option>
-                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 영양소 기능 이해가 다소 부족하여 추가 지도가 필요함</option>
+                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:100%; max-width: 400px;">
+                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 선택 안됨</option>
+                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 6대 영양소가 성장과 건강에 미치는 영향을 탐색하고 바람직한 식생활 실천 방안을 제안할 수 있다.</option>
+                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 6대 영양소가 성장과 건강에 미치는 영향을 이해하고 바람직한 식생활 실천 방안을 설명할 수 있다.</option>
+                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 6대 영양소가 성장과 건강에 미치는 영향에 대한 이해가 부족하여 실천 방안 제안에 어려움이 있다.</option>
                     </select>
                     <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
                 </div>
@@ -572,11 +572,11 @@ function renderRanking() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:100%; max-width: 350px;">
-                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 안됨</option>
-                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 6대 영양소의 기능과 결핍증을 완벽히 이해함</option>
-                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 6대 영양소의 종류와 핵심 기능을 대체로 이해함</option>
-                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 영양소 기능 이해가 다소 부족하여 추가 지도가 필요함</option>
+                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:100%; max-width: 400px;">
+                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 선택 안됨</option>
+                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 6대 영양소가 성장과 건강에 미치는 영향을 탐색하고 바람직한 식생활 실천 방안을 제안할 수 있다.</option>
+                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 6대 영양소가 성장과 건강에 미치는 영향을 이해하고 바람직한 식생활 실천 방안을 설명할 수 있다.</option>
+                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 6대 영양소가 성장과 건강에 미치는 영향에 대한 이해가 부족하여 실천 방안 제안에 어려움이 있다.</option>
                     </select>
                     <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
                 </div>
@@ -631,11 +631,12 @@ function updateEval(studentId, level) {
 }
 
 function showProcessEvaluation() {
-    const title = "🌟 과정중심평가 기준 (중2 과학)";
+    const title = "🌟 과정중심평가 기준 (2022 개정 기술·가정)";
     const content = `
-    <div style="margin-bottom:10px;"><b>[상] (우수)</b><br>6대 영양소의 종류와 기능을 정확히 이해하고, 각 영양소의 결핍증(예: 야맹증, 괴혈병 등)과 실생활 식단을 연관 지어 논리적으로 설명할 수 있다.</div>
-    <div style="margin-bottom:10px;"><b>[중] (보통)</b><br>6대 영양소의 종류와 핵심 기능을 대부분 이해하고, 대표적인 결핍증을 설명할 수 있다.</div>
-    <div><b>[하] (노력요함)</b><br>6대 영양소의 일부 종류와 기능을 나열할 수 있으나, 결핍증과 실생활을 연관 지어 설명하는 데 어려움이 있어 추가적인 지도가 필요하다.</div>
+    <div style="margin-bottom:10px; font-size:0.9rem; color:#f472b6;"><b>※ 관련 성취기준: [9기가01-02]</b> 의생활, 식생활이 청소년기 성장과 건강에 미치는 영향을 탐색하고 성장과 건강을 위해 바람직한 의생활과 식생활의 실천 방안을 탐색하여 이를 실천한다.</div>
+    <div style="margin-bottom:10px;"><b>[상] (우수)</b><br>6대 영양소가 청소년기 성장과 건강에 미치는 영향을 깊이 탐색하고, 바람직한 식생활 실천 방안을 구체적으로 제안할 수 있다.</div>
+    <div style="margin-bottom:10px;"><b>[중] (보통)</b><br>6대 영양소가 청소년기 성장과 건강에 미치는 영향을 이해하고, 바람직한 식생활 실천 방안을 설명할 수 있다.</div>
+    <div><b>[하] (노력요함)</b><br>6대 영양소가 성장과 건강에 미치는 영향에 대한 이해가 다소 부족하여 실생활 실천 방안 제안에 어려움이 있다.</div>
     `;
 
     document.getElementById('eval-modal-title').innerHTML = title;
