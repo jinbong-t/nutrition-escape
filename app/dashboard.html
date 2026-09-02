@@ -227,6 +227,12 @@
         <select id="global-class-filter" onchange="filterStudents()" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:8px 14px; color:white; font-size:0.85rem; font-weight:bold; outline:none; font-family:'Noto Sans KR',sans-serif; cursor:pointer; margin-right:5px;">
             <option value="all" style="color:black">🏫 모든 반</option>
         </select>
+        <select id="process-evaluation" onchange="showProcessEvaluation()" style="background:linear-gradient(135deg,#ec4899,#db2777); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:8px 14px; color:white; font-size:0.85rem; font-weight:bold; outline:none; font-family:'Noto Sans KR',sans-serif; cursor:pointer; margin-right:5px;">
+            <option value="" style="color:black" disabled selected>📝 과정중심평가</option>
+            <option value="high" style="color:black">성취수준: 상 (우수)</option>
+            <option value="mid" style="color:black">성취수준: 중 (보통)</option>
+            <option value="low" style="color:black">성취수준: 하 (노력요함)</option>
+        </select>
         <button class="save-btn" onclick="exportToCSV()" style="background:linear-gradient(135deg,#10b981,#059669); color:white;">
             📊 다운로드
         </button>
@@ -320,6 +326,15 @@
         <h3 id="modal-student-name">학생 소감</h3>
         <div class="star-display" id="modal-rating" style="margin-bottom:12px;font-size:1.1rem;"></div>
         <div class="feedback-full-text" id="modal-feedback-text"></div>
+    </div>
+</div>
+
+<!-- 과정중심평가 모달 -->
+<div class="feedback-modal-overlay" id="eval-modal">
+    <div class="feedback-modal">
+        <button class="modal-close" onclick="closeEvalModal()">✕</button>
+        <h3 id="eval-modal-title" style="color:#ec4899;">과정중심평가 기준</h3>
+        <div class="feedback-full-text" id="eval-modal-text" style="font-size:1.05rem; line-height:1.7;"></div>
     </div>
 </div>
 
@@ -586,6 +601,40 @@ function showFeedbackModal(studentId) {
 
 function closeFeedbackModal() {
     document.getElementById('feedback-modal').classList.remove('active');
+}
+
+// ===========================
+// 과정중심평가 모달
+// ===========================
+function showProcessEvaluation() {
+    const evalSelect = document.getElementById('process-evaluation');
+    const level = evalSelect.value;
+    if (!level) return;
+
+    let title = "";
+    let content = "";
+
+    if (level === 'high') {
+        title = "🌟 성취수준: 상 (우수)";
+        content = "6대 영양소의 종류와 기능을 정확히 이해하고, 각 영양소의 결핍증(예: 야맹증, 괴혈병 등)과 실생활 식단을 연관 지어 논리적으로 설명할 수 있다.";
+    } else if (level === 'mid') {
+        title = "⭐ 성취수준: 중 (보통)";
+        content = "6대 영양소의 종류와 핵심 기능을 대부분 이해하고, 대표적인 결핍증을 설명할 수 있다.";
+    } else if (level === 'low') {
+        title = "🌱 성취수준: 하 (노력요함)";
+        content = "6대 영양소의 일부 종류와 기능을 나열할 수 있으나, 결핍증과 실생활을 연관 지어 설명하는 데 어려움이 있어 추가적인 지도가 필요하다.";
+    }
+
+    document.getElementById('eval-modal-title').innerHTML = title;
+    document.getElementById('eval-modal-text').innerHTML = content;
+    document.getElementById('eval-modal').classList.add('active');
+    
+    // 선택 초기화 (다시 선택 가능하도록)
+    evalSelect.value = "";
+}
+
+function closeEvalModal() {
+    document.getElementById('eval-modal').classList.remove('active');
 }
 
 // ===========================
