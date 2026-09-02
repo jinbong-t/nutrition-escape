@@ -227,12 +227,6 @@
         <select id="global-class-filter" onchange="filterStudents()" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:8px 14px; color:white; font-size:0.85rem; font-weight:bold; outline:none; font-family:'Noto Sans KR',sans-serif; cursor:pointer; margin-right:5px;">
             <option value="all" style="color:black">🏫 모든 반</option>
         </select>
-        <select id="process-evaluation" onchange="showProcessEvaluation()" style="background:linear-gradient(135deg,#ec4899,#db2777); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:8px 14px; color:white; font-size:0.85rem; font-weight:bold; outline:none; font-family:'Noto Sans KR',sans-serif; cursor:pointer; margin-right:5px;">
-            <option value="" style="color:black" disabled selected>📝 과정중심평가</option>
-            <option value="high" style="color:black">성취수준: 상 (우수)</option>
-            <option value="mid" style="color:black">성취수준: 중 (보통)</option>
-            <option value="low" style="color:black">성취수준: 하 (노력요함)</option>
-        </select>
         <button class="save-btn" onclick="exportToCSV()" style="background:linear-gradient(135deg,#10b981,#059669); color:white;">
             📊 다운로드
         </button>
@@ -284,6 +278,7 @@
                     <th onclick="handleSort('stage')" style="cursor:pointer;" title="클릭하여 정렬">현재 단계 ↕</th>
                     <th onclick="handleSort('rating')" style="cursor:pointer;" title="클릭하여 정렬">별점 ↕</th>
                     <th>활동 소감</th>
+                    <th>과정 평가</th>
                 </tr>
             </thead>
             <tbody id="student-tbody"></tbody>
@@ -308,7 +303,7 @@
         <!-- 전체 순위 테이블 -->
         <table class="rank-table" id="rank-table">
             <thead>
-                <tr><th>순위</th><th>학생</th><th>점수</th><th>완료 방</th><th>완료 여부</th><th>별점</th><th>소감</th></tr>
+                <tr><th>순위</th><th>학생</th><th>점수</th><th>완료 방</th><th>완료 여부</th><th>별점</th><th>소감</th><th>과정 평가</th></tr>
             </thead>
             <tbody id="rank-tbody"></tbody>
         </table>
@@ -486,6 +481,17 @@ function renderStudents() {
             <td style="font-size:0.8rem;color:rgba(255,255,255,0.6);">${s.currentStage||'-'}</td>
             <td class="star-display">${starsToEmoji(s.rating)}</td>
             <td>${feedbackPreview}</td>
+            <td onclick="event.stopPropagation()">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:4px 8px; color:white; font-size:0.75rem; outline:none; cursor:pointer;">
+                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 안됨</option>
+                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>상</option>
+                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>중</option>
+                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>하</option>
+                    </select>
+                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1rem;" title="평가 기준 보기">❓</button>
+                </div>
+            </td>
         </tr>`;
     }).join('');
 
@@ -564,6 +570,17 @@ function renderRanking() {
             <td>${getStatusBadge(s)}</td>
             <td class="star-display">${starsToEmoji(s.rating)}</td>
             <td>${feedbackPreview}</td>
+            <td onclick="event.stopPropagation()">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:4px 8px; color:white; font-size:0.75rem; outline:none; cursor:pointer;">
+                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 안됨</option>
+                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>상</option>
+                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>중</option>
+                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>하</option>
+                    </select>
+                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1rem;" title="평가 기준 보기">❓</button>
+                </div>
+            </td>
         </tr>`;
     }).join('');
 }
@@ -606,31 +623,24 @@ function closeFeedbackModal() {
 // ===========================
 // 과정중심평가 모달
 // ===========================
+function updateEval(studentId, level) {
+    if (!db) return;
+    db.collection('sessions').doc(studentId).update({ processEval: level }).catch(e => {
+        console.error("평가 저장 실패:", e);
+    });
+}
+
 function showProcessEvaluation() {
-    const evalSelect = document.getElementById('process-evaluation');
-    const level = evalSelect.value;
-    if (!level) return;
-
-    let title = "";
-    let content = "";
-
-    if (level === 'high') {
-        title = "🌟 성취수준: 상 (우수)";
-        content = "6대 영양소의 종류와 기능을 정확히 이해하고, 각 영양소의 결핍증(예: 야맹증, 괴혈병 등)과 실생활 식단을 연관 지어 논리적으로 설명할 수 있다.";
-    } else if (level === 'mid') {
-        title = "⭐ 성취수준: 중 (보통)";
-        content = "6대 영양소의 종류와 핵심 기능을 대부분 이해하고, 대표적인 결핍증을 설명할 수 있다.";
-    } else if (level === 'low') {
-        title = "🌱 성취수준: 하 (노력요함)";
-        content = "6대 영양소의 일부 종류와 기능을 나열할 수 있으나, 결핍증과 실생활을 연관 지어 설명하는 데 어려움이 있어 추가적인 지도가 필요하다.";
-    }
+    const title = "🌟 과정중심평가 기준 (중2 과학)";
+    const content = `
+    <div style="margin-bottom:10px;"><b>[상] (우수)</b><br>6대 영양소의 종류와 기능을 정확히 이해하고, 각 영양소의 결핍증(예: 야맹증, 괴혈병 등)과 실생활 식단을 연관 지어 논리적으로 설명할 수 있다.</div>
+    <div style="margin-bottom:10px;"><b>[중] (보통)</b><br>6대 영양소의 종류와 핵심 기능을 대부분 이해하고, 대표적인 결핍증을 설명할 수 있다.</div>
+    <div><b>[하] (노력요함)</b><br>6대 영양소의 일부 종류와 기능을 나열할 수 있으나, 결핍증과 실생활을 연관 지어 설명하는 데 어려움이 있어 추가적인 지도가 필요하다.</div>
+    `;
 
     document.getElementById('eval-modal-title').innerHTML = title;
     document.getElementById('eval-modal-text').innerHTML = content;
     document.getElementById('eval-modal').classList.add('active');
-    
-    // 선택 초기화 (다시 선택 가능하도록)
-    evalSelect.value = "";
 }
 
 function closeEvalModal() {
