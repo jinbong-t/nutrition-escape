@@ -1026,7 +1026,7 @@
 
             <!-- 소감 입력 -->
             <textarea id="feedback-text"
-                placeholder="새롭게 알게 된 점, 깨달은 점, 느낀 점, 앞으로의 실천 다짐 등을 진지하게 적어주세요! (10글자 이상) 😊"
+                placeholder="새롭게 알게 된 점, 깨달은 점, 느낀 점, 앞으로의 실천 다짐 등을 진지하게 적어주세요! (15글자 이상) 😊"
                 style="
                     width:100%; box-sizing:border-box;
                     min-height:180px; padding:12px;
@@ -1133,15 +1133,15 @@
                 document.getElementById('feedback-text').placeholder = '⚠️ 소감을 입력해주세요!';
                 setTimeout(() => { 
                     document.getElementById('feedback-text').style.borderColor = '#fcd34d'; 
-                    document.getElementById('feedback-text').placeholder = '오늘 배운 것, 어려웠던 점, 재미있었던 것을 진지하게 써주세요! (10글자 이상) 😊';
+                    document.getElementById('feedback-text').placeholder = '새롭게 알게 된 점, 깨달은 점, 느낀 점, 앞으로의 실천 다짐 등을 진지하게 적어주세요! (15글자 이상) 😊';
                 }, 1500);
                 return;
             }
-            // ✨ 10글자 이상 검증
-            if (text.length < 10) {
+            // ✨ 15글자 이상 검증
+            if (text.length < 15) {
                 document.getElementById('feedback-text').style.borderColor = '#ef4444';
                 document.getElementById('feedback-char-count').style.color = '#ef4444';
-                document.getElementById('feedback-char-count').textContent = `${text.length} / 최소 10자 — ⚠️ ${10 - text.length}글자 더 써주세요!`;
+                document.getElementById('feedback-char-count').textContent = `${text.length} / 최소 15자 — ⚠️ ${15 - text.length}글자 더 써주세요!`;
                 setTimeout(() => { 
                     document.getElementById('feedback-text').style.borderColor = '#fcd34d';
                     document.getElementById('feedback-char-count').style.color = '#92400e';
