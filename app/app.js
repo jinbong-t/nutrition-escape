@@ -1866,14 +1866,14 @@ function startWitchBattle() {
     // 게임 루프 시작
     witchGameLoop = setInterval(updateWitchGame, 50); // 50ms = 0.05초로 정상화 (유지)
     scheduleWitchMove(); // 랜덤한 속도로 마녀 이동 시작
-    junkSpawnInterval = setInterval(spawnJunkFood, 150); // 250ms -> 150ms로 폭격 수준 상향
+    junkSpawnInterval = setInterval(spawnJunkFood, 100); // 엄청나게 쏟아짐 (처음 오리지널 난이도 100ms)
 }
 
 function scheduleWitchMove() {
     if (isWitchDead) return;
     
-    // 600ms ~ 1200ms 사이의 랜덤한 간격으로 마녀 이동 (더 날쌔게 도망다님)
-    const nextMoveTime = 600 + Math.random() * 600;
+    // 600ms ~ 1500ms 사이의 랜덤한 간격으로 다음 이동 예약 (처음 오리지널 난이도)
+    const nextMoveTime = 600 + Math.random() * 900;
     witchMoveInterval = setTimeout(() => {
         moveWitchRandomly();
         scheduleWitchMove();
@@ -1964,8 +1964,8 @@ function updateWitchGame() {
             item.el.remove();
             junkFoods.splice(i, 1);
             
-            // 마을 데미지 (정크푸드 무시하고 마녀만 때리는 꼼수 방지: 데미지 대폭 상향)
-            villageHp -= 8; // 13개만 놓쳐도 게임 오버
+            // 마을 데미지 (처음 오리지널 난이도: 마구 쏟아지므로 1%)
+            villageHp -= 1;
             if (villageHp < 0) villageHp = 0;
             document.getElementById('village-hp-bar').style.width = `${villageHp}%`;
             
