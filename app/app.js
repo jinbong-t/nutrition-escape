@@ -1864,16 +1864,16 @@ function startWitchBattle() {
     junkFoods = [];
     
     // 게임 루프 시작
-    witchGameLoop = setInterval(updateWitchGame, 30); // 프레임 증가
+    witchGameLoop = setInterval(updateWitchGame, 50); // 50ms = 0.05초로 정상화
     scheduleWitchMove(); // 랜덤한 속도로 마녀 이동 시작
-    junkSpawnInterval = setInterval(spawnJunkFood, 100); // 엄청나게 쏟아짐 (100ms)
+    junkSpawnInterval = setInterval(spawnJunkFood, 400); // 100ms -> 400ms로 조절 (적당한 난이도)
 }
 
 function scheduleWitchMove() {
     if (isWitchDead) return;
     
-    // 600ms ~ 1500ms 사이의 랜덤한 간격으로 다음 이동 예약 (조금 더 느리게 완화!)
-    const nextMoveTime = 600 + Math.random() * 900;
+    // 1000ms ~ 2000ms 사이의 랜덤한 간격으로 다음 이동 예약 (마우스로 잡을 수 있게 완화!)
+    const nextMoveTime = 1000 + Math.random() * 1000;
     witchMoveInterval = setTimeout(() => {
         moveWitchRandomly();
         scheduleWitchMove();
@@ -1964,8 +1964,8 @@ function updateWitchGame() {
             item.el.remove();
             junkFoods.splice(i, 1);
             
-            // 마을 데미지 (마구 쏟아지므로 데미지를 1%로 줄여서 오래 버틸 수 있게 함)
-            villageHp -= 1;
+            // 마을 데미지 (빈도가 줄었으므로 데미지를 조금 올림)
+            villageHp -= 5;
             if (villageHp < 0) villageHp = 0;
             document.getElementById('village-hp-bar').style.width = `${villageHp}%`;
             
@@ -1984,7 +1984,7 @@ function updateWitchGame() {
 function hitWitch() {
     if (witchTime <= 0 || isWitchDead) return;
     
-    witchHp -= 5; // 20번 클릭 시 처치
+    witchHp -= 10; // 10번 클릭 시 처치 (태블릿/PC 배려)
     
     // 이모지 흔들기 효과
     const bossEl = document.getElementById('witch-boss');
