@@ -490,6 +490,7 @@ function renderStudents() {
                         <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 노력요함</option>
                     </select>
                     <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
+                    <button onclick="deleteStudent('${s.id}'); event.stopPropagation();" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1.1rem; flex-shrink:0; margin-left:4px;" title="학생 삭제">🗑️</button>
                 </div>
             </td>
         </tr>`;
@@ -579,6 +580,7 @@ function renderRanking() {
                         <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 노력요함</option>
                     </select>
                     <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
+                    <button onclick="deleteStudent('${s.id}'); event.stopPropagation();" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1.1rem; flex-shrink:0; margin-left:4px;" title="학생 삭제">🗑️</button>
                 </div>
             </td>
         </tr>`;
@@ -646,6 +648,25 @@ function showProcessEvaluation() {
 
 function closeEvalModal() {
     document.getElementById('eval-modal').classList.remove('active');
+}
+
+// ===========================
+// 🗑️ 학생 삭제
+// ===========================
+async function deleteStudent(studentId) {
+    if (!confirm('정말로 이 학생의 기록을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.')) return;
+    
+    try {
+        if (!db) {
+            alert('데이터베이스 연결이 없습니다.');
+            return;
+        }
+        await db.collection('sessions').doc(studentId).delete();
+        alert('학생 기록이 삭제되었습니다.');
+    } catch(e) {
+        console.error("학생 삭제 실패:", e);
+        alert('삭제 중 오류가 발생했습니다.');
+    }
 }
 
 // ===========================
