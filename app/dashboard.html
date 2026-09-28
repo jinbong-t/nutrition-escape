@@ -142,6 +142,14 @@
         .spinner { width:40px; height:40px; border:3px solid rgba(255,215,0,0.2); border-top-color:#ffd700; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
         @keyframes spin { to { transform:rotate(360deg); } }
 
+        /* 루브릭 & 메모 모달 */
+        .rubric-item { background:rgba(255,255,255,0.05); padding:10px 14px; border-radius:8px; margin-bottom:10px; display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+        .rubric-item input { margin-top:4px; transform:scale(1.2); }
+        .rubric-item label { color:#e2e8f0; font-size:0.9rem; line-height:1.4; flex:1; cursor:pointer; }
+        .rubric-item:hover { background:rgba(255,255,255,0.1); }
+        .memo-textarea { width:100%; height:80px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:10px; color:white; font-size:0.9rem; resize:none; margin-top:10px; font-family:'Gowun Dodum',sans-serif; }
+        .memo-textarea:focus { outline:none; border-color:#ec4899; background:rgba(0,0,0,0.3); }
+
         /* ---- 🏆 순위표 ---- */
         .ranking-section { padding:16px 20px 30px; }
         .ranking-title { font-family:'Gamja Flower',cursive; color:#ffd700; font-size:1.2rem; margin-bottom:16px; }
@@ -330,8 +338,31 @@
 <div class="feedback-modal-overlay" id="eval-modal">
     <div class="feedback-modal">
         <button class="modal-close" onclick="closeEvalModal()">✕</button>
-        <h3 id="eval-modal-title" style="color:#ec4899;">과정중심평가 기준</h3>
-        <div class="feedback-full-text" id="eval-modal-text" style="font-size:1.05rem; line-height:1.7;"></div>
+        <h3 id="eval-modal-title" style="color:#ec4899;">🌟 과정중심평가 기록</h3>
+        
+        <div style="margin-bottom:10px; font-size:0.85rem; color:#f472b6;">※ 관련 성취기준: [9기가01-02] 의생활, 식생활이 청소년기 성장과 건강에 미치는 영향을 탐색하고 실천 방안을 탐색하여 실천한다.</div>
+        
+        <div id="eval-rubric-container" style="margin-top:16px;">
+            <div class="rubric-item">
+                <input type="checkbox" id="rubric-1">
+                <label for="rubric-1"><b>[지식]</b> 6대 영양소의 종류와 기능을 정확히 이해하고 설명할 수 있다.</label>
+            </div>
+            <div class="rubric-item">
+                <input type="checkbox" id="rubric-2">
+                <label for="rubric-2"><b>[적용]</b> 영양소 지식을 활용하여 식생활 문제(질병 등)의 원인을 찾고 해결 방안을 제안할 수 있다.</label>
+            </div>
+            <div class="rubric-item">
+                <input type="checkbox" id="rubric-3">
+                <label for="rubric-3"><b>[태도]</b> 주어진 난관에 포기하지 않고 끈기 있게 도전하여 목표(엔딩)를 달성하였다.</label>
+            </div>
+        </div>
+
+        <h4 style="color:#ffd700; font-family:'Gamja Flower',cursive; font-size:1.1rem; margin:16px 0 8px;">📝 교사 관찰 코멘트</h4>
+        <textarea id="eval-memo" class="memo-textarea" placeholder="학생의 문제 해결 과정이나 특이사항을 적어주세요. (나이스 세특용)"></textarea>
+
+        <div style="margin-top:16px; text-align:right;">
+            <button onclick="saveEvaluation()" style="background:linear-gradient(135deg,#ec4899,#be185d); color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:0.9rem;">저장하기</button>
+        </div>
     </div>
 </div>
 
@@ -631,29 +662,53 @@ function closeFeedbackModal() {
 // ===========================
 // 과정중심평가 모달
 // ===========================
-function updateEval(studentId, level) {
-    if (!db) return;
-    db.collection('sessions').doc(studentId).update({ processEval: level }).catch(e => {
-        console.error("평가 저장 실패:", e);
-    });
+let currentEvalStudentId = null;
+
+function showProcessEvaluation(studentId) {
+    const s = allStudents.find(s => s.id === studentId);
+    if (!s) return;
+    currentEvalStudentId = studentId;
+    
+    document.getElementById('rubric-1').checked = s.rubric1 || false;
+    document.getElementById('rubric-2').checked = s.rubric2 || false;
+    document.getElementById('rubric-3').checked = s.rubric3 || false;
+    document.getElementById('eval-memo').value = s.evalMemo || '';
+
+    document.getElementById('eval-modal').classList.add('active');
 }
 
-function showProcessEvaluation() {
-    const title = "🌟 과정중심평가 기준 (2022 개정 기술·가정)";
-    const content = `
-    <div style="margin-bottom:10px; font-size:0.9rem; color:#f472b6;"><b>※ 관련 성취기준: [9기가01-02]</b> 의생활, 식생활이 청소년기 성장과 건강에 미치는 영향을 탐색하고 성장과 건강을 위해 바람직한 의생활과 식생활의 실천 방안을 탐색하여 이를 실천한다.</div>
-    <div style="margin-bottom:10px;"><b>[상] (우수)</b><br>6대 영양소가 청소년기 성장과 건강에 미치는 영향을 깊이 탐색하고, 바람직한 식생활 실천 방안을 구체적으로 제안할 수 있다.</div>
-    <div style="margin-bottom:10px;"><b>[중] (보통)</b><br>6대 영양소가 청소년기 성장과 건강에 미치는 영향을 이해하고, 바람직한 식생활 실천 방안을 설명할 수 있다.</div>
-    <div><b>[하] (노력요함)</b><br>6대 영양소가 성장과 건강에 미치는 영향에 대한 이해가 다소 부족하여 실생활 실천 방안 제안에 어려움이 있다.</div>
-    `;
+async function saveEvaluation() {
+    if (!currentEvalStudentId || !db) return;
+    const r1 = document.getElementById('rubric-1').checked;
+    const r2 = document.getElementById('rubric-2').checked;
+    const r3 = document.getElementById('rubric-3').checked;
+    const memo = document.getElementById('eval-memo').value;
+    
+    let score = 0;
+    if(r1) score++; if(r2) score++; if(r3) score++;
 
-    document.getElementById('eval-modal-title').innerHTML = title;
-    document.getElementById('eval-modal-text').innerHTML = content;
-    document.getElementById('eval-modal').classList.add('active');
+    let level = 'low';
+    if(score >= 2) level = 'high';
+    else if(score === 1) level = 'mid';
+
+    try {
+        await db.collection('sessions').doc(currentEvalStudentId).update({
+            rubric1: r1, rubric2: r2, rubric3: r3,
+            rubricScore: score,
+            processEval: level,
+            evalMemo: memo
+        });
+        closeEvalModal();
+        alert('저장되었습니다!');
+    } catch(e) {
+        console.error("평가 저장 실패:", e);
+        alert('저장 중 오류가 발생했습니다.');
+    }
 }
 
 function closeEvalModal() {
     document.getElementById('eval-modal').classList.remove('active');
+    currentEvalStudentId = null;
 }
 
 // ===========================
@@ -738,7 +793,7 @@ function exportToCSV() {
 
     // CSV 헤더 (한글 깨짐 방지를 위해 BOM 포함)
     const BOM = "\uFEFF";
-    let csvContent = BOM + "학반,학생 이름,점수,클리어한 방 개수,완료 여부,별점,소감,접속시간,완료시간\n";
+    let csvContent = BOM + "학반,학생 이름,점수,클리어한 방 개수,완료 여부,별점,소감,관찰 코멘트(세특용),과정평가 등급,접속시간,완료시간\n";
 
     // 데이터 행 생성
     allStudents.forEach(s => {
@@ -748,16 +803,24 @@ function exportToCSV() {
         const _done = s.completed ? '완료' : '진행중';
         const _rating = s.rating || '';
         
-        // 소감에 콤마나 줄바꿈이 있으면 따옴표로 감싸기
         let _feedback = s.feedback || '';
-        _feedback = _feedback.replace(/"/g, '""');
-        _feedback = `"${_feedback}"`;
+        _feedback = `"${_feedback.replace(/"/g, '""')}"`;
+        
+        let _memo = s.evalMemo || '';
+        _memo = `"${_memo.replace(/"/g, '""')}"`;
+
+        let _level = '-';
+        if (s.rubricScore !== undefined) {
+            _level = s.rubricScore >= 2 ? '상' : (s.rubricScore === 1 ? '중' : '하');
+        } else if (s.processEval) {
+            _level = s.processEval === 'high' ? '상' : (s.processEval === 'mid' ? '중' : '하');
+        }
         
         const _start = s.startedAt && s.startedAt.toDate ? s.startedAt.toDate().toLocaleString('ko-KR') : '';
         const _end = s.completedAt && s.completedAt.toDate ? s.completedAt.toDate().toLocaleString('ko-KR') : '';
         const _class = s.classNum || '미지정';
 
-        const row = `${_class},${_name},${_score},${_rooms},${_done},${_rating},${_feedback},"${_start}","${_end}"`;
+        const row = `${_class},${_name},${_score},${_rooms},${_done},${_rating},${_feedback},${_memo},${_level},"${_start}","${_end}"`;
         csvContent += row + "\n";
     });
 
