@@ -345,6 +345,11 @@
         
         <div style="margin-bottom:10px; font-size:0.85rem; color:#f472b6;">※ 관련 성취기준: [9기가01-02] 의생활, 식생활이 청소년기 성장과 건강에 미치는 영향을 탐색하고 실천 방안을 탐색하여 실천한다.</div>
         
+        <div id="eval-feedback-preview" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; margin-bottom:16px;">
+            <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">학생 소감:</div>
+            <div id="eval-student-feedback" style="font-size:0.9rem; line-height:1.4; color:#fff; word-break:keep-all;"></div>
+        </div>
+        
         <div id="eval-rubric-container" style="margin-top:16px;">
             <div class="rubric-item">
                 <input type="checkbox" id="rubric-1">
@@ -685,6 +690,14 @@ function showProcessEvaluation(studentId) {
     const s = allStudents.find(s => s.id === studentId);
     if (!s) return;
     currentEvalStudentId = studentId;
+    
+    // 소감 내용 표시
+    const feedbackBox = document.getElementById('eval-student-feedback');
+    if (s.feedback && s.feedback.trim().length > 0) {
+        feedbackBox.innerHTML = `${starsToEmoji(s.rating)}<br><span style="color:#e2e8f0;">${s.feedback}</span>`;
+    } else {
+        feedbackBox.innerHTML = '<span style="color:rgba(255,255,255,0.4); font-style:italic;">아직 소감을 작성하지 않았습니다.</span>';
+    }
     
     document.getElementById('rubric-1').checked = s.rubric1 || false;
     document.getElementById('rubric-2').checked = s.rubric2 || false;
