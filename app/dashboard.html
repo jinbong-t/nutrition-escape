@@ -724,17 +724,21 @@ function autoFillEval() {
     let isSincere = false;
     let memoText = '';
     
-    if (fbText.length >= 15) {
-        isSincere = true; // 길이가 길면 성실
+    // ㅋㅋㅋ, ㅏㅏㅏ 같은 무의미한 연속 문자 압축 및 공백 제거로 실질적인 길이 측정
+    const cleanedText = fbText.replace(/([ㄱ-ㅎㅏ-ㅣ])\1+/g, '$1');
+    const textLengthWithoutSpaces = cleanedText.replace(/\s/g, '').length;
+    
+    if (textLengthWithoutSpaces >= 15) {
+        isSincere = true; // 실질적인 내용이 길면 성실
     } else {
-        // 길이는 짧지만 핵심 키워드가 포함되었는지 확인
-        const goodKeywords = ['알게', '배웠', '중요', '어려웠', '노력', '영양소', '재미', '도움'];
-        isSincere = goodKeywords.some(kw => fbText.includes(kw));
+        // 길이는 짧지만 핵심 키워드가 포함되었는지 확인 ('재미'는 '재미없다'와 겹치므로 제외)
+        const goodKeywords = ['알게', '배웠', '중요', '어려웠', '노력', '영양소', '도움', '깨달'];
+        isSincere = goodKeywords.some(kw => cleanedText.includes(kw));
     }
     
-    // 성의 없는 단어 필터링 (길이가 길어도 이런 단어만 있으면 불합격 처리 가능하지만, 일단 단순화)
-    const badKeywords = ['없음', 'ㅇㅇ', '몰라', '그냥', '귀찮'];
-    if (badKeywords.some(kw => fbText === kw)) {
+    // 부정적이거나 성의 없는 단어 필터링 (가차없이 불합격)
+    const badKeywords = ['없음', 'ㅇㅇ', '몰라', '그냥', '귀찮', '재미없', '노잼', '별로', '싫', '짜증'];
+    if (badKeywords.some(kw => cleanedText.includes(kw))) {
         isSincere = false;
     }
 
