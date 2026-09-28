@@ -704,13 +704,19 @@ function autoFillEval() {
     const s = allStudents.find(st => st.id === currentEvalStudentId);
     if (!s) return;
     
-    // 7방 모두 클리어하고 100점 이상이면 모두 체크 (상)
     const cleared = (s.clearedRooms || []).length;
-    if (s.completed || cleared >= 6) {
+    const hasFeedback = s.feedback && s.feedback.trim().length > 0;
+    
+    if (s.completed && hasFeedback) {
         document.getElementById('rubric-1').checked = true;
         document.getElementById('rubric-2').checked = true;
         document.getElementById('rubric-3').checked = true;
-        appendMemo('성실하게 모든 과제를 해결함.');
+        appendMemo('성실하게 모든 과제를 해결하고 정성스러운 소감을 남김.');
+    } else if (s.completed || cleared >= 6) {
+        document.getElementById('rubric-1').checked = true;
+        document.getElementById('rubric-2').checked = true;
+        document.getElementById('rubric-3').checked = false;
+        appendMemo('과제는 잘 해결했으나 소감 작성(태도)이 미흡함.');
     } else if (cleared >= 3) {
         document.getElementById('rubric-1').checked = true;
         document.getElementById('rubric-2').checked = false;
