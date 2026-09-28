@@ -239,6 +239,9 @@
         <button class="save-btn" onclick="exportToCSV()" style="background:linear-gradient(135deg,#10b981,#059669); color:white;">
             📊 다운로드
         </button>
+        <button class="save-btn" onclick="batchSetAllToMid()" style="background:linear-gradient(135deg,#3b82f6,#2563eb); color:white;">
+            ⚡ 미평가 일괄 [중]
+        </button>
         <button class="save-btn" onclick="resetAllData()" style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white;">
             🗑️ 초기화
         </button>
@@ -358,9 +361,15 @@
         </div>
 
         <h4 style="color:#ffd700; font-family:'Gamja Flower',cursive; font-size:1.1rem; margin:16px 0 8px;">📝 교사 관찰 코멘트</h4>
+        <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
+            <button type="button" onclick="appendMemo('수업에 성실하게 참여하고 영양소의 종류와 기능을 정확히 이해함.')" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:4px 8px; color:white; font-size:0.75rem; cursor:pointer;">[개념 우수]</button>
+            <button type="button" onclick="appendMemo('주어진 난관에도 포기하지 않고 끈기 있게 도전하여 목표를 달성함.')" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:4px 8px; color:white; font-size:0.75rem; cursor:pointer;">[태도 우수]</button>
+            <button type="button" onclick="appendMemo('배운 지식을 바탕으로 식생활 문제의 해결 방안을 논리적으로 제시함.')" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:4px 8px; color:white; font-size:0.75rem; cursor:pointer;">[적용 우수]</button>
+        </div>
         <textarea id="eval-memo" class="memo-textarea" placeholder="학생의 문제 해결 과정이나 특이사항을 적어주세요. (나이스 세특용)"></textarea>
 
-        <div style="margin-top:16px; text-align:right;">
+        <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center;">
+            <button onclick="autoFillEval()" style="background:rgba(255,255,255,0.15); color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:0.85rem;">🤖 점수기반 자동 채우기</button>
             <button onclick="saveEvaluation()" style="background:linear-gradient(135deg,#ec4899,#be185d); color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:0.9rem;">저장하기</button>
         </div>
     </div>
@@ -516,10 +525,17 @@ function renderStudents() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <span style="font-size:0.8rem; font-weight:bold; color:${s.rubricScore >= 2 ? '#4ade80' : s.rubricScore === 1 ? '#fbbf24' : '#94a3b8'}; margin-right:4px;">
-                        ${s.rubricScore >= 2 ? '[상]' : s.rubricScore === 1 ? '[중]' : s.rubricScore === 0 ? '[하]' : '-'}
-                    </span>
-                    <button onclick="showProcessEvaluation('${s.id}');" style="background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); color:#ec4899; cursor:pointer; font-size:0.8rem; padding:4px 10px; border-radius:10px; font-weight:bold;" title="루브릭 및 메모 작성">평가 기록 📝</button>
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <span style="font-size:0.8rem; font-weight:bold; color:${s.rubricScore >= 2 ? '#4ade80' : s.rubricScore === 1 ? '#fbbf24' : s.rubricScore === 0 ? '#94a3b8' : 'rgba(255,255,255,0.4)'}; margin-bottom:2px;">
+                            ${s.rubricScore >= 2 ? '등급: [상]' : s.rubricScore === 1 ? '등급: [중]' : s.rubricScore === 0 ? '등급: [하]' : '미평가'}
+                        </span>
+                        <div style="display:flex; gap:2px;">
+                            <button onclick="quickEval('${s.id}', 3);" style="background:${s.rubricScore >= 2 ? '#4ade80' : 'rgba(255,255,255,0.1)'}; color:${s.rubricScore >= 2 ? '#000' : 'white'}; border:none; padding:2px 6px; border-radius:4px; cursor:pointer; font-size:0.7rem;">상</button>
+                            <button onclick="quickEval('${s.id}', 1);" style="background:${s.rubricScore === 1 ? '#fbbf24' : 'rgba(255,255,255,0.1)'}; color:${s.rubricScore === 1 ? '#000' : 'white'}; border:none; padding:2px 6px; border-radius:4px; cursor:pointer; font-size:0.7rem;">중</button>
+                            <button onclick="quickEval('${s.id}', 0);" style="background:${s.rubricScore === 0 ? '#94a3b8' : 'rgba(255,255,255,0.1)'}; color:${s.rubricScore === 0 ? '#000' : 'white'}; border:none; padding:2px 6px; border-radius:4px; cursor:pointer; font-size:0.7rem;">하</button>
+                            <button onclick="showProcessEvaluation('${s.id}');" style="background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); color:#ec4899; cursor:pointer; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:4px;" title="메모 작성">📝</button>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td onclick="event.stopPropagation()">
@@ -605,10 +621,17 @@ function renderRanking() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <span style="font-size:0.8rem; font-weight:bold; color:${s.rubricScore >= 2 ? '#4ade80' : s.rubricScore === 1 ? '#fbbf24' : '#94a3b8'}; margin-right:4px;">
-                        ${s.rubricScore >= 2 ? '[상]' : s.rubricScore === 1 ? '[중]' : s.rubricScore === 0 ? '[하]' : '-'}
-                    </span>
-                    <button onclick="showProcessEvaluation('${s.id}');" style="background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); color:#ec4899; cursor:pointer; font-size:0.8rem; padding:4px 10px; border-radius:10px; font-weight:bold;" title="루브릭 및 메모 작성">평가 기록 📝</button>
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <span style="font-size:0.8rem; font-weight:bold; color:${s.rubricScore >= 2 ? '#4ade80' : s.rubricScore === 1 ? '#fbbf24' : s.rubricScore === 0 ? '#94a3b8' : 'rgba(255,255,255,0.4)'}; margin-bottom:2px;">
+                            ${s.rubricScore >= 2 ? '등급: [상]' : s.rubricScore === 1 ? '등급: [중]' : s.rubricScore === 0 ? '등급: [하]' : '미평가'}
+                        </span>
+                        <div style="display:flex; gap:2px;">
+                            <button onclick="quickEval('${s.id}', 3);" style="background:${s.rubricScore >= 2 ? '#4ade80' : 'rgba(255,255,255,0.1)'}; color:${s.rubricScore >= 2 ? '#000' : 'white'}; border:none; padding:2px 6px; border-radius:4px; cursor:pointer; font-size:0.7rem;">상</button>
+                            <button onclick="quickEval('${s.id}', 1);" style="background:${s.rubricScore === 1 ? '#fbbf24' : 'rgba(255,255,255,0.1)'}; color:${s.rubricScore === 1 ? '#000' : 'white'}; border:none; padding:2px 6px; border-radius:4px; cursor:pointer; font-size:0.7rem;">중</button>
+                            <button onclick="quickEval('${s.id}', 0);" style="background:${s.rubricScore === 0 ? '#94a3b8' : 'rgba(255,255,255,0.1)'}; color:${s.rubricScore === 0 ? '#000' : 'white'}; border:none; padding:2px 6px; border-radius:4px; cursor:pointer; font-size:0.7rem;">하</button>
+                            <button onclick="showProcessEvaluation('${s.id}');" style="background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); color:#ec4899; cursor:pointer; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:4px;" title="메모 작성">📝</button>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td onclick="event.stopPropagation()">
@@ -669,6 +692,68 @@ function showProcessEvaluation(studentId) {
     document.getElementById('eval-memo').value = s.evalMemo || '';
 
     document.getElementById('eval-modal').classList.add('active');
+}
+
+function appendMemo(text) {
+    const memo = document.getElementById('eval-memo');
+    if (memo.value) memo.value += ' ' + text;
+    else memo.value = text;
+}
+
+function autoFillEval() {
+    const s = allStudents.find(st => st.id === currentEvalStudentId);
+    if (!s) return;
+    
+    // 7방 모두 클리어하고 100점 이상이면 모두 체크 (상)
+    const cleared = (s.clearedRooms || []).length;
+    if (s.completed || cleared >= 6) {
+        document.getElementById('rubric-1').checked = true;
+        document.getElementById('rubric-2').checked = true;
+        document.getElementById('rubric-3').checked = true;
+        appendMemo('성실하게 모든 과제를 해결함.');
+    } else if (cleared >= 3) {
+        document.getElementById('rubric-1').checked = true;
+        document.getElementById('rubric-2').checked = false;
+        document.getElementById('rubric-3').checked = false;
+    }
+}
+
+async function quickEval(studentId, score) {
+    if (!db) return;
+    try {
+        let level = score >= 2 ? 'high' : score === 1 ? 'mid' : 'low';
+        await db.collection('sessions').doc(studentId).update({
+            rubric1: score >= 2,
+            rubric2: score >= 2,
+            rubric3: score >= 3,
+            rubricScore: score,
+            processEval: level
+        });
+    } catch(e) {
+        console.error("빠른 평가 저장 실패:", e);
+    }
+}
+
+async function batchSetAllToMid() {
+    if (!db || !confirm('평가되지 않은 모든 학생을 [중]으로 일괄 저장하시겠습니까?')) return;
+    const batch = db.batch();
+    let count = 0;
+    allStudents.forEach(s => {
+        if (s.rubricScore === undefined && !s.processEval) {
+            const ref = db.collection('sessions').doc(s.id);
+            batch.update(ref, {
+                rubric1: true, rubric2: false, rubric3: false,
+                rubricScore: 1, processEval: 'mid', evalMemo: ''
+            });
+            count++;
+        }
+    });
+    if (count > 0) {
+        await batch.commit();
+        alert(`${count}명의 학생이 일괄 [중]으로 평가되었습니다.`);
+    } else {
+        alert('모든 학생이 이미 평가되었습니다.');
+    }
 }
 
 async function saveEvaluation() {
