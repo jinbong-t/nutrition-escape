@@ -924,7 +924,13 @@ function startRealtimeListener() {
     }
     db.collection('sessions').orderBy('startedAt', 'desc').onSnapshot(snapshot => {
         document.getElementById('loading').style.display = 'none';
-        allStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        allStudents = snapshot.docs.map(doc => {
+            const data = doc.data();
+            const rooms = data.clearedRooms || [];
+            const uniqueRooms = [...new Set(rooms)]; // 중복 클리어 방지
+            data.score = (uniqueRooms.length * 15) + (data.completed ? 30 : 0);
+            return { id: doc.id, ...data };
+        });
         
         // 반 목록 추출 및 드롭다운 업데이트
         const classes = new Set();
