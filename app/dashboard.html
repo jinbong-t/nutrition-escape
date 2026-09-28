@@ -112,6 +112,7 @@
             font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;
             color:rgba(255,255,255,0.4); text-align:left;
             border-bottom:1px solid rgba(255,255,255,0.08);
+            white-space: nowrap;
         }
         .student-row { background:rgba(255,255,255,0.05); border-radius:12px; transition:background 0.2s; cursor:pointer; }
         .student-row:hover { background:rgba(255,255,255,0.1); }
@@ -132,7 +133,7 @@
         .room-dot { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700; }
         .room-dot.cleared { background:#4ade80; color:#052e16; }
         .room-dot.not-cleared { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.3); }
-        .feedback-preview { max-width:180px; font-size:0.8rem; color:rgba(255,255,255,0.6); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .feedback-preview { max-width:250px; font-size:0.8rem; color:rgba(255,255,255,0.6); white-space:normal; word-break:keep-all; line-height:1.4; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; }
         .no-feedback { color:rgba(255,255,255,0.25); font-style:italic; }
         .star-display { color:#fbbf24; font-size:0.82rem; }
         .empty-state { text-align:center; padding:60px 20px; color:rgba(255,255,255,0.3); }
@@ -279,6 +280,7 @@
                     <th onclick="handleSort('rating')" style="cursor:pointer;" title="클릭하여 정렬">별점 ↕</th>
                     <th>활동 소감</th>
                     <th>과정 평가</th>
+                    <th>관리</th>
                 </tr>
             </thead>
             <tbody id="student-tbody"></tbody>
@@ -303,7 +305,7 @@
         <!-- 전체 순위 테이블 -->
         <table class="rank-table" id="rank-table">
             <thead>
-                <tr><th>순위</th><th>학생</th><th>점수</th><th>완료 방</th><th>완료 여부</th><th>별점</th><th>소감</th><th>과정 평가</th></tr>
+                <tr><th>순위</th><th>학생</th><th>점수</th><th>완료 방</th><th>완료 여부</th><th>별점</th><th>소감</th><th>과정 평가</th><th>관리</th></tr>
             </thead>
             <tbody id="rank-tbody"></tbody>
         </table>
@@ -490,8 +492,10 @@ function renderStudents() {
                         <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 노력요함</option>
                     </select>
                     <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
-                    <button onclick="deleteStudent('${s.id}'); event.stopPropagation();" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1.1rem; flex-shrink:0; margin-left:4px;" title="학생 삭제">🗑️</button>
                 </div>
+            </td>
+            <td onclick="event.stopPropagation()">
+                <button onclick="deleteStudent('${s.id}'); event.stopPropagation();" style="background:#ef4444; border:none; color:white; border-radius:6px; padding:6px 12px; cursor:pointer; font-size:0.8rem; font-weight:bold; transition:all 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'" title="학생 기록 삭제">삭제</button>
             </td>
         </tr>`;
     }).join('');
@@ -580,8 +584,10 @@ function renderRanking() {
                         <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 노력요함</option>
                     </select>
                     <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
-                    <button onclick="deleteStudent('${s.id}'); event.stopPropagation();" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1.1rem; flex-shrink:0; margin-left:4px;" title="학생 삭제">🗑️</button>
                 </div>
+            </td>
+            <td onclick="event.stopPropagation()">
+                <button onclick="deleteStudent('${s.id}'); event.stopPropagation();" style="background:#ef4444; border:none; color:white; border-radius:6px; padding:6px 12px; cursor:pointer; font-size:0.8rem; font-weight:bold; transition:all 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'" title="학생 기록 삭제">삭제</button>
             </td>
         </tr>`;
     }).join('');
