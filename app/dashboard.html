@@ -516,13 +516,10 @@ function renderStudents() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:110px;">
-                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 선택</option>
-                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 우수</option>
-                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 보통</option>
-                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 노력요함</option>
-                    </select>
-                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
+                    <span style="font-size:0.8rem; font-weight:bold; color:${s.rubricScore >= 2 ? '#4ade80' : s.rubricScore === 1 ? '#fbbf24' : '#94a3b8'}; margin-right:4px;">
+                        ${s.rubricScore >= 2 ? '[상]' : s.rubricScore === 1 ? '[중]' : s.rubricScore === 0 ? '[하]' : '-'}
+                    </span>
+                    <button onclick="showProcessEvaluation('${s.id}');" style="background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); color:#ec4899; cursor:pointer; font-size:0.8rem; padding:4px 10px; border-radius:10px; font-weight:bold;" title="루브릭 및 메모 작성">평가 기록 📝</button>
                 </div>
             </td>
             <td onclick="event.stopPropagation()">
@@ -608,13 +605,10 @@ function renderRanking() {
             <td>${feedbackPreview}</td>
             <td onclick="event.stopPropagation()">
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <select onchange="updateEval('${s.id}', this.value)" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:6px 10px; color:white; font-size:0.8rem; outline:none; cursor:pointer; width:110px;">
-                        <option value="" style="color:black" ${!s.processEval ? 'selected' : ''}>평가 선택</option>
-                        <option value="high" style="color:black" ${s.processEval==='high' ? 'selected' : ''}>[상] 우수</option>
-                        <option value="mid" style="color:black" ${s.processEval==='mid' ? 'selected' : ''}>[중] 보통</option>
-                        <option value="low" style="color:black" ${s.processEval==='low' ? 'selected' : ''}>[하] 노력요함</option>
-                    </select>
-                    <button onclick="showProcessEvaluation();" style="background:none; border:none; color:#ec4899; cursor:pointer; font-size:1.1rem; flex-shrink:0;" title="전체 기준 보기">❓</button>
+                    <span style="font-size:0.8rem; font-weight:bold; color:${s.rubricScore >= 2 ? '#4ade80' : s.rubricScore === 1 ? '#fbbf24' : '#94a3b8'}; margin-right:4px;">
+                        ${s.rubricScore >= 2 ? '[상]' : s.rubricScore === 1 ? '[중]' : s.rubricScore === 0 ? '[하]' : '-'}
+                    </span>
+                    <button onclick="showProcessEvaluation('${s.id}');" style="background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); color:#ec4899; cursor:pointer; font-size:0.8rem; padding:4px 10px; border-radius:10px; font-weight:bold;" title="루브릭 및 메모 작성">평가 기록 📝</button>
                 </div>
             </td>
             <td onclick="event.stopPropagation()">
