@@ -724,15 +724,15 @@ function autoFillEval() {
     let isSincere = false;
     let memoText = '';
     
-    // ㅋㅋㅋ, ㅏㅏㅏ 같은 무의미한 연속 문자 압축 및 공백 제거로 실질적인 길이 측정
-    const cleanedText = fbText.replace(/([ㄱ-ㅎㅏ-ㅣ])\1+/g, '$1');
+    // 모든 무의미한 연속 문자(특수기호, 자음, 모음 등) 압축 (예: !!!! -> !, ㅋㅋㅋ -> ㅋ)
+    const cleanedText = fbText.replace(/(.)\1{2,}/g, '$1$1');
     const textLengthWithoutSpaces = cleanedText.replace(/\s/g, '').length;
     
     if (textLengthWithoutSpaces >= 15) {
         isSincere = true; // 실질적인 내용이 길면 성실
     } else {
         // 길이는 짧지만 핵심 키워드가 포함되었는지 확인 ('재미'는 '재미없다'와 겹치므로 제외)
-        const goodKeywords = ['알게', '배웠', '중요', '어려웠', '노력', '영양소', '도움', '깨달'];
+        const goodKeywords = ['알게', '배웠', '중요', '어려웠', '노력', '영양소', '도움', '깨달', '유익'];
         isSincere = goodKeywords.some(kw => cleanedText.includes(kw));
     }
     
