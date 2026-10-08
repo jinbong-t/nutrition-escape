@@ -252,6 +252,7 @@
 <div class="tab-bar">
     <button class="tab-btn active" id="tab-btn-progress" onclick="switchTab('progress')">📋 진행 현황</button>
     <button class="tab-btn" id="tab-btn-ranking" onclick="switchTab('ranking')">🏆 순위표</button>
+    <button class="tab-btn" id="tab-btn-feedback" onclick="switchTab('feedback')">💡 수업 환류</button>
 </div>
 
 <!-- ======================== 탭1: 진행 현황 ======================== -->
@@ -285,6 +286,7 @@
                         <span onclick="handleSort('time')" style="cursor:pointer; color:#94a3b8;" title="접속 시간으로 정렬" onmouseover="this.style.color='white'" onmouseout="this.style.color='#94a3b8'">시간 ↕</span>
                     </th>
                     <th onclick="handleSort('progress')" style="cursor:pointer;" title="클릭하여 정렬">방 진행 ↕</th>
+                    <th>방별 이해도</th>
                     <th onclick="handleSort('percent')" style="cursor:pointer;" title="클릭하여 정렬">진행률 ↕</th>
                     <th onclick="handleSort('status')" style="cursor:pointer;" title="클릭하여 정렬">상태 ↕</th>
                     <th onclick="handleSort('stage')" style="cursor:pointer;" title="클릭하여 정렬">현재 단계 ↕</th>
@@ -323,6 +325,31 @@
         <div id="rank-empty" class="empty-state" style="display:none;">
             <div class="empty-icon">🏆</div>
             <p>아직 참여한 학생이 없어요!</p>
+        </div>
+    </div>
+</div>
+
+<!-- ======================== 탭3: 수업 환류 ======================== -->
+<div class="tab-content" id="tab-feedback">
+    <div class="ranking-section">
+        <div class="toolbar" style="justify-content: flex-end; margin-bottom: 10px;">
+            <button class="save-btn" onclick="saveAsImage('tab-feedback')" style="background:linear-gradient(135deg,#ec4899,#be185d);">
+                📸 수업 환류 저장
+            </button>
+        </div>
+        <div class="stats-row" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="stat-card" style="text-align: left; grid-column: span 1; padding: 20px;">
+                <h3 style="color:#ffd700; margin-bottom:15px; font-family:'Gamja Flower',cursive; font-size: 1.3rem;">🚨 오답 집중 구간 TOP 5</h3>
+                <div id="top-wrong-questions" style="font-size:0.95rem; line-height:1.8;">
+                    데이터 분석 중...
+                </div>
+            </div>
+            <div class="stat-card" style="text-align: left; grid-column: span 1; padding: 20px;">
+                <h3 style="color:#ffd700; margin-bottom:15px; font-family:'Gamja Flower',cursive; font-size: 1.3rem;">📊 과정 평가(지식/적용/태도) 분포</h3>
+                <div id="eval-distribution" style="font-size:0.95rem; line-height:1.8;">
+                    데이터 분석 중...
+                </div>
+            </div>
         </div>
     </div>
 </div>
